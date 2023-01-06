@@ -2,6 +2,9 @@ import 'package:get/get.dart';
 
 class FavoriteListPageController extends GetxController {
 
+  RxList listRestaurant = [].obs;
+  RxList listRestaurantIsChecked = [].obs;
+
   // edit이나 share를 하는 state
   bool editShare = false;
   bool get eS => editShare;

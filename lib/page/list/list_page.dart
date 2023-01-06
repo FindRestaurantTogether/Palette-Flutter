@@ -59,6 +59,7 @@ class _ListPageState extends State<ListPage> {
                   child: TextFormField(
                     controller: _TextEditingController,
                     decoration: InputDecoration(
+                      contentPadding: EdgeInsets.only(top: 10),
                       prefixIcon: IconButton(
                         onPressed: () {
                           Get.back();
@@ -186,7 +187,7 @@ class _ListPageState extends State<ListPage> {
                                       ),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Color(0xff787878),
+                                      backgroundColor: Color(0xfff42957),
                                       shape: StadiumBorder(),
                                     )
                                 ),
@@ -248,6 +249,7 @@ class _ListPageState extends State<ListPage> {
                             ),
                             onPressed: () {},
                             child: DropdownButton2(
+                              focusColor: Color(0xfff42957),
                               isExpanded: true,
                               items: DropdownList2
                                   .map((item) => DropdownMenuItem<String>(

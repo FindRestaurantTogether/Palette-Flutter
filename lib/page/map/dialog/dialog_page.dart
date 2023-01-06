@@ -137,7 +137,7 @@ class _DialogPageState extends State<DialogPage> {
                           Container(
                             width: width * 0.84,
                             height: height * 0.08,
-                            padding: EdgeInsets.symmetric(horizontal: 23, vertical: 20),
+                            padding: EdgeInsets.symmetric(horizontal: 23, vertical: 18),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 width: 1,

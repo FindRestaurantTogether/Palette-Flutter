@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
+import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/map/bottomsheet/select_folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
@@ -21,6 +22,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
   final NaverMapPageModel selectedRestaurant;
   _BottomsheetPageState({required this.selectedRestaurant});
 
+  final _FavoriteListPageController = Get.put(FavoriteListPageController());
+  final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
   late List<bool> ToggleSelected;
@@ -114,9 +117,13 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                 return _NaverMapPageController.restaurants[selectedIndex].favorite.value
                     ? GestureDetector(
                         onTap: (){
-                          setState(() {
-                            _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                          });
+                          _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                          _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
+                          _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
+                          for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
+                            if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
+                              _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);
+                          }
                         },
                         child: Icon(Icons.bookmark, size: 28, color: Colors.pinkAccent)
                     )

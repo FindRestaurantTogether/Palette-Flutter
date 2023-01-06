@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:myapp/page/detail/detail_page_controller.dart';
 import 'package:myapp/page/detail/review/see_review_page.dart';
-import 'package:myapp/page/detail/review/write_review_page.dart';
+import 'package:myapp/page/detail/review/write_review_page1.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -1073,7 +1073,8 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         backgroundColor: Color(0xfff42957),
                         onPressed: () {
-                          Get.to(() => WriteReviewPage());
+                          Get.to(() => WriteReviewPage1(), arguments: _selectedRestaurant);
+
                         },
                       ),
                     ),

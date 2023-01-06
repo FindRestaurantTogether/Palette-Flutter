@@ -100,7 +100,7 @@ class _NoticePageState extends State<NoticePage> {
                                     noticeOpen[0] = !noticeOpen[0];
                                   });
                                 },
-                                child: Icon(Icons.keyboard_arrow_down)
+                                child: noticeOpen[0]? Icon(Icons.keyboard_arrow_up) : Icon(Icons.keyboard_arrow_down)
                             )
                           ],
                         ),

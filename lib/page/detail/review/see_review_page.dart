@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
-import 'package:myapp/page/detail/review/write_review_page.dart';
+import 'package:myapp/page/detail/review/write_review_page1.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 final List<String> DropdownList = ['전체', '음식', '매장'];
@@ -600,7 +600,7 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
                   ),
                   backgroundColor: Color(0xfff42957),
                   onPressed: () {
-                    Get.to(() => WriteReviewPage());
+                    Get.to(() => WriteReviewPage1());
                   },
                 ),
               ),

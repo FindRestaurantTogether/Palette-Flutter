@@ -34,7 +34,7 @@ class _LoadingPageState extends State<LoadingPage> {
             child: Image.asset(
               'assets/splash_image/splash_image.png'
             ),
-            scale: 0.25,
+            scale: 0.2,
           )
         ));
   }
