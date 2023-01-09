@@ -118,8 +118,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     ? GestureDetector(
                         onTap: (){
                           _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                          _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
                           _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
+                          _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
                           for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
                             if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
                               _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);

@@ -42,6 +42,9 @@ class _FavoritePageState extends State<FavoritePage> {
 
   late NaverMapPageRestaurant checkedRestaurant;
 
+  late int folderRestaurantLength;
+  late int listRestaurantLength;
+
   @override
   Widget build(BuildContext context) {
 
@@ -893,18 +896,19 @@ class _FavoritePageState extends State<FavoritePage> {
                               height: 50,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  for (var i=0; i<_FavoriteFolderPageController.folderRestaurant.length; i++) {
-                                    for (var j=0; j<_FavoriteListPageController.listRestaurantIsChecked.length; j++) {
+                                  final folderRestaurantLength = _FavoriteFolderPageController.folderRestaurant.length;
+                                  final listRestaurantLength = _FavoriteListPageController.listRestaurantIsChecked.length;
+                                  for (var i=folderRestaurantLength-1; i>=0; i--) {
+                                    for (var j=listRestaurantLength-1; j>=0; j--) {
                                       if (_FavoriteListPageController.listRestaurantIsChecked[j] == true) {
                                         checkedRestaurant = _FavoriteListPageController.listRestaurant[j];
-                                        
-                                        _FavoriteListPageController.listRestaurant.removeAt(i);
-                                        _FavoriteListPageController.listRestaurantIsChecked.removeAt(i);
+
+                                        _FavoriteListPageController.listRestaurant.removeAt(j);
+                                        _FavoriteListPageController.listRestaurantIsChecked.removeAt(j);
 
                                         if (_FavoriteFolderPageController.folderRestaurant[i].contains(checkedRestaurant)) {
                                           _FavoriteFolderPageController.folderRestaurant[i].remove(checkedRestaurant);
                                         }
-
                                         _NaverMapPageController.restaurants[_NaverMapPageController.restaurants.indexWhere((e) => e == checkedRestaurant)].favorite.toggle();
                                       }
                                     }
@@ -912,6 +916,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                   setState(() {
                                     _FavoriteListPageController.editShareChangeState();
                                     _FavoriteListPageController.checkEditChangeState();
+                                    print(_FavoriteListPageController.listRestaurantIsChecked.length);
                                     for (var i=0; i<_FavoriteListPageController.listRestaurantIsChecked.length; i++) {
                                       _FavoriteListPageController.listRestaurantIsChecked[i] = false;
                                     }
