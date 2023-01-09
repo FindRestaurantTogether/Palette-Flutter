@@ -1,10 +1,15 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:myapp/page/map/search/store_model.dart';
 
 class SearchPage extends StatefulWidget {
-
   List _items;
+
   SearchPage(this._items);
 
   @override
@@ -16,7 +21,28 @@ class _SearchPageState extends State<SearchPage> {
   bool RecentSearch = true; // 최근 검색 focus?
 
   List _items;
+
   _SearchPageState(this._items);
+
+  List<Store> _stores = []; // 검색 결과 리스트
+
+  void _search(String query) async {
+    final response = await http
+        .get(Uri.parse("http://114.71.48.94:8080/api/search?query=$query"));
+    final statusCode = response.statusCode;
+
+    if (statusCode == 200) {
+      List<Store> searchedStroes = jsonDecode(response.body)
+          .map<Store>((json) => Store.fromJson(json))
+          .toList();
+      setState(() {
+        _stores.clear();
+        _stores.addAll(searchedStroes);
+      });
+    } else {
+      throw Exception('Failed to load');
+    }
+  }
 
   @override
   void dispose() {
@@ -26,9 +52,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    this._search('치즈');
+    developer.log(_stores[0].name);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -50,9 +77,9 @@ class _SearchPageState extends State<SearchPage> {
                     width: width * 0.85,
                     child: TextFormField(
                       textInputAction: TextInputAction.go,
-                      onFieldSubmitted: (value) async{
+                      onFieldSubmitted: (value) async {
                         setState(() {
-                          if(_items.length >=10){
+                          if (_items.length >= 10) {
                             _items.removeAt(0);
                           }
                           _items.add(value);
@@ -61,7 +88,7 @@ class _SearchPageState extends State<SearchPage> {
                       controller: _TextEditingController,
                       decoration: InputDecoration(
                         prefixIcon: IconButton(
-                          onPressed: (){
+                          onPressed: () {
                             Get.back();
                           },
                           icon: Icon(
@@ -71,14 +98,14 @@ class _SearchPageState extends State<SearchPage> {
                           ),
                         ),
                         suffixIcon: IconButton(
-                            onPressed: (){
-                              _TextEditingController.clear();
-                            },
-                            icon: Icon(
-                              Icons.clear,
-                              color: Colors.grey,
-                              size: 25,
-                            ),
+                          onPressed: () {
+                            _TextEditingController.clear();
+                          },
+                          icon: Icon(
+                            Icons.clear,
+                            color: Colors.grey,
+                            size: 25,
+                          ),
                         ),
                         hintText: '장소, 주소, 음식 검색',
                         hintStyle: TextStyle(
@@ -99,9 +126,9 @@ class _SearchPageState extends State<SearchPage> {
             ), // 회색 바
             Expanded(
               child: ListView(
-                padding: EdgeInsets.only(left: 30,right: 20),
+                padding: EdgeInsets.only(left: 30, right: 20),
                 children: [
-                  for(int i=_items.length-1; i>=0; i--) ...[
+                  for (int i = _items.length - 1; i >= 0; i--) ...[
                     Row(
                       children: [
                         Expanded(
@@ -116,38 +143,40 @@ class _SearchPageState extends State<SearchPage> {
                                     Container(
                                       height: 30,
                                       width: 30,
-                                      child: Icon(Icons.search,color: Colors.black,size: 20),
-                                      decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
+                                      child: Icon(Icons.search,
+                                          color: Colors.black, size: 20),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Colors.black12),
                                     ),
                                     SizedBox(width: 16),
-                                    Text('${_items[i]}',
+                                    Text(
+                                      '${_items[i]}',
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black45
-                                      ),
+                                          color: Colors.black45),
                                     ),
                                   ],
                                 ),
                                 IconButton(
-                                    onPressed: (){
+                                    onPressed: () {
                                       setState(() {
                                         _items.removeAt(i);
                                       });
                                     },
-                                    icon: Icon(Icons.clear,color: Colors.black38,size: 20))
+                                    icon: Icon(Icons.clear,
+                                        color: Colors.black38, size: 20))
                               ],
                             ),
                           ),
                         ),
-
                       ],
                     ),
                     Container(
                       height: 1,
                       color: Colors.grey[300],
                     )
-
                   ]
                 ],
               ),
