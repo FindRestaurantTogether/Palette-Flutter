@@ -49,68 +49,90 @@ class _MapPageState extends State<MapPage> {
       body: Stack(
         children: [
           NaverMapPage(), // 네이버 맵
-          Center(
-            child: Column(
-              children: [
-                SizedBox(height: height * 0.075),
-                Container(
-                  height: height * 0.06,
-                  width: width * 0.87,
-                  padding: EdgeInsets.only(left: 20, right: 20),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.25),
-                          spreadRadius: 2,
-                          blurRadius: 7,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
+            children: [
+              SizedBox(height: height * 0.075),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
                     children: [
-                      ExpandTapWidget(
-                        onTap: () {
-                          Get.to(() => ListPage());
-                        },
-                        tapPadding: EdgeInsets.all(25),
-                        child: Container(
-                          child: Icon(
-                                Icons.list,
-                                color: Color(0xff787878),
-                                size: 27,
-                          ),
-                        ),
-                      ),
+                      SizedBox(width: width * 0.065),
                       Container(
-                        child: Text(
-                          '나의 지도',
-                          style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                        width: width * 0.72,
+                        height: height * 0.06,
+                        padding: EdgeInsets.only(left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                      ),
-                      ExpandTapWidget(
-                        onTap: () {
-                          Get.to(() => SearchPage(_items));
-                        },
-                        tapPadding: EdgeInsets.all(25),
-                        child: Container(
-                          child: Icon(
-                                Icons.search,
-                                color: Color(0xff787878),
-                                size: 27,
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: height * 0.045,
+                              height: height * 0.045,
+                              child: IconButton(
+                                onPressed: () {
+                                  Get.to(() => ListPage());
+                                },
+                                icon: Image.asset('assets/button_image/list_button.png'),
+                              ),
+                            ),
+                            Container(
+                              child: Text(
+                                '나의 지도',
+                                style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                              ),
+                            ),
+                            Container(
+                              width: height * 0.042,
+                              height: height * 0.042,
+                              child: IconButton(
+                                onPressed: () {
+                                  Get.to(() => SearchPage(_items));
+                                },
+                                icon: Image.asset('assets/button_image/search_button.png'),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   ),
-                ), // 앱바
-                SizedBox(height: height * 0.003),
-                FilterPage() // 필터
-              ],
-            ),
+                  Row(
+                    children: [
+                      Container(
+                        height: height * 0.06,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: Image.asset('assets/button_image/hot_place_button.png'),
+                      ),
+                      SizedBox(width: width * 0.065),
+                    ],
+                  ),
+                ],
+              ), // 앱바
+              SizedBox(height: height * 0.003),
+              FilterPage() // 필터
+            ],
           ),
         ],
       ),

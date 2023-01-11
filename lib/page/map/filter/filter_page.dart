@@ -40,7 +40,7 @@ class _FilterPageState extends State<FilterPage> {
         children: [
           Row(
             children: [
-              SizedBox(width: width * 0.04),
+              SizedBox(width: width * 0.035),
               Expanded(
                 child: Container(
                   height: 45,
@@ -208,6 +208,14 @@ class _FilterPageState extends State<FilterPage> {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: Offset(0, -1),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 20),
         child: Column(
@@ -472,6 +480,14 @@ class _FilterPageState extends State<FilterPage> {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: Offset(0, -1),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 20),
         child: Column(
@@ -629,6 +645,14 @@ class _FilterPageState extends State<FilterPage> {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: Offset(0, -1),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
         child: Column(
@@ -843,6 +867,14 @@ class _FilterPageState extends State<FilterPage> {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: Offset(0, -1),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
         child: Column(
@@ -1309,6 +1341,14 @@ class _FilterPageState extends State<FilterPage> {
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.15),
+              spreadRadius: 2,
+              blurRadius: 10,
+              offset: Offset(0, -1),
+            ),
+          ],
         ),
         padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
         child: Column(

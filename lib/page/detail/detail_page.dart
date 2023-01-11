@@ -35,6 +35,9 @@ class _DetailPageState extends State<DetailPage> {
     final _selectedRestaurant = Get.arguments;
     int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.markerId == _selectedRestaurant.markerId);
 
+    final menuName = _selectedRestaurant.menu.keys.toList();
+    final menuInfo = _selectedRestaurant.menu.values.toList();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -107,17 +110,13 @@ class _DetailPageState extends State<DetailPage> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Container(
-                                        height: 23,
+                                        width: 27,
+                                        height: 35,
                                         child: IconButton(
-                                            padding: EdgeInsets.all(0.0),
-                                            onPressed: (){
-                                              Get.back();
-                                            },
-                                            icon: Icon(
-                                              Icons.arrow_back_ios,
-                                              color: Colors.black54,
-                                              size: 20
-                                            )
+                                          onPressed: () {
+                                            Get.back();
+                                          },
+                                          icon: Image.asset('assets/button_image/back_button.png'),
                                         ),
                                       ),
                                       Container(
@@ -595,153 +594,81 @@ class _DetailPageState extends State<DetailPage> {
                                   )
                                 ],
                               ),
-                              SizedBox(height: 25),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '모둠 사시미',
-                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '   |   ',
-                                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        '26000원',
-                                        style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.pinkAccent,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        ' 4.3(16건)',
-                                        style: TextStyle(
-                                            fontSize: 12
+                              SizedBox(height: 12),
+                              Container(
+                                height: 110,
+                                child: ListView.builder(
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.all(0),
+                                  itemCount: _selectedRestaurant.menu.length,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return Column(
+                                      children: [
+                                        SizedBox(height: 7),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 80,
+                                                  child: Text(
+
+                                                    '${menuName[index]}',
+                                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                                Text(
+                                                  ' |  ',
+                                                  style: TextStyle(fontSize: 15, color: Colors.grey),
+                                                ),
+                                                Container(
+                                                  width: 80,
+                                                  child: Text(
+                                                    ' ${menuInfo[index][0].toInt()}원',
+                                                    style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 15,
+                                                  child: Icon(
+                                                    Icons.star,
+                                                    color: Colors.pinkAccent,
+                                                    size: 14,
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 20,
+                                                  alignment: Alignment.centerRight,
+                                                  child: Text(
+                                                    '${menuInfo[index][1]}',
+                                                    style: TextStyle(
+                                                        fontSize: 12
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  width: 42,
+                                                  alignment: Alignment.centerLeft,
+                                                  child: Text(
+                                                    '(${menuInfo[index][2].toInt()}건)',
+                                                    style: TextStyle(
+                                                        fontSize: 12
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 7),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '모둠 사시미',
-                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '   |   ',
-                                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        '26000원',
-                                        style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.pinkAccent,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        ' 4.3(16건)',
-                                        style: TextStyle(
-                                            fontSize: 12
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 7),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '모둠 사시미',
-                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '   |   ',
-                                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        '26000원',
-                                        style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.pinkAccent,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        ' 4.3(16건)',
-                                        style: TextStyle(
-                                            fontSize: 12
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              SizedBox(height: 7),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '모둠 사시미',
-                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                      ),
-                                      Text(
-                                        '   |   ',
-                                        style: TextStyle(fontSize: 15, color: Colors.grey),
-                                      ),
-                                      Text(
-                                        '26000원',
-                                        style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.star,
-                                        color: Colors.pinkAccent,
-                                        size: 14,
-                                      ),
-                                      Text(
-                                        ' 4.3(16건)',
-                                        style: TextStyle(
-                                            fontSize: 12
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    );
+                                  }
+                                ),
                               ),
                             ],
                           ),
@@ -1073,8 +1000,7 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         backgroundColor: Color(0xfff42957),
                         onPressed: () {
-                          Get.to(() => WriteReviewPage1(), arguments: _selectedRestaurant);
-
+                          Get.to(() => WriteReviewPage1(), arguments: [_selectedRestaurant,menuName]);
                         },
                       ),
                     ),

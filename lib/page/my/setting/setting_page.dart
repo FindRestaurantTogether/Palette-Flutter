@@ -33,20 +33,18 @@ class _SettingPageState extends State<SettingPage> {
             Container(
               child: Row(
                 children: [
-                  SizedBox(width: 20),
+                  SizedBox(width: 30),
                   Container(
-                    width: 36,
+                    width: 27,
+                    height: 45,
                     child: IconButton(
                         onPressed: () {
                           Get.back();
                         },
-                        icon: Icon(
-                            Icons.arrow_back_ios,
-                            color: Colors.black54,
-                            size: 20
-                        )
+                        icon: Image.asset('assets/button_image/back_button.png'),
                     ),
                   ),
+                  SizedBox(width: 16),
                   Text(
                     '설정',
                     style: TextStyle(
@@ -57,7 +55,7 @@ class _SettingPageState extends State<SettingPage> {
                   )
                 ],
               ),
-            ),
+            ), // 백 버튼과 설정
             SizedBox(height: 15),
             Container(
               width: width,
@@ -71,7 +69,7 @@ class _SettingPageState extends State<SettingPage> {
                 children: [
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 21),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 21),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
@@ -108,7 +106,7 @@ class _SettingPageState extends State<SettingPage> {
                   Divider(height: 1),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 28),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -129,10 +127,13 @@ class _SettingPageState extends State<SettingPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                                Icons.arrow_forward_ios,
-                                size: 18,
-                                color: Color(0xff464646)
+                            Container(
+                              width: 30,
+                              height: 30,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Image.asset('assets/button_image/front_button.png'),
+                              ),
                             ),
                           ],
                         ),
@@ -141,7 +142,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 28),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -162,10 +163,13 @@ class _SettingPageState extends State<SettingPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                                Icons.arrow_forward_ios,
-                                size: 18,
-                                color: Color(0xff464646)
+                            Container(
+                              width: 30,
+                              height: 30,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Image.asset('assets/button_image/front_button.png'),
+                              ),
                             ),
                           ],
                         ),
@@ -175,7 +179,7 @@ class _SettingPageState extends State<SettingPage> {
                   Divider(height: 1),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 28),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -196,10 +200,13 @@ class _SettingPageState extends State<SettingPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(
-                                Icons.arrow_forward_ios,
-                                size: 18,
-                                color: Color(0xff464646)
+                            Container(
+                              width: 30,
+                              height: 30,
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Image.asset('assets/button_image/front_button.png'),
+                              ),
                             ),
                           ],
                         ),
@@ -208,7 +215,7 @@ class _SettingPageState extends State<SettingPage> {
                   ),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 36),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -245,7 +252,7 @@ class _SettingPageState extends State<SettingPage> {
                   Divider(height: 1),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 32),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +270,7 @@ class _SettingPageState extends State<SettingPage> {
                   Divider(height: 1),
                   Container(
                     height: height * 0.082,
-                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 32, right: 32),
+                    padding: EdgeInsets.only(top: 15, bottom: 15, left: 36, right: 32),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.start,

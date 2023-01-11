@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:myapp/page/detail/review/select_menupage.dart';
 import 'package:myapp/page/detail/review/write_reveiw_page_controller.dart';
 import 'package:myapp/page/detail/review/write_review_page2.dart';
 
@@ -51,7 +52,7 @@ class _WriteReviewPage1State extends State<WriteReviewPage1> {
                       rating: 5,
                       itemCount: 5,
                       itemSize: 15,
-                      itemBuilder: (context, index) => Icon(Icons.star, color: Color(0xfff42957),),
+                      itemBuilder: (context, index) => Icon(Icons.star, color: Color(0xfff42957)),
                       direction: Axis.horizontal,
                     ),
                     SizedBox(width: 10),
@@ -101,7 +102,8 @@ class _WriteReviewPage1State extends State<WriteReviewPage1> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final _selectedRestaurant = Get.arguments;
+    final _selectedRestaurant = Get.arguments[0];
+    final menuName = Get.arguments[1];
 
     return Scaffold(
         appBar: AppBar(
@@ -261,89 +263,119 @@ class _WriteReviewPage1State extends State<WriteReviewPage1> {
             SizedBox(height: 20),
             if (_WriteReviewPageController.currentIndex.value == 0) ... [
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
-                        spreadRadius: 5,
-                        blurRadius: 5,
-                        offset: Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                        width: width,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(20)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 5,
+                              blurRadius: 5,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
                         child: Column(
                           children: [
-                            SizedBox(height: 30),
-                            Expanded(
-                              child: ListView.builder(
-                                  physics: BouncingScrollPhysics(),
-                                  shrinkWrap: true,
-                                  padding: EdgeInsets.zero,
-                                  itemCount: menuCardList.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return menuCardList[index];
-                                  }
+                            SizedBox(height: 15),
+                            Container(
+                              width: width,
+                              height: 50,
+                              child: IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                      context: context,
+                                      barrierDismissible: false,
+                                      builder: (BuildContext context) {
+                                        return SelectMenuPage(menuName: menuName);
+                                      }
+                                  );
+                                },
+                                icon: Image.asset('assets/button_image/evaluate_example_button.png'),
                               ),
                             ),
-                            SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: () {
-                                addMenu();
-                              },
-                              child: Container(
-                                width: 35,
-                                height: 35,
-                                decoration: ShapeDecoration(
-                                    shape: CircleBorder(),
-                                    color: Color(0xfff42957),
-                                ),
-                                child: Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                  size: 22,
-                                ),
-                              ),
-                            ), // 더하기 버튼
+                            SizedBox(height: 15),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     showDialog(
+                            //         context: context,
+                            //         barrierDismissible: false,
+                            //         builder: (BuildContext context) {
+                            //           return SelectMenuPage(menuName: menuName);
+                            //         }
+                            //     );
+                            //   },
+                            //   child: Container(
+                            //     height: 35,
+                            //     decoration: BoxDecoration(
+                            //       shape: BoxShape.circle,
+                            //       boxShadow: [
+                            //         BoxShadow(
+                            //           color: Colors.black.withOpacity(0.25),
+                            //           spreadRadius: 2,
+                            //           blurRadius: 7,
+                            //           offset: Offset(0, 2),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //     child: Image.asset('assets/button_image/hot_place_button.png'),
+                            //   ),
+                            // ), // 더하기 버튼
+                            // Column(
+                            //   children: [
+                            //     SizedBox(height: 30),
+                            //     Expanded(
+                            //       child: ListView.builder(
+                            //           physics: BouncingScrollPhysics(),
+                            //           shrinkWrap: true,
+                            //           padding: EdgeInsets.zero,
+                            //           itemCount: menuCardList.length,
+                            //           itemBuilder: (BuildContext context, int index) {
+                            //             return menuCardList[index];
+                            //           }
+                            //       ),
+                            //     ),
+                            //     SizedBox(height: 10),
+                            //   ],
+                            // ),
                           ],
                         ),
                       ),
-                      Column(
-                        children: [
-                          SizedBox(height: 15),
-                          Container(
-                            width: 400,
-                            height: 50,
-                            padding: EdgeInsets.only(left: 30, right: 30),
-                            child: ElevatedButton(
-                                onPressed: () {
-                                  Get.to(() => WriteReviewPage2(), arguments: [_selectedRestaurant, menuCardList]);
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  primary: Color(0xfff42957),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
+                    Column(
+                      children: [
+                        SizedBox(height: 15),
+                        Container(
+                          width: 400,
+                          height: 50,
+                          padding: EdgeInsets.only(left: 30, right: 30),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                Get.to(() => WriteReviewPage2(), arguments: [_selectedRestaurant, menuCardList]);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                primary: Color(0xfff42957),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Text(
-                                  '다음',
-                                  style: TextStyle(
+                              ),
+                              child: Text(
+                                '다음',
+                                style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white
-                                  ),
-                                )
-                            ),
+                                ),
+                              )
                           ),
-                          SizedBox(height: 20),
-                        ],
-                      ), // 완료 버튼
-                    ],
-                  ),
+                        ),
+                        SizedBox(height: 40),
+                      ],
+                    ), // 다음 버튼
+                  ],
                 ),
               ),
             ]

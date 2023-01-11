@@ -24,6 +24,7 @@ abstract class NaverMapPageModel {
   final String address = '';
   final int phoneNumber = 0;
   final LocationClass position = LocationClass(longitude: 0.0, latitude: 0.0);
+  final Map<String,List<double>> menu = {};
 }
 
 class NaverMapPageRestaurant implements NaverMapPageModel {
@@ -69,6 +70,8 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   final int phoneNumber;
   @override
   final LocationClass position;
+  @override
+  final Map<String,List<double>> menu;
 
   NaverMapPageRestaurant({
     required this.markerId,
@@ -92,5 +95,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
     required this.address,
     required this.phoneNumber,
     required this.position,
+    required this.menu,
   });
 }

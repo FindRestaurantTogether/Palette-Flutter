@@ -29,48 +29,52 @@ class _MyReviewPageState extends State<MyReviewPage> {
         body: Column(
           children: [
             SizedBox(height: height * 0.08),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    SizedBox(width: 20),
-                    SizedBox(
-                      width: 36,
-                      child: IconButton(
+            Container(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(width: 30),
+                      Container(
+                        width: 27,
+                        height: 45,
+                        child: IconButton(
                           onPressed: () {
                             Get.back();
                           },
-                          icon: Icon(
-                              Icons.arrow_back_ios,
-                              color: Colors.black54,
-                              size: 20
-                          )
+                          icon: Image.asset('assets/button_image/back_button.png'),
+                        ),
                       ),
-                    ),
-                    Text(
-                      '내가 작성한 리뷰',
-                      style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold
+                      SizedBox(width: 16),
+                      Text(
+                        '내가 쓴 리뷰',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff464646)
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        child: IconButton(
+                          onPressed: () {
+                            Get.back();
+                          },
+                          icon: Image.asset('assets/button_image/edit_button.png'),
+                        ),
                       ),
-                    )
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 36,
-                      child: IconButton(
-                          onPressed: (){},
-                          icon: Icon(Icons.edit)
-                      ),
-                    ),
-                    SizedBox(width: 20),
-                  ],
-                )
-              ],
-            ), // 내가 작성한 리뷰 Row
+                      SizedBox(width: 25),
+                    ],
+                  ),
+                ],
+              ),
+            ), // 백 버튼과 내가 쓴 리뷰와 편집 버튼
             SizedBox(height: 15),
             Container(
               width: width * 0.87,

@@ -45,37 +45,42 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
           children: [
             SizedBox(height: height * 0.08),
             Container(
-              height: 50,
               child: Stack(
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(width: 10),
-                      IconButton(
-                        onPressed: (){
-                          Get.back();
-                        },
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.black54,
-                          size: 18,
+                  Container(
+                    height: 45,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 30),
+                        Container(
+                          width: 27,
+                          height: 45,
+                          child: IconButton(
+                            onPressed: () {
+                              Get.back();
+                            },
+                            icon: Image.asset('assets/button_image/back_button.png'),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Center(
-                    child: Text(
-                      '오류 제보/식당 등록',
-                      style: TextStyle(
-                        color: Color(0xff464646),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 22,
-                      ),
+                      ],
                     ),
                   ),
+                  Container(
+                    height: 45,
+                    child: Center(
+                      child: Text(
+                        '오류 제보/식당 등록',
+                        style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xff464646)
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
-            ), // 오류 제보/식당 등록
+            ), // 백 버튼과 오류 제보/식당 등록
             SizedBox(
               height: height * 0.024,
             ),
@@ -256,7 +261,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(6),
                     prefixIcon: Icon(Icons.search, size: 18),
-                    hintText: '오류 제보할 식당을 검색해주세요.',
+                    hintText: '등록할 식당 이름을 입력해주세요.',
                     hintStyle: TextStyle(
                         fontSize: 14,
                         color: Color(0xffa2a2a2)
@@ -272,7 +277,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      '오류 내용',
+                      '식당 정보',
                       style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14
@@ -293,7 +298,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                 child: TextFormField(
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.all(11),
-                    hintText: '오류 내용을 상세하게 작성해주세요.',
+                    hintText: '식당 위치, 전화번호, 영업시간, 메뉴 등 정보를 자유롭게 입력해주세요.',
                     hintStyle: TextStyle(
                         fontSize: 14,
                         color: Color(0xffa2a2a2)

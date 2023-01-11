@@ -41,6 +41,7 @@ class NaverMapPageController extends GetxController {
           address: '서울 마포구 상수동 93-44번지 2층',
           phoneNumber: 01054538839,
           position: LocationClass(latitude: 37.49369555120038, longitude: 127.01370530988898),
+          menu: {'모둠 사시미': [26000,4.3,16], '광어 사시미': [22000,3.1,240], '참치 와사비': [20000,3.0,10], '모둠 초회': [18000,2.0,70]},
       ),
       NaverMapPageRestaurant(
           markerId: '2',
@@ -63,6 +64,7 @@ class NaverMapPageController extends GetxController {
           address: '서울 마포구 상수동 93-44번지 2층',
           phoneNumber: 01054538839,
           position: LocationClass(latitude: 37.49351987696494, longitude: 126.98648695795542),
+          menu: {'모둠 사시미': [26000,4.3,16], '광어 사시미': [22000,3.1,240], '참치 와사비': [20000,3.0,10], '모둠 초회': [18000,2.0,70]},
       ),
     ];
 

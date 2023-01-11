@@ -37,8 +37,8 @@ class _FavoritePageState extends State<FavoritePage> {
 
   bool openRegion = false;
   bool switchSelected = false;
-  List<String> regionList = ["내 주변", "서울", "경기", "강원", "부산", "인천", "경상", "전라", "충청", "제주"];
-  List<bool> regionSelected = [false, false, false, false, false, false, false, false, false, false];
+  List<String> regionList = ["내 주변", "강남/서초", "강동/송파", "동작/관악/금천", "마포/은평/서대문", "성동/광진/중랑/동대문", "성북/강북/도봉/노원", "영등포/구로/강서/양천", "용산/종로/중구"];
+  List<bool> regionSelected = [false, false, false, false, false, false, false, false, false];
 
   late NaverMapPageRestaurant checkedRestaurant;
 
@@ -232,8 +232,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                     onPressed: () {},
                                     child: DropdownButton2(
                                       isExpanded: true,
-                                      items: DropdownList
-                                          .map((item) => DropdownMenuItem<String>(
+                                      items: DropdownList.map((item) => DropdownMenuItem<String>(
                                           value: item,
                                           child: Text(
                                             item,
@@ -383,20 +382,20 @@ class _FavoritePageState extends State<FavoritePage> {
                   ),
                   SizedBox(height: 2),
                   if (openRegion == true) ... [
-                    SizedBox(height: 3),
+                    SizedBox(height: 7),
                     Center(
                       child: Container(
                         width: width - 37,
-                        height: height * 0.17,
+                        height: height * 0.254,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.9),
                           borderRadius: BorderRadius.circular(15),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
+                              color: Colors.black.withOpacity(0.15),
                               spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: Offset(0, 2),
+                              blurRadius: 10,
+                              offset: Offset(0, -1),
                             ),
                           ],
                         ),
@@ -498,10 +497,10 @@ class _FavoritePageState extends State<FavoritePage> {
                                       width: width * 0.016,
                                     ),
                                   ], // 내 주변
-                                  for (int i = 1; i < 5; i++) ...[
+                                  for (int i = 1; i < 2; i++) ...[
                                     regionSelected[i]
                                         ? Container(
-                                          width: 48,
+                                          width: 72,
                                           child: OutlinedButton(
                                               onPressed: () {
                                                 setState(() {
@@ -520,7 +519,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                   shape: StadiumBorder())),
                                         )
                                         : Container(
-                                          width: 48,
+                                          width: 72,
                                           child: OutlinedButton(
                                               onPressed: () {
                                                 setState(() {
@@ -543,22 +542,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                     SizedBox(
                                       width: width * 0.016,
                                     ),
-                                  ] // 서울, 경기, 강원, 부산
-                                ],
-                              ),
-                            ), // 첫째줄 필터
-                            SizedBox(
-                              height: height * 0.01,
-                            ), // 빈 공간
-                            Container(
-                              height: height * 0.03,
-                              child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  for (int i = 5; i < regionList.length; i++) ...[
+                                  ], // 강남/서초
+                                  for (int i = 2; i < 3; i++) ...[
                                     regionSelected[i]
                                         ? Container(
-                                      width: 48,
+                                      width: 72,
                                       child: OutlinedButton(
                                           onPressed: () {
                                             setState(() {
@@ -577,7 +565,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                               shape: StadiumBorder())),
                                     )
                                         : Container(
-                                      width: 48,
+                                      width: 72,
                                       child: OutlinedButton(
                                           onPressed: () {
                                             setState(() {
@@ -600,10 +588,319 @@ class _FavoritePageState extends State<FavoritePage> {
                                     SizedBox(
                                       width: width * 0.016,
                                     ),
-                                  ] // 인천, 경상, 전라, 충청, 제주
+                                  ] // 강동/송파
+                                ],
+                              ),
+                            ), // 첫째줄 필터
+                            SizedBox(
+                              height: height * 0.01,
+                            ), // 빈 공간
+                            Container(
+                              height: height * 0.03,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  for (int i = 3; i < 4; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 100,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 100,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 동작/관악/금천
+                                  for (int i = 4; i < 5; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 112,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 112,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 마포/은평/서대문
                                 ],
                               ),
                             ), // 둘째줄 필터
+                            SizedBox(
+                              height: height * 0.01,
+                            ), // 빈 공간
+                            Container(
+                              height: height * 0.03,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  for (int i = 5; i < 6; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 136,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 136,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 성동/광진/중랑/동대문
+                                  for (int i = 6; i < 7; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 126,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 126,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 성북/강북/도봉/노원
+                                ],
+                              ),
+                            ), // 세번째줄 필터
+                            SizedBox(
+                              height: height * 0.01,
+                            ), // 빈 공간
+                            Container(
+                              height: height * 0.03,
+                              child: ListView(
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  for (int i = 7; i < 8; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 136,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 136,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 영등포/구로/강서/양천
+                                  for (int i = 8; i < 9; i++) ...[
+                                    regionSelected[i]
+                                        ? Container(
+                                      width: 100,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Colors.white, fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfff42957),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder())),
+                                    )
+                                        : Container(
+                                      width: 100,
+                                      child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() {
+                                              regionSelected[i] = !regionSelected[i];
+                                            });
+                                          },
+                                          child: Text(
+                                            regionList[i],
+                                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                          ),
+                                          style: OutlinedButton.styleFrom(
+                                              backgroundColor: Color(0xfffff6f8),
+                                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                              minimumSize: Size.zero,
+                                              padding: EdgeInsets.zero,
+                                              shape: StadiumBorder()
+                                          )
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: width * 0.016,
+                                    ),
+                                  ], // 용산/종로/중구
+                                ],
+                              ),
+                            ), // 네번째줄 필터
                           ],
                         ), // innerfilter 박스 내 내용물
 
