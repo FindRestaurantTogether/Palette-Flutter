@@ -71,6 +71,14 @@ class _NaverMapPageState extends State<NaverMapPage> {
   }
 
   @override
+  void dispose() {
+    _MapPageController.dispose();
+    _FilterPageController.dispose();
+    _NaverMapPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

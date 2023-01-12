@@ -32,6 +32,14 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   @override
+  void dispose() {
+    _NameTextEditingController.dispose();
+    _IdTextEditingController.dispose();
+    _PasswordTextEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

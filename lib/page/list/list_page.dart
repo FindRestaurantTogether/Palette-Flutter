@@ -23,6 +23,12 @@ class _ListPageState extends State<ListPage> {
   final _TextEditingController = TextEditingController();
 
   @override
+  void dispose() {
+    _TextEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

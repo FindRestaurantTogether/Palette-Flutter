@@ -3,7 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:myapp/page/detail/detail_page_controller.dart';
-import 'package:myapp/page/detail/review/see_review_page.dart';
+import 'package:myapp/page/detail/review/see_all_review_page.dart';
 import 'package:myapp/page/detail/review/write_review_page1.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
@@ -45,7 +45,7 @@ class _DetailPageState extends State<DetailPage> {
       onWillPop: () async {
         Get.back();
         return false;
-       },
+      },
       child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -76,8 +76,8 @@ class _DetailPageState extends State<DetailPage> {
                           height: height * 0.32,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                              image: AssetImage(_selectedRestaurant.exteriorImage),
-                              fit: BoxFit.fill
+                                image: AssetImage(_selectedRestaurant.exteriorImage),
+                                fit: BoxFit.fill
                             ),
                           ),
                         ),
@@ -89,7 +89,7 @@ class _DetailPageState extends State<DetailPage> {
                         Center(
                           child: Container(
                             width: width * 0.87,
-                            height: _DetailPageController.mI? height * 0.36 : height * 0.338,
+                            height: _DetailPageController.mI? height * 0.36 : height * 0.355,
                             padding: EdgeInsets.all(20),
                             decoration: BoxDecoration(
                               color: Colors.white,
@@ -135,31 +135,31 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             _selectedRestaurant.open
                                                 ? Container(
-                                                  height: 32,
-                                                  child: Align(
-                                                    alignment: Alignment.topCenter,
-                                                    child: Container(
-                                                      width: 8,
-                                                      height: 8,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.cyan.shade300,
-                                                          shape: BoxShape.circle),
-                                                    ),
-                                                  ),
-                                                )
-                                                : Container(
-                                                  height: 32,
-                                                  child: Align(
-                                                    alignment: Alignment.topCenter,
-                                                    child: Container(
-                                                      width: 8,
-                                                      height: 8,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.red.shade300,
-                                                          shape: BoxShape.circle),
-                                                    ),
-                                                  ),
+                                              height: 32,
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Container(
+                                                  width: 8,
+                                                  height: 8,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.cyan.shade300,
+                                                      shape: BoxShape.circle),
                                                 ),
+                                              ),
+                                            )
+                                                : Container(
+                                              height: 32,
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Container(
+                                                  width: 8,
+                                                  height: 8,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red.shade300,
+                                                      shape: BoxShape.circle),
+                                                ),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ),
@@ -168,31 +168,31 @@ class _DetailPageState extends State<DetailPage> {
                                         child: Obx(() {
                                           return  _NaverMapPageController.restaurants[selectedIndex].favorite.value
                                               ? IconButton(
-                                                  padding: EdgeInsets.all(0.0),
-                                                  onPressed: (){
-                                                    setState(() {
-                                                      _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                                                    });
-                                                  },
-                                                  icon: Icon(
-                                                    Icons.bookmark,
-                                                    color: Colors.pinkAccent,
-                                                    size: 25
-                                                  )
+                                              padding: EdgeInsets.all(0.0),
+                                              onPressed: (){
+                                                setState(() {
+                                                  _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                                                });
+                                              },
+                                              icon: Icon(
+                                                  Icons.bookmark,
+                                                  color: Colors.pinkAccent,
+                                                  size: 25
                                               )
+                                          )
                                               : IconButton(
-                                                  padding: EdgeInsets.all(0.0),
-                                                  onPressed: () {
-                                                    setState(() {
-                                                      _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                                                    });
-                                                  },
-                                                  icon: Icon(
-                                                      Icons.bookmark_border,
-                                                      color: Colors.pinkAccent,
-                                                      size: 25
-                                                  ),
-                                              );
+                                            padding: EdgeInsets.all(0.0),
+                                            onPressed: () {
+                                              setState(() {
+                                                _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                                              });
+                                            },
+                                            icon: Icon(
+                                                Icons.bookmark_border,
+                                                color: Colors.pinkAccent,
+                                                size: 25
+                                            ),
+                                          );
                                         }),
                                       )
                                     ],
@@ -219,14 +219,14 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 1),
                                       GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            _DetailPageController.changeState();
-                                          });
-                                        },
-                                        child: _DetailPageController.mI
-                                            ? Icon(Icons.keyboard_arrow_up, color: Colors.black54, size: 20)
-                                            : Icon(Icons.keyboard_arrow_down, color: Colors.black54, size: 20)
+                                          onTap: () {
+                                            setState(() {
+                                              _DetailPageController.changeState();
+                                            });
+                                          },
+                                          child: _DetailPageController.mI
+                                              ? Icon(Icons.keyboard_arrow_up, color: Colors.black54, size: 20)
+                                              : Icon(Icons.keyboard_arrow_down, color: Colors.black54, size: 20)
                                       ),
                                       SizedBox(width: 5),
                                       Text(
@@ -243,44 +243,44 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 _DetailPageController.mI
                                     ? Container(
-                                        child: Column(
-                                      children: [
-                                        SizedBox(height: 5),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              '메뉴 ',
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Colors.pinkAccent,
-                                              size: 12,
-                                            ),
-                                            Text(
-                                              ' ${_selectedRestaurant.menuRating}(${_selectedRestaurant.numberOfMenuRating})',
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                            SizedBox(width: 13),
-                                            Text(
-                                              '매장 ',
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                            Icon(
-                                              Icons.star,
-                                              color: Colors.pinkAccent,
-                                              size: 12,
-                                            ),
-                                            Text(
-                                              ' ${_selectedRestaurant.restaurantRating}(${_selectedRestaurant.numberOfRestaurantRating})',
-                                              style: TextStyle(fontSize: 12),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    )
+                                  child: Column(
+                                    children: [
+                                      SizedBox(height: 5),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '메뉴 ',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.pinkAccent,
+                                            size: 12,
+                                          ),
+                                          Text(
+                                            ' ${_selectedRestaurant.menuRating}(${_selectedRestaurant.numberOfMenuRating})',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          SizedBox(width: 13),
+                                          Text(
+                                            '매장 ',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                          Icon(
+                                            Icons.star,
+                                            color: Colors.pinkAccent,
+                                            size: 12,
+                                          ),
+                                          Text(
+                                            ' ${_selectedRestaurant.restaurantRating}(${_selectedRestaurant.numberOfRestaurantRating})',
+                                            style: TextStyle(fontSize: 12),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                )
                                     : SizedBox(),
                                 SizedBox(height: height * 0.016),
                                 Row(
@@ -296,15 +296,15 @@ class _DetailPageState extends State<DetailPage> {
                                 SizedBox(height: height * 0.014),
                                 Container(
                                   width: width * 0.67,
-                                  height: height * 0.156,
+                                  height: height * 0.16,
                                   padding: EdgeInsets.only(top: 10),
                                   decoration: BoxDecoration(
-                                    border: Border(
-                                      top: BorderSide(
-                                        color: Colors.black45,
-                                        width: 1,
-                                      ),
-                                    )
+                                      border: Border(
+                                        top: BorderSide(
+                                          color: Colors.black45,
+                                          width: 1,
+                                        ),
+                                      )
                                   ),
                                   child: Column(
                                     children: [
@@ -321,8 +321,8 @@ class _DetailPageState extends State<DetailPage> {
                                             Text(
                                               '영업 중',
                                               style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 12
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 12
                                               ),
                                             ),
                                             Icon(
@@ -398,9 +398,9 @@ class _DetailPageState extends State<DetailPage> {
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       Icon(
-                                                        Icons.call,
-                                                        color: Colors.black54,
-                                                        size: 17
+                                                          Icons.call,
+                                                          color: Colors.black54,
+                                                          size: 17
                                                       ),
                                                     ],
                                                   )
@@ -411,8 +411,8 @@ class _DetailPageState extends State<DetailPage> {
                                                     mainAxisAlignment: MainAxisAlignment.center,
                                                     children: [
                                                       Icon(
-                                                        Icons.open_in_new,
-                                                        color: Colors.black54,
+                                                          Icons.open_in_new,
+                                                          color: Colors.black54,
                                                           size: 17
                                                       ),
                                                     ],
@@ -424,8 +424,8 @@ class _DetailPageState extends State<DetailPage> {
                                                   mainAxisAlignment: MainAxisAlignment.center,
                                                   children: [
                                                     Icon(
-                                                      Icons.navigation,
-                                                      color: Colors.black54,
+                                                        Icons.navigation,
+                                                        color: Colors.black54,
                                                         size: 17
                                                     ),
                                                   ],
@@ -557,11 +557,11 @@ class _DetailPageState extends State<DetailPage> {
                           padding: EdgeInsets.only(left: 20, right: 20, bottom: 25),
                           decoration: BoxDecoration(
                             border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.black12,
-                                  width: 1,
-                                ),
+                              bottom: BorderSide(
+                                color: Colors.black12,
+                                width: 1,
                               ),
+                            ),
                           ),
                           child: Column(
                             children: [
@@ -569,129 +569,13 @@ class _DetailPageState extends State<DetailPage> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                      '메뉴',
-                                      style: TextStyle(
+                                    '메뉴',
+                                    style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.bold
-                                      ),
                                     ),
+                                  ),
                                   Row(
-                                    children: [
-                                      Text(
-                                        '전체보기',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12
-                                        ),
-                                      ),
-                                      SizedBox(width: 8),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Colors.grey,
-                                        size: 12,
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                              SizedBox(height: 12),
-                              Container(
-                                height: 110,
-                                child: ListView.builder(
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.all(0),
-                                  itemCount: _selectedRestaurant.menu.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    return Column(
-                                      children: [
-                                        SizedBox(height: 7),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 80,
-                                                  child: Text(
-
-                                                    '${menuName[index]}',
-                                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  ' |  ',
-                                                  style: TextStyle(fontSize: 15, color: Colors.grey),
-                                                ),
-                                                Container(
-                                                  width: 80,
-                                                  child: Text(
-                                                    ' ${menuInfo[index][0].toInt()}원',
-                                                    style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 15,
-                                                  child: Icon(
-                                                    Icons.star,
-                                                    color: Colors.pinkAccent,
-                                                    size: 14,
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 20,
-                                                  alignment: Alignment.centerRight,
-                                                  child: Text(
-                                                    '${menuInfo[index][1]}',
-                                                    style: TextStyle(
-                                                        fontSize: 12
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  width: 42,
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    '(${menuInfo[index][2].toInt()}건)',
-                                                    style: TextStyle(
-                                                        fontSize: 12
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    );
-                                  }
-                                ),
-                              ),
-                            ],
-                          ),
-                        ), // 메뉴판
-                        Container(
-                          width: width * 0.87,
-                          padding: EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 15),
-                          // padding: EdgeInsets.only(top: 0, bottom: 10, left: 30, right: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '최근 리뷰',
-                                style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold
-                                ),
-                              ),
-                              GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => SeeReviewPage(), arguments: _selectedRestaurant);
-                                  },
-                                  child: Row(
                                     children: [
                                       Text(
                                         '전체보기',
@@ -708,9 +592,125 @@ class _DetailPageState extends State<DetailPage> {
                                       )
                                     ],
                                   )
-                              )
+                                ],
+                              ),
+                              SizedBox(height: 12),
+                              Container(
+                                height: 110,
+                                child: ListView.builder(
+                                    physics: NeverScrollableScrollPhysics(),
+                                    padding: EdgeInsets.all(0),
+                                    itemCount: _selectedRestaurant.menu.length,
+                                    itemBuilder: (BuildContext context, int index) {
+                                      return Column(
+                                        children: [
+                                          SizedBox(height: 7),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 80,
+                                                    child: Text(
+
+                                                      '${menuName[index]}',
+                                                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    ' |  ',
+                                                    style: TextStyle(fontSize: 15, color: Colors.grey),
+                                                  ),
+                                                  Container(
+                                                    width: 80,
+                                                    child: Text(
+                                                      ' ${menuInfo[index][0].toInt()}원',
+                                                      style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    width: 15,
+                                                    child: Icon(
+                                                      Icons.star,
+                                                      color: Colors.pinkAccent,
+                                                      size: 14,
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 20,
+                                                    alignment: Alignment.centerRight,
+                                                    child: Text(
+                                                      '${menuInfo[index][1]}',
+                                                      style: TextStyle(
+                                                          fontSize: 12
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    width: 42,
+                                                    alignment: Alignment.centerLeft,
+                                                    child: Text(
+                                                      '(${menuInfo[index][2].toInt()}건)',
+                                                      style: TextStyle(
+                                                          fontSize: 12
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                ),
+                              ),
                             ],
-                          )
+                          ),
+                        ), // 메뉴판
+                        Container(
+                            width: width * 0.87,
+                            padding: EdgeInsets.only(left: 20, right: 20, top: 25, bottom: 15),
+                            // padding: EdgeInsets.only(top: 0, bottom: 10, left: 30, right: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '최근 리뷰',
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => SeeAllReviewPage(), arguments: _selectedRestaurant);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          '전체보기',
+                                          style: TextStyle(
+                                              color: Colors.grey,
+                                              fontSize: 12
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Colors.grey,
+                                          size: 12,
+                                        )
+                                      ],
+                                    )
+                                )
+                              ],
+                            )
                         ), // 최근 리뷰
                         SingleChildScrollView(
                           physics: BouncingScrollPhysics(),
@@ -810,20 +810,20 @@ class _DetailPageState extends State<DetailPage> {
                                             Text(
                                               '3',
                                               style: TextStyle(
-                                                fontSize: 10
+                                                  fontSize: 10
                                               ),
                                             )
                                           ],
                                         ), // 별점과 좋아요 버튼과 좋아요 개수
                                         SizedBox(height: 12),
                                         Container(
-                                          child: Text(
+                                            child: Text(
                                               '일단 강추부터 박고 갑니다. 지난주에 처음 방문하고 너무 좋아서 그 자리에서 바로 다른 약속을 이곳으로 잡았어요.',
                                               style: TextStyle(
-                                                fontSize: 11,
-                                                color: Color(0xff464646)
+                                                  fontSize: 11,
+                                                  color: Color(0xff464646)
                                               ),
-                                          )
+                                            )
                                         ), // 텍스트 설명
                                         SizedBox(height: 12),
                                         Container(
@@ -979,31 +979,31 @@ class _DetailPageState extends State<DetailPage> {
                 right: 20,
                 bottom: 30,
                 child: Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
-                            spreadRadius: 2,
-                            blurRadius: 6,
-                            offset: Offset(0, 0),
-                          ),
-                        ],
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        spreadRadius: 2,
+                        blurRadius: 6,
+                        offset: Offset(0, 0),
                       ),
-                      child: FloatingActionButton(
-                        heroTag: null,
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                        ),
-                        backgroundColor: Color(0xfff42957),
-                        onPressed: () {
-                          Get.to(() => WriteReviewPage1(), arguments: [_selectedRestaurant,menuName]);
-                        },
-                      ),
+                    ],
+                  ),
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    child: Icon(
+                      Icons.edit,
+                      color: Colors.white,
                     ),
+                    backgroundColor: Color(0xfff42957),
+                    onPressed: () {
+                      Get.to(() => WriteReviewPage1(), arguments: [_selectedRestaurant,menuName]);
+                    },
+                  ),
+                ),
               )
             ],
           )

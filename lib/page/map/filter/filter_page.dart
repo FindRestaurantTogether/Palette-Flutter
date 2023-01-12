@@ -25,6 +25,12 @@ class _FilterPageState extends State<FilterPage> {
   // List<String> InnerFilterListJapanese = ["초밥/회", "돈까스", "라멘", "우동/모밀", "덮밥", "기타"];
 
   @override
+  void dispose() {
+    _FilterPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

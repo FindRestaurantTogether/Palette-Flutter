@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
+import 'package:myapp/page/detail/review/see_only_picture.dart';
 import 'package:myapp/page/detail/review/write_review_page1.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 final List<String> DropdownList = ['전체', '음식', '매장'];
 final List<String> DropdownList2 = ['최신순', '추천순', '평점순'];
 
-class SeeReviewPage extends StatefulWidget {
-  SeeReviewPage({Key? key}) : super(key: key);
+class SeeAllReviewPage extends StatefulWidget {
+  SeeAllReviewPage({Key? key}) : super(key: key);
 
   @override
-  State<SeeReviewPage> createState() => _SeeReviewPageState();
+  State<SeeAllReviewPage> createState() => _SeeAllReviewPageState();
 }
 
-class _SeeReviewPageState extends State<SeeReviewPage> {
+class _SeeAllReviewPageState extends State<SeeAllReviewPage> {
 
   String? DropdownSelected = DropdownList.first;
   String? DropdownSelected2 = DropdownList2.first;
@@ -35,7 +36,7 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
   @override
   Widget build(BuildContext context) {
 
-    final _selectedRestaurant = Get.arguments;
+    final selectedRestaurant = Get.arguments;
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -85,7 +86,7 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
                           ),
                           Container(
                             child: Text(
-                              '${_selectedRestaurant.name}',
+                              '${selectedRestaurant.name}',
                               style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold
@@ -93,7 +94,9 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
                             ),
                           ),
                           IconButton(
-                              onPressed: (){},
+                              onPressed: (){
+                                Get.to(() => SeeOnlyPicturePage(), arguments: selectedRestaurant);
+                              },
                               icon: Icon(
                                 Icons.photo,
                                 color: Colors.black54,
@@ -115,7 +118,7 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
                           ),
                           SizedBox(width: 8),
                           Text(
-                            '${_selectedRestaurant.overallRating}(${_selectedRestaurant.numberOfOverallRating})',
+                            '${selectedRestaurant.overallRating}(${selectedRestaurant.numberOfOverallRating})',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold
@@ -128,7 +131,7 @@ class _SeeReviewPageState extends State<SeeReviewPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            '메뉴 ${_selectedRestaurant.menuRating}(${_selectedRestaurant.numberOfMenuRating})    매장 ${_selectedRestaurant.restaurantRating}(${_selectedRestaurant.numberOfRestaurantRating})',
+                            '메뉴 ${selectedRestaurant.menuRating}(${selectedRestaurant.numberOfMenuRating})    매장 ${selectedRestaurant.restaurantRating}(${selectedRestaurant.numberOfRestaurantRating})',
                             style: TextStyle(
                                 color: Colors.black26,
                                 fontSize: 13

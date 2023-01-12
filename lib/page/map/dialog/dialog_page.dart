@@ -16,6 +16,13 @@ class _DialogPageState extends State<DialogPage> {
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
   @override
+  void dispose() {
+    _DialogPageController.dispose();
+    _NaverMapPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:myapp/page/detail/review/select_menupage.dart';
+import 'package:myapp/page/detail/review/select_menu_and_give_grade_page.dart';
 import 'package:myapp/page/detail/review/write_reveiw_page_controller.dart';
 import 'package:myapp/page/detail/review/write_review_page2.dart';
 
@@ -95,6 +95,12 @@ class _WriteReviewPage1State extends State<WriteReviewPage1> {
   //     menuCardList.removeAt(index);
   //   });
   // }
+
+  @override
+  void dispose() {
+    _WriteReviewPageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -292,7 +298,7 @@ class _WriteReviewPage1State extends State<WriteReviewPage1> {
                                       context: context,
                                       barrierDismissible: false,
                                       builder: (BuildContext context) {
-                                        return SelectMenuPage(menuName: menuName);
+                                        return SelectMenuAndGiveGradePage(menuName: menuName);
                                       }
                                   );
                                 },

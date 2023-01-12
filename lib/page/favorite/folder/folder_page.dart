@@ -21,7 +21,7 @@ class _FolderPageState extends State<FolderPage> {
   final _FolderPageController = Get.put(FolderPageController());
   final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
-  final textController = TextEditingController();
+  final _TextEditingController = TextEditingController();
 
   bool isList = true;
 
@@ -37,6 +37,15 @@ class _FolderPageState extends State<FolderPage> {
     // TODO: implement initState
     super.initState();
     isChecked = List<bool>.filled(_NaverMapPageController.restaurants.where((NaverMapPageModel restaurant) => restaurant.favorite == true).length, false);
+  }
+
+  @override
+  void dispose() {
+    _FolderPageController.dispose();
+    _FavoriteFolderPageController.dispose();
+    _NaverMapPageController.dispose();
+    _TextEditingController.dispose();
+    super.dispose();
   }
 
   @override

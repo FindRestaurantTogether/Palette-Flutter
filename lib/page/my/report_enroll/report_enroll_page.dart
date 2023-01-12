@@ -11,7 +11,7 @@ class ReportEnrollPage extends StatefulWidget {
 
 class _ReportEnrollPageState extends State<ReportEnrollPage> {
 
-  final textController = TextEditingController();
+  final _TextEditingController = TextEditingController();
 
   bool isReport = true;
 
@@ -21,6 +21,12 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
   void initState() {
     ToggleSelected = [false, false, false];
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _TextEditingController.dispose();
+    super.dispose();
   }
 
   @override

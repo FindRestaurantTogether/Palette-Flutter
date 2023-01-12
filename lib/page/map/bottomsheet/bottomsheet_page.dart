@@ -35,6 +35,14 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
   }
 
   @override
+  void dispose() {
+    _FavoriteListPageController.dispose();
+    _FavoriteFolderPageController.dispose();
+    _NaverMapPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.markerId == selectedRestaurant.markerId);
@@ -45,7 +53,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     return Container(
       padding: EdgeInsets.only(top: 25, bottom: 25, left: 35, right: 35),
       width: width,
-      height: height * 0.28,
+      height: height * 0.3,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.white,

@@ -53,7 +53,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                     '${selectedRestaurant.name}',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 20
+                        fontSize: 20,
                     ),
                   ),
                   SizedBox(height: 5),

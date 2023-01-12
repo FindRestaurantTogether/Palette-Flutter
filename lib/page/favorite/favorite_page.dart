@@ -46,6 +46,14 @@ class _FavoritePageState extends State<FavoritePage> {
   late int listRestaurantLength;
 
   @override
+  void dispose() {
+    _FavoriteListPageController.dispose();
+    _FavoriteFolderPageController.dispose();
+    _NaverMapPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

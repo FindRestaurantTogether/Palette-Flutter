@@ -56,6 +56,13 @@ class _MyPageState extends State<MyPage> {
   ];
 
   @override
+  void dispose() {
+    _MyPageController.dispose();
+    _PageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
@@ -212,7 +219,7 @@ class _MyPageState extends State<MyPage> {
                       SizedBox(height: 5),
                       Container(
                         width: width * 0.87,
-                        height: height * 0.2,
+                        height: height * 0.21,
                         padding: EdgeInsets.all(17),
                         decoration: BoxDecoration(
                           color: Colors.white,

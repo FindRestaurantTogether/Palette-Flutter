@@ -32,6 +32,14 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   @override
+  void dispose() {
+    _MyPageController.dispose();
+    _IdTextEditingController.dispose();
+    _PasswordTextEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     final user = FirebaseAuth.instance.currentUser;

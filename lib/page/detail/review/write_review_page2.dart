@@ -15,6 +15,13 @@ class _WriteReviewPage2State extends State<WriteReviewPage2> {
   final _WriteReviewPageController = Get.put(WriteReviewPageController());
 
   @override
+  void dispose() {
+    _WriteReviewPageController.dispose();
+    super.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;

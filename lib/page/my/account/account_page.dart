@@ -61,6 +61,12 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   @override
+  void dispose() {
+    _MyPageController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
