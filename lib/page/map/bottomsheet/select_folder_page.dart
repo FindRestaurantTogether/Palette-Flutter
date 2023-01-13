@@ -32,7 +32,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.markerId == selectedRestaurant.markerId);
+    final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
 
     return Obx(() {
       return Column(

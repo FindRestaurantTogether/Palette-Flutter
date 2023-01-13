@@ -14,7 +14,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     Timer(
-      Duration(seconds: 5),
+      Duration(seconds: 1),
       () {
         Get.off(() => TabPage());
       }

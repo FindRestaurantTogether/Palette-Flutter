@@ -33,7 +33,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
 
     final _selectedRestaurant = Get.arguments;
-    int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.markerId == _selectedRestaurant.markerId);
+    int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == _selectedRestaurant.markerId);
 
     final menuName = _selectedRestaurant.menu.keys.toList();
     final menuInfo = _selectedRestaurant.menu.values.toList();

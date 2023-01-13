@@ -33,10 +33,13 @@ class _NaverMapPageState extends State<NaverMapPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!this.mounted) return;
       _NaverMapPageController.restaurants.forEach((NaverMapPageModel restaurant) async {
-        CustomMarker customMarker = CustomMarker(restaurant: restaurant, markerId: restaurant.markerId, anchor: restaurant.anchor, position: restaurant.position);
+        CustomMarker customMarker = CustomMarker(
+            restaurant: restaurant,
+            position: restaurant.position,
+        );
         customMarker.createImage(context);
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
-          final NaverMapPageModel _selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.markerId == marker.markerId);
+          final NaverMapPageModel _selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
           setState(() async {
             final controller = await _controller.future;
             await controller.moveCamera(CameraUpdate.scrollTo(marker.position));

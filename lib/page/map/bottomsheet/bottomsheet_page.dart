@@ -45,7 +45,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
   @override
   Widget build(BuildContext context) {
 
-    final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.markerId == selectedRestaurant.markerId);
+    final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
