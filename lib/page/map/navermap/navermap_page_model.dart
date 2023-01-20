@@ -1,17 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 abstract class NaverMapPageModel {
   final String uid = '';
   final String markerImage = '';
-  final double captionTextSize = 0;
-  final Color captionColor = Colors.white;
-  final Color captionHaloColor = Colors.white;
-  final int captionOffset = 0;
-  final bool captionPerspectiveEnabled = false;
-  final AnchorPoint anchor = AnchorPoint(0.0, 0.0);
   final String exteriorImage = '';
   final String name = '';
   final bool open = false;
@@ -38,18 +30,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   final String uid;
   @override
   final String markerImage;
-  @override
-  final double captionTextSize = 20;
-  @override
-  final Color captionColor = Color(0xfff42957);
-  @override
-  final Color captionHaloColor = Colors.white;
-  @override
-  final int captionOffset = 3;
-  @override
-  final bool captionPerspectiveEnabled = true;
-  @override
-  final AnchorPoint anchor = AnchorPoint(0.5, 0.7);
   @override
   final String exteriorImage;
   @override

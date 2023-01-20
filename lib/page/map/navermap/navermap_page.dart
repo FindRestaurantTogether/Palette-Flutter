@@ -32,6 +32,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
     // sleep(Duration(seconds: 2));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!this.mounted) return;
+      // restaurants 데이터들로 CustomMarker 생성 후 markers에 저장
       _NaverMapPageController.restaurants.forEach((NaverMapPageModel restaurant) async {
         CustomMarker customMarker = CustomMarker(
             restaurant: restaurant,
@@ -230,8 +231,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
       final Position position = await Geolocator.getCurrentPosition();
       controller.moveCamera(CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude)));
     }
-
-
   }
   Future<void> _onCameraChange(LatLng latLng, CameraChangeReason reason, bool isAnimated) async {
     print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'

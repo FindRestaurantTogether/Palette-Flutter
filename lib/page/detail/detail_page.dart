@@ -5,6 +5,7 @@ import 'package:like_button/like_button.dart';
 import 'package:myapp/page/detail/detail_page_controller.dart';
 import 'package:myapp/page/detail/review/see_all_review_page.dart';
 import 'package:myapp/page/detail/review/write_review_page1.dart';
+import 'package:myapp/page/map/bottomsheet/select_folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -32,11 +33,11 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
 
-    final _selectedRestaurant = Get.arguments;
-    int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == _selectedRestaurant.markerId);
+    final selectedRestaurant = Get.arguments;
+    int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
 
-    final menuName = _selectedRestaurant.menu.keys.toList();
-    final menuInfo = _selectedRestaurant.menu.values.toList();
+    final menuName = selectedRestaurant.menu.keys.toList();
+    final menuInfo = selectedRestaurant.menu.values.toList();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -76,7 +77,7 @@ class _DetailPageState extends State<DetailPage> {
                           height: height * 0.32,
                           decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage(_selectedRestaurant.exteriorImage),
+                                image: AssetImage(selectedRestaurant.exteriorImage),
                                 fit: BoxFit.fill
                             ),
                           ),
@@ -124,7 +125,7 @@ class _DetailPageState extends State<DetailPage> {
                                           children: [
                                             Container(
                                               child: Text(
-                                                '${_selectedRestaurant.name}',
+                                                '${selectedRestaurant.name}',
                                                 style: TextStyle(
                                                     fontSize: 22,
                                                     fontWeight: FontWeight.bold),
@@ -133,7 +134,7 @@ class _DetailPageState extends State<DetailPage> {
                                             SizedBox(
                                               width: 3,
                                             ),
-                                            _selectedRestaurant.open
+                                            selectedRestaurant.open
                                                 ? Container(
                                               height: 32,
                                               child: Align(
@@ -171,7 +172,7 @@ class _DetailPageState extends State<DetailPage> {
                                               padding: EdgeInsets.all(0.0),
                                               onPressed: (){
                                                 setState(() {
-                                                  _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                                                  // _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
                                                 });
                                               },
                                               icon: Icon(
@@ -184,7 +185,13 @@ class _DetailPageState extends State<DetailPage> {
                                             padding: EdgeInsets.all(0.0),
                                             onPressed: () {
                                               setState(() {
-                                                _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                                                showDialog(
+                                                    context: context,
+                                                    barrierDismissible: false,
+                                                    builder: (BuildContext context) {
+                                                      return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                                    }
+                                                );
                                               });
                                             },
                                             icon: Icon(
@@ -213,7 +220,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 2),
                                       Text(
-                                        ' ${_selectedRestaurant.overallRating}(${_selectedRestaurant.numberOfOverallRating})',
+                                        ' ${selectedRestaurant.overallRating}(${selectedRestaurant.numberOfOverallRating})',
                                         style:
                                         TextStyle(fontSize: 15),
                                       ),
@@ -235,7 +242,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 7),
                                       Text(
-                                        '${_selectedRestaurant.classification}      ',
+                                        '${selectedRestaurant.classification}      ',
                                         style: TextStyle(fontSize: 15),
                                       ),
                                     ],
@@ -259,7 +266,7 @@ class _DetailPageState extends State<DetailPage> {
                                             size: 12,
                                           ),
                                           Text(
-                                            ' ${_selectedRestaurant.menuRating}(${_selectedRestaurant.numberOfMenuRating})',
+                                            ' ${selectedRestaurant.menuRating}(${selectedRestaurant.numberOfMenuRating})',
                                             style: TextStyle(fontSize: 12),
                                           ),
                                           SizedBox(width: 13),
@@ -273,7 +280,7 @@ class _DetailPageState extends State<DetailPage> {
                                             size: 12,
                                           ),
                                           Text(
-                                            ' ${_selectedRestaurant.restaurantRating}(${_selectedRestaurant.numberOfRestaurantRating})',
+                                            ' ${selectedRestaurant.restaurantRating}(${selectedRestaurant.numberOfRestaurantRating})',
                                             style: TextStyle(fontSize: 12),
                                           ),
                                         ],
@@ -286,9 +293,9 @@ class _DetailPageState extends State<DetailPage> {
                                 Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      for (int i = 0; i < _selectedRestaurant.atmosphere.length; i++)
+                                      for (int i = 0; i < selectedRestaurant.atmosphere.length; i++)
                                         Text(
-                                          '#${_selectedRestaurant.atmosphere[i]} ',
+                                          '#${selectedRestaurant.atmosphere[i]} ',
                                           style: TextStyle(fontSize: 12, color: Colors.cyan.shade300),
                                         )
                                     ]
@@ -345,7 +352,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 5),
                                             Text(
-                                                '${_selectedRestaurant.address}',
+                                                '${selectedRestaurant.address}',
                                                 style: TextStyle(fontSize: 12)
                                             ),
                                             // SizedBox(width: 3),
@@ -370,15 +377,15 @@ class _DetailPageState extends State<DetailPage> {
                                             SizedBox(width: 6),
                                             Row(
                                                 children: [
-                                                  for (int i = 0; i < _selectedRestaurant.service.length; i++)
-                                                    if (i == _selectedRestaurant.service.length - 1)
+                                                  for (int i = 0; i < selectedRestaurant.service.length; i++)
+                                                    if (i == selectedRestaurant.service.length - 1)
                                                       Text(
-                                                        '${_selectedRestaurant.service[i]}',
+                                                        '${selectedRestaurant.service[i]}',
                                                         style: TextStyle(fontSize: 12, color: Colors.black87),
                                                       )
                                                     else
                                                       Text(
-                                                        '${_selectedRestaurant.service[i]}, ',
+                                                        '${selectedRestaurant.service[i]}, ',
                                                         style: TextStyle(fontSize: 12, color: Colors.black87),
                                                       )
                                                 ]
@@ -470,7 +477,7 @@ class _DetailPageState extends State<DetailPage> {
                                                                   children: [
                                                                     GestureDetector(
                                                                       onTap: () {
-                                                                        KakaoMapUtils.OpenKakaoMap('${_selectedRestaurant.address}');
+                                                                        KakaoMapUtils.OpenKakaoMap('${selectedRestaurant.address}');
                                                                       },
                                                                       child: Container(
                                                                         child: Column(
@@ -490,7 +497,7 @@ class _DetailPageState extends State<DetailPage> {
                                                                     ),
                                                                     GestureDetector(
                                                                       onTap: () {
-                                                                        GoogleMapUtils.OpenGoogleMap('${_selectedRestaurant.address}');
+                                                                        GoogleMapUtils.OpenGoogleMap('${selectedRestaurant.address}');
                                                                       },
                                                                       child: Container(
                                                                         child: Column(
@@ -510,7 +517,7 @@ class _DetailPageState extends State<DetailPage> {
                                                                     ),
                                                                     GestureDetector(
                                                                       onTap: () {
-                                                                        NaverMapUtils.OpenNaverMap('${_selectedRestaurant.address}');
+                                                                        NaverMapUtils.OpenNaverMap('${selectedRestaurant.address}');
                                                                       },
                                                                       child: Container(
                                                                         child: Column(
@@ -600,7 +607,7 @@ class _DetailPageState extends State<DetailPage> {
                                 child: ListView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     padding: EdgeInsets.all(0),
-                                    itemCount: _selectedRestaurant.menu.length,
+                                    itemCount: selectedRestaurant.menu.length,
                                     itemBuilder: (BuildContext context, int index) {
                                       return Column(
                                         children: [
@@ -689,7 +696,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 GestureDetector(
                                     onTap: () {
-                                      Get.to(() => SeeAllReviewPage(), arguments: _selectedRestaurant);
+                                      Get.to(() => SeeAllReviewPage(), arguments: selectedRestaurant);
                                     },
                                     child: Row(
                                       children: [
@@ -1000,7 +1007,7 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     backgroundColor: Color(0xfff42957),
                     onPressed: () {
-                      Get.to(() => WriteReviewPage1(), arguments: [_selectedRestaurant,menuName]);
+                      Get.to(() => WriteReviewPage1(), arguments: [selectedRestaurant,menuName]);
                     },
                   ),
                 ),

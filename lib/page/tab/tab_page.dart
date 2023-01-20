@@ -8,6 +8,7 @@ import 'package:myapp/page/tab/tab_page_controller.dart';
 import 'package:myapp/page/group/group_page.dart';
 import 'package:myapp/page/onboarding/onboarding.dart';
 
+// 바텀네비게이션바 기능 추가
 class TabPage extends StatelessWidget {
   TabPage({Key? key}) : super(key: key);
   final _TabPageController = Get.put(TabPageController());

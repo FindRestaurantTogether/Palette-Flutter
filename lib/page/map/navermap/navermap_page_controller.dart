@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class NaverMapPageController extends GetxController {
 
+  // 백에서 가져온 데이터 저장 후 이후 다른 페이지에서 이 데이터들 사용
   var restaurants = <NaverMapPageRestaurant>[].obs;
+  // 위에 데이터들로 CustomMarker 생성후 markers에 저장
   var markers = <CustomMarker>[].obs;
 
   @override
@@ -16,10 +16,12 @@ class NaverMapPageController extends GetxController {
     fetchData();
   }
 
+  // 백에서 데이터 가져오기
   void fetchData() {
 
     // await Future.delayed(Duration(seconds: 1));
 
+    // 이거는 가져왔다는 가정하에 데이터 추가한거
     List<NaverMapPageRestaurant> restaurantData = [
       NaverMapPageRestaurant(
         uid: '1',
@@ -67,6 +69,7 @@ class NaverMapPageController extends GetxController {
       ),
     ];
 
+    // restaurants 변수에 백에서 가져온 데이터 넣기
     restaurants.assignAll(restaurantData); // 데이터 받아서 restaurants list에 데이터 추가
   }
 }
