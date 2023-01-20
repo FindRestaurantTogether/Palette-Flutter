@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:myapp/page/loading/loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,6 +12,9 @@ void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(nativeAppKey: 'f967051526ddc92370564aba68e7ba65');
+
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   runApp(MyApp());
 }

@@ -40,7 +40,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
         );
         customMarker.createImage(context);
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
-          final NaverMapPageModel _selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
+          final NaverMapPageModel selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
           setState(() async {
             final controller = await _controller.future;
             await controller.moveCamera(CameraUpdate.scrollTo(marker.position));
@@ -51,19 +51,19 @@ class _NaverMapPageState extends State<NaverMapPage> {
               context: context,
               builder: (context) => GestureDetector(
                   onTap: () {
-                    Get.to(DetailPage(), arguments: _selectedRestaurant);
+                    Get.to(DetailPage(), arguments: selectedRestaurant);
                   },
                   onVerticalDragUpdate: (details) {
                     int sensitivity = 3;
                     if (details.delta.dy < -sensitivity) {
-                      Get.to(DetailPage(), arguments: _selectedRestaurant);
+                      Get.to(DetailPage(), arguments: selectedRestaurant);
                     }
                     if (details.delta.dy > sensitivity) {
                       _MapPageController.ChangeState();
                       Get.back();
                     }
                   },
-                  child: BottomsheetPage(selectedRestaurant: _selectedRestaurant)
+                  child: BottomsheetPage(selectedRestaurant: selectedRestaurant)
               ),
             );
           });
@@ -102,7 +102,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
             NaverMap(
               onMapCreated: onMapCreated,
               mapType: MapType.Basic,
-              // initialCameraPosition: CameraPosition(target: LatLng(position.latitude, position.longitude)),
+              initialCameraPosition: CameraPosition(target: LatLng(37.49369555120038, 127.01370530988898)),
               onCameraChange: _onCameraChange,
               onCameraIdle: _onCameraIdle,
               markers: _NaverMapPageController.markers,

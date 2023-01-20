@@ -32,7 +32,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
+    int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
 
     return Obx(() {
       return Column(
@@ -52,8 +52,10 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                   Text(
                     '${selectedRestaurant.name}',
                     style: TextStyle(
+                        decoration: TextDecoration.none,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
+                        color: Colors.black
                     ),
                   ),
                   SizedBox(height: 5),
@@ -201,14 +203,17 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                                   Text(
                                     _FavoriteFolderPageController.folderName[index],
                                     style: TextStyle(
+                                        decoration: TextDecoration.none,
                                         fontSize: 14,
-                                        fontWeight: FontWeight.bold
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black
                                     ),
                                   ),
                                   SizedBox(width: 10),
                                   Text(
                                     _FavoriteFolderPageController.folderRestaurant[index].length.toString(),
                                     style: TextStyle(
+                                      decoration: TextDecoration.none,
                                       fontSize: 10,
                                       color: Color(0xfff42957),
                                     ),
@@ -223,9 +228,10 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                                     value: folderIsChecked[index],
                                     onChanged: (bool? value) {
                                       setState(() {
-                                        for (var i=0 ; i<folderIsChecked.length; i++) {
-                                          folderIsChecked[i] = false;
-                                        }
+                                        if (folderIsChecked.length > 1)
+                                          for (var i=0 ; i<folderIsChecked.length; i++) {
+                                            folderIsChecked[i] = false;
+                                          }
                                         folderIsChecked[index] = !folderIsChecked[index];
                                       });
                                     },
