@@ -41,6 +41,7 @@ class _FilterPageState extends State<FilterPage> {
     });
   }
 
+  // 음식, 카페, 술집, 서비스, 분위기 알약
   Widget Filter(FilterPageController Controller, double width, double height) {
     return Column(
         children: [
@@ -197,6 +198,7 @@ class _FilterPageState extends State<FilterPage> {
             ],
           ),
           SizedBox(height: 3),
+          // 음식, 카페, 술집, 서비스, 분위기 필터 밑에 뜨는거
           if (Controller.CurrentOuterIndex == 0) ... [FilterFood(Controller, width, height)],
           if (Controller.CurrentOuterIndex == 1) ... [FilterCafe(Controller, width, height)],
           if (Controller.CurrentOuterIndex == 2) ... [FilterAlcohol(Controller, width, height)],
@@ -206,6 +208,7 @@ class _FilterPageState extends State<FilterPage> {
     );
   }
 
+  // 음식, 카페, 술집, 서비스, 분위기 필터 밑에 뜨는거
   Widget FilterFood(FilterPageController Controller, double width, double height) {
     return Center(
       child: Container(
