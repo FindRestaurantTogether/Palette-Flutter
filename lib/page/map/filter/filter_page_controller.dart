@@ -34,7 +34,7 @@ class FilterPageController extends GetxController {
   List<bool> OuterAlcoholSelected = [false, false, false, false, false].obs;
   // 주차, 24시 영업, 포장, 예약, 애완동물 출입가능, 코스, 뷔페, 배달, 무한리필, 오마카세, 미슐랭, 콜키지, 룸 선택 여부
   List<bool> OuterServiceSelected = [false, false, false, false, false, false, false, false, false, false, false, false, false].obs;
-  // 데이트, 가성비, 조용한, 친절한, 인스타, 깨끗한, 고급, 이색적인, 혼밥, 단체, 다이엍,, 뷰가 좋은, 방송 맛집 선택 여부
+  // 데이트, 가성비, 조용한, 친절한, 인스타, 깨끗한, 고급, 이색적인, 혼밥, 단체, 다이어트, 뷰가 좋은, 방송 맛집 선택 여부
   List<bool> OuterMoodSelected = [false, false, false, false, false, false, false, false, false, false, false, false, false].obs;
 
   void ChangeOuterFoodSelected(int index, bool selected) {
