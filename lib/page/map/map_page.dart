@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/filter/filter_page.dart';
+import 'package:myapp/page/map/hotplace/hotplace_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 
@@ -110,20 +111,30 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Row(
                     children: [
-                      Container(
-                        height: height * 0.06,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return HotPlacePage();
+                            },
+                          );
+                        },
+                        child: Container(
+                          height: height * 0.06,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                spreadRadius: 2,
+                                blurRadius: 7,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Image.asset('assets/button_image/hot_place_button.png'),
                         ),
-                        child: Image.asset('assets/button_image/hot_place_button.png'),
                       ),
                       SizedBox(width: width * 0.065),
                     ],

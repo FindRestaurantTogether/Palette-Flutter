@@ -28,7 +28,6 @@ class FilterPageController extends GetxController {
   // 한식, 양식, 중식, 일식, 베트남, 멕시칸, 기타 선택 여부
   List<bool> OuterFoodSelected = [false, false, false, false, false, false, false].obs; // 한식, 중식 ~
   // 프랜차이즈, 개인 선택 여부
-  // 프랜차이즈, 개인 선택 여부
   List<bool> OuterCafeSelected = [false, false].obs;
   // 주점, 호프, 와인, 이자카야, 칵테일/양주 선택 여부
   List<bool> OuterAlcoholSelected = [false, false, false, false, false].obs;

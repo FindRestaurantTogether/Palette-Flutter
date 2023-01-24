@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
-import 'package:myapp/page/map/bottomsheet/select_folder_page.dart';
+import 'package:myapp/page/favorite/folder/select_folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:url_launcher/url_launcher.dart';

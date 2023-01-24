@@ -27,6 +27,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
   final _FilterPageController = Get.put(FilterPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController()); // 데이터 생성 완료(리스트에 추가되면서)
 
+  bool cameraChange = false;
+
   @override
   void initState() {
     // sleep(Duration(seconds: 2));
@@ -188,7 +190,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
                 );
               }
             ), // 우측 아래 동그라미 버튼 두개
-            Positioned(
+            if (cameraChange == true && _FilterPageController.FilterSelected.contains(true))
+              Positioned(
               left: width * 0.5 - 95,
               bottom: 68,
               child: Container(
@@ -233,18 +236,20 @@ class _NaverMapPageState extends State<NaverMapPage> {
     }
   }
   Future<void> _onCameraChange(LatLng latLng, CameraChangeReason reason, bool isAnimated) async {
-    print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
-        '\n원인: $reason'
-        '\n에니메이션 여부: $isAnimated'
-    );
+    // print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
+    //     '\n원인: $reason'
+    //     '\n에니메이션 여부: $isAnimated'
+    // );
+    if (cameraChange == false)
+      setState(() {cameraChange = true;});
 
-    NaverMapController Controller = await _controller.future;
-    LatLngBounds bound = await Controller.getVisibleRegion();
-    CameraPosition position = await Controller.getCameraPosition();
-    print("========================================");
-    print('중심: ${position.target}');
-    print('북동쪽: ${bound.northeast}');
-    print('남서쪽: ${bound.southwest}');
+    // NaverMapController Controller = await _controller.future;
+    // LatLngBounds bound = await Controller.getVisibleRegion();
+    // CameraPosition position = await Controller.getCameraPosition();
+    // print("========================================");
+    // print('중심: ${position.target}');
+    // print('북동쪽: ${bound.northeast}');
+    // print('남서쪽: ${bound.southwest}');
   }
   void _onCameraIdle() {
     print('카메라 움직임 멈춤');

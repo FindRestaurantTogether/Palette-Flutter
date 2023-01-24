@@ -211,11 +211,11 @@ class _FavoritePageState extends State<FavoritePage> {
                                       '지역',
                                       style: TextStyle(
                                         fontSize: 15,
-                                        color: Color(0xff787878),
+                                        color: regionSelected.contains(true) ? Colors.white : Color(0xff787878),
                                       ),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      primary: Colors.white,
+                                      primary: regionSelected.contains(true) ? Color(0xfff42957) : Colors.white,
                                       shape: StadiumBorder(),
                                     )
                                 ),
@@ -911,7 +911,6 @@ class _FavoritePageState extends State<FavoritePage> {
                             ), // 네번째줄 필터
                           ],
                         ), // innerfilter 박스 내 내용물
-
                     ),
                   )
                   ]
