@@ -48,24 +48,60 @@ class _HotPlacePageState extends State<HotPlacePage> {
           Center(
             child: Container(
               width: width * 0.8,
-              height: 410,
-              padding: EdgeInsets.symmetric(vertical: 25, horizontal: 20),
+              height: 440,
+              padding: EdgeInsets.only(top: 20, bottom: 25, left: 20, right: 20),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(20)),
                   color: Colors.white
               ),
               child: Column(
                 children: [
+                  SizedBox(
+                    height: 30,
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onPressed: () {
+                                Get.back();
+                              },
+                              icon: Image.asset('assets/button_image/close_button.png'),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: IconButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              onPressed: () {
+                                for (var i = 0 ; i < 8; i++)
+                                  _HotPlacePageController.hotPlaceIsChecked[i] = false;
+                              },
+                              icon: Image.asset('assets/button_image/back_button.png'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                   Text(
                     '핫플레이스',
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                        fontSize: 22,
                         color: Colors.black
                     ),
                   ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 16),
                   Expanded(
                     child: ListView(
                       children: [

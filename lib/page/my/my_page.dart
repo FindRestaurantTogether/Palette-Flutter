@@ -217,79 +217,79 @@ class _MyPageState extends State<MyPage> {
                   child: Column(
                     children: [
                       SizedBox(height: 5),
-                      // Container(
-                      //   width: width * 0.87,
-                      //   height: height * 0.21,
-                      //   padding: EdgeInsets.all(17),
-                      //   decoration: BoxDecoration(
-                      //     color: Colors.white,
-                      //     borderRadius: BorderRadius.circular(12),
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.black.withOpacity(0.08),
-                      //         spreadRadius: 1.8,
-                      //         blurRadius: 9,
-                      //         offset: Offset(1, 2),
-                      //       ),
-                      //     ],
-                      //   ),
-                      //   child: Column(
-                      //     children: [
-                      //       Row(
-                      //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      //         children: [
-                      //           Row(
-                      //             children: [
-                      //               Icon(Icons.card_giftcard, size: 20),
-                      //               SizedBox(width: 10),
-                      //               Text(
-                      //                 '이벤트',
-                      //                 style: TextStyle(
-                      //                     color: Color(0xff464646),
-                      //                     fontWeight: FontWeight.bold,
-                      //                     fontSize: 14
-                      //                 ),
-                      //               )
-                      //             ],
-                      //           ),
-                      //           DotsIndicator(
-                      //             dotsCount: _pages.length,
-                      //             position: _activePage,
-                      //             decorator: DotsDecorator(
-                      //                 size: Size.square(10),
-                      //                 activeSize: Size(18, 10),
-                      //                 activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
-                      //                 activeColor: Color(0xfff42957),
-                      //                 color: Color(0xffd9d9d9)
-                      //             ),
-                      //           )
-                      //         ],
-                      //       ), // 이벤트 아이콘과 텍스트
-                      //       SizedBox(height: 7),
-                      //       Container(
-                      //           height: height * 0.11,
-                      //           decoration: BoxDecoration(
-                      //             color: Color(0xffd9d9d9),
-                      //             borderRadius: BorderRadius.circular(10),
-                      //           ),
-                      //           child: PageView.builder(
-                      //             controller: _PageController,
-                      //             onPageChanged: (int page) {
-                      //               setState(() {
-                      //                 _activePage = page.toDouble();
-                      //               });
-                      //             },
-                      //             itemCount: _pages.length,
-                      //             pageSnapping: true,
-                      //             itemBuilder: (BuildContext context, int index) {
-                      //               return _pages[index % _pages.length];
-                      //             },
-                      //           )
-                      //       )
-                      //     ],
-                      //   ),
-                      // ), // 이벤트
-                      // // SizedBox(height: 10),
+                      Container(
+                        width: width * 0.87,
+                        height: height * 0.21,
+                        padding: EdgeInsets.all(17),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.08),
+                              spreadRadius: 1.8,
+                              blurRadius: 9,
+                              offset: Offset(1, 2),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(Icons.card_giftcard, size: 20),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      '이벤트',
+                                      style: TextStyle(
+                                          color: Color(0xff464646),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                DotsIndicator(
+                                  dotsCount: _pages.length,
+                                  position: _activePage,
+                                  decorator: DotsDecorator(
+                                      size: Size.square(10),
+                                      activeSize: Size(18, 10),
+                                      activeShape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
+                                      activeColor: Color(0xfff42957),
+                                      color: Color(0xffd9d9d9)
+                                  ),
+                                )
+                              ],
+                            ), // 이벤트 아이콘과 텍스트
+                            SizedBox(height: 7),
+                            Container(
+                                height: height * 0.11,
+                                decoration: BoxDecoration(
+                                  color: Color(0xffd9d9d9),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: PageView.builder(
+                                  controller: _PageController,
+                                  onPageChanged: (int page) {
+                                    setState(() {
+                                      _activePage = page.toDouble();
+                                    });
+                                  },
+                                  itemCount: _pages.length,
+                                  pageSnapping: true,
+                                  itemBuilder: (BuildContext context, int index) {
+                                    return _pages[index % _pages.length];
+                                  },
+                                )
+                            )
+                          ],
+                        ),
+                      ), // 이벤트
+                      SizedBox(height: 10),
                       // // Container(
                       // //   width: width * 0.87,
                       // //   height: height * 0.055,

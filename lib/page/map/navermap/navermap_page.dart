@@ -27,7 +27,15 @@ class _NaverMapPageState extends State<NaverMapPage> {
   final _FilterPageController = Get.put(FilterPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController()); // 데이터 생성 완료(리스트에 추가되면서)
 
+  // 사용자가 움직여서 카메라가 움직였나 확인하기 위해
   bool cameraChange = false;
+
+  // 중심 좌표
+  late LatLng centerPosition;
+  // 우측 위 좌표
+  late LatLng rightUpPosition;
+  // 좌측 밑 좌표
+  late LatLng leftDownPosition;
 
   @override
   void initState() {
@@ -133,9 +141,10 @@ class _NaverMapPageState extends State<NaverMapPage> {
                         ),
                         child: FloatingActionButton(
                           heroTag: null,
-                          child: Icon(
-                            Icons.people_alt_outlined,
-                            color: Color(0xfff42957),
+                          child: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: Image.asset('assets/button_image/current_page_button.png')
                           ),
                           backgroundColor: Colors.white,
                           onPressed: () {
@@ -172,9 +181,10 @@ class _NaverMapPageState extends State<NaverMapPage> {
                         ),
                         child: FloatingActionButton(
                           heroTag: null,
-                          child: Icon(
-                            Icons.gps_fixed,
-                            color: Color(0xfff42957),
+                          child: SizedBox(
+                              width: 25,
+                              height: 25,
+                              child: Image.asset('assets/button_image/current_position_button.png')
                           ),
                           backgroundColor: Colors.white,
                           onPressed: () async {
@@ -240,19 +250,30 @@ class _NaverMapPageState extends State<NaverMapPage> {
     //     '\n원인: $reason'
     //     '\n에니메이션 여부: $isAnimated'
     // );
+
     if (cameraChange == false)
       setState(() {cameraChange = true;});
 
-    // NaverMapController Controller = await _controller.future;
-    // LatLngBounds bound = await Controller.getVisibleRegion();
-    // CameraPosition position = await Controller.getCameraPosition();
+    NaverMapController Controller = await _controller.future;
+    LatLngBounds bound = await Controller.getVisibleRegion();
+    CameraPosition position = await Controller.getCameraPosition();
+    setState(() {
+      centerPosition = position.target;
+      rightUpPosition = bound.northeast;
+      leftDownPosition = bound.southwest;
+    });
     // print("========================================");
     // print('중심: ${position.target}');
     // print('북동쪽: ${bound.northeast}');
     // print('남서쪽: ${bound.southwest}');
   }
   void _onCameraIdle() {
-    print('카메라 움직임 멈춤');
+    // print('카메라 움직임 멈춤');
+
+    print("========================================");
+    print('중심: ${centerPosition}');
+    print('북동쪽: ${rightUpPosition}');
+    print('남서쪽: ${leftDownPosition}');
   }
   void _onMapTap(LatLng latLng) {
 

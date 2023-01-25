@@ -79,6 +79,8 @@ class _FolderPageState extends State<FolderPage> {
                         Container(
                           width: 36,
                           child: IconButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                               onPressed: () {
                                 Get.back();
                               },

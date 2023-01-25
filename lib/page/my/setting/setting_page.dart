@@ -38,6 +38,8 @@ class _SettingPageState extends State<SettingPage> {
                     width: 27,
                     height: 45,
                     child: IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         onPressed: () {
                           Get.back();
                         },

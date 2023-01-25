@@ -42,6 +42,8 @@ class _NoticePageState extends State<NoticePage> {
                     width: 27,
                     height: 45,
                     child: IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       onPressed: () {
                         Get.back();
                       },
@@ -104,6 +106,8 @@ class _NoticePageState extends State<NoticePage> {
                               width: 30,
                               height: 30,
                               child: IconButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
                                   onPressed: () {
                                     setState(() {
                                       noticeOpen[0] = !noticeOpen[0];

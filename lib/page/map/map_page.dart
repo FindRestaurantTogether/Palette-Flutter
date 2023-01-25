@@ -78,26 +78,30 @@ class _MapPageState extends State<MapPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              width: height * 0.045,
-                              height: height * 0.045,
+                            SizedBox(
+                              width: 32,
+                              height: 32,
                               child: IconButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onPressed: () {
                                   Get.to(() => ListPage());
                                 },
                                 icon: Image.asset('assets/button_image/list_button.png'),
                               ),
                             ),
-                            Container(
+                            SizedBox(
                               child: Text(
                                 '나의 지도',
                                 style: TextStyle(color: Color(0xff787878), fontSize: 18),
                               ),
                             ),
-                            Container(
-                              width: height * 0.042,
-                              height: height * 0.042,
+                            SizedBox(
+                              width: 30,
+                              height: 30,
                               child: IconButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
                                 onPressed: () {
                                   Get.to(() => SearchPage(_items));
                                 },
@@ -114,6 +118,7 @@ class _MapPageState extends State<MapPage> {
                       GestureDetector(
                         onTap: () {
                           showDialog(
+                            barrierDismissible: false,
                             context: context,
                             builder: (context) {
                               return HotPlacePage();

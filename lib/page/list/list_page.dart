@@ -59,44 +59,52 @@ class _ListPageState extends State<ListPage> {
                     ),
                   ],
               ),
-              child: Center(
-                child: Container(
-                  width: width * 0.83,
-                  child: TextFormField(
-                    controller: _TextEditingController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.only(top: 10),
-                      prefixIcon: IconButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        icon: Icon(
-                          Icons.map,
-                          color: Colors.black54,
-                          size: 23,
+              padding: EdgeInsets.only(left: 10, right: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 36,
+                    height: 36,
+                    child: IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Image.asset('assets/button_image/map_button.png'),
+                    ),
+                  ),
+                  Container(
+                    width: width * 0.87 - 100,
+                    child: TextFormField(
+                      controller: _TextEditingController,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '장소, 주소, 음식 검색',
+                        hintStyle: TextStyle(
+                          fontSize: 16.4,
+                          color: Color(0xffb9b9b9),
                         ),
-                      ),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          _TextEditingController.clear();
-                        },
-                        icon: Icon(
-                          Icons.clear,
-                          color: Colors.grey,
-                          size: 25,
-                        ),
-                      ),
-                      border: InputBorder.none,
-                      hintText: '장소, 주소, 음식 검색',
-                      hintStyle: TextStyle(
-                        fontSize: 16,
-                        color: Color(0xffb9b9b9),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(
+                    width: 30,
+                    height: 30,
+                    child: IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {
+                        _TextEditingController.clear();
+                      },
+                      icon: Image.asset('assets/button_image/close_button.png'),
+                    ),
+                  ),
+                ],
               )
-          ),
+          ), // 검색창
           SizedBox(height: height * 0.028),
           Center(
             child: Container(
@@ -108,7 +116,7 @@ class _ListPageState extends State<ListPage> {
                       children: [
                         SizedBox(width: 10),
                         Container(
-                          width: width * 0.26,
+                          width: width * 0.255,
                           height: height * 0.04,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -124,7 +132,7 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size.zero,
-                                  padding: EdgeInsets.only(left: 18, right: 12),
+                                  padding: EdgeInsets.only(left: 18, right: 15),
                                   primary: Colors.white,
                                   shape: StadiumBorder()
                               ),
@@ -137,7 +145,7 @@ class _ListPageState extends State<ListPage> {
                                     child: Text(
                                       item,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: 15,
                                         color: Color(0xff787878),
                                       ),
                                     )
@@ -149,9 +157,13 @@ class _ListPageState extends State<ListPage> {
                                   });
                                 },
                                 underline: Container(),
-                                icon: Icon(Icons.keyboard_arrow_down),
+                                icon: SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: Image.asset('assets/button_image/down_button.png'),
+                                ),
                                 buttonElevation: 0,
-                                dropdownWidth: 95,
+                                dropdownWidth: width * 0.255,
                                 dropdownDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -164,76 +176,42 @@ class _ListPageState extends State<ListPage> {
                     ),
                     Row(
                       children: [
-                        Open
-                            ? Container(
-                                width: width * 0.2,
-                                height: height * 0.04,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
-                                      spreadRadius: 2,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
+                        Container(
+                          width: width * 0.2,
+                          height: height * 0.04,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(50)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.05),
+                                spreadRadius: 2,
+                                blurRadius: 7,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: ElevatedButton(
+                              onPressed: () {
+                                setState(() {
+                                  Open = !Open;
+                                });
+                              },
+                              child: Text(
+                                '영업중',
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Open ? Colors.white : Color(0xff787878),
                                 ),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        Open = false;
-                                      });
-                                    },
-                                    child: Text(
-                                      '영업중',
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Color(0xfff42957),
-                                      shape: StadiumBorder(),
-                                    )
-                                ),
-                            )
-                            : Container(
-                                width: width * 0.2,
-                                height: height * 0.04,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.05),
-                                      spreadRadius: 2,
-                                      blurRadius: 7,
-                                      offset: Offset(0, 2),
-                                    ),
-                                  ],
-                                ),
-                                child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        Open = true;
-                                      });
-                                    },
-                                    child: Text(
-                                      '영업중',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Color(0xff787878),
-                                      ),
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                        primary: Colors.white,
-                                        shape: StadiumBorder(),
-                                    )
-                                ),
-                            ),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Open ? Color(0xfff42957) : Colors.white,
+                                shape: StadiumBorder(),
+                              )
+                          ),
+                        ),
                         SizedBox(width: 10),
                         Container(
-                          width: width * 0.22,
+                          width: width * 0.21,
                           height: height * 0.04,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -249,7 +227,7 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 minimumSize: Size.zero,
-                                padding: EdgeInsets.only(left: 18, right: 12),
+                                padding: EdgeInsets.only(left: 18, right: 15),
                                 primary: Colors.white,
                                 shape: StadiumBorder()
                             ),
@@ -275,9 +253,13 @@ class _ListPageState extends State<ListPage> {
                                 });
                               },
                               underline: Container(),
-                              icon: Icon(Icons.keyboard_arrow_down),
+                              icon: SizedBox(
+                                width: 12,
+                                height: 12,
+                                child: Image.asset('assets/button_image/down_button.png'),
+                              ),
                               buttonElevation: 0,
-                              dropdownWidth: 78,
+                              dropdownWidth: width * 0.21,
                               dropdownDecoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -291,7 +273,7 @@ class _ListPageState extends State<ListPage> {
                     ),
                   ],
                 )),
-          ),
+          ), // 필터들
           SizedBox(height: height * 0.032),
           Container(
             width: width,
