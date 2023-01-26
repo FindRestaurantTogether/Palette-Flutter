@@ -89,7 +89,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                           width: 5,
                           height: 5,
                           decoration: BoxDecoration(
-                              color: Colors.cyan.shade300,
+                              color: Color(0xff57dde0),
                               shape: BoxShape.circle),
                         ),
                       ),
@@ -102,7 +102,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                           width: 5,
                           height: 5,
                           decoration: BoxDecoration(
-                              color: Colors.red.shade300,
+                              color: Color(0xfff42957),
                               shape: BoxShape.circle),
                         ),
                       ),
@@ -145,7 +145,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                               }
                           );
                         },
-                        child: Icon(Icons.bookmark_border, size: 28, color: Colors.pinkAccent)
+                        child: Icon(Icons.bookmark_border, size: 28, color: Color(0xfff42957))
                     );  // 즐겨찾기
               })
             ],
@@ -165,7 +165,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                 for (int i = 0; i < selectedRestaurant.atmosphere.length; i++)
                     Text(
                       '#${selectedRestaurant.atmosphere[i]} ',
-                      style: TextStyle(fontSize: 13, color: Colors.cyan.shade300),
+                      style: TextStyle(fontSize: 13, color: Color(0xff57dde0)),
                     )
               ]
             ),
@@ -175,7 +175,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
             children: [
               Icon(
                 Icons.star,
-                color: Colors.pinkAccent,
+                color: Color(0xfff42957),
                 size: 16,
               ),
               SizedBox(width: 4),
@@ -206,7 +206,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                   children: [
                     Icon(
                       Icons.person_outline,
-                      color: Colors.pinkAccent,
+                      color: Color(0xfff42957),
                       size: 16,
                     ),
                     SizedBox(width: 4),
@@ -240,9 +240,10 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.call,
-                          color: Colors.black54,
+                        SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: Image.asset('assets/button_image/call_button.png'),
                         ),
                       ],
                     )),
@@ -251,9 +252,10 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.open_in_new,
-                          color: Colors.black54,
+                        SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: Image.asset('assets/button_image/share_button.png'),
                         ),
                       ],
                     )),
@@ -262,9 +264,10 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.navigation,
-                        color: Colors.black54,
+                      SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: Image.asset('assets/button_image/navigation_button.png'),
                       ),
                     ],
                   ),
@@ -416,8 +419,7 @@ class NaverMapUtils {
   NaverMapUtils._();
 
   static Future<void> OpenNaverMap(String address) async {
-    String naverUrl =
-        'https://m.map.naver.com/search2/search.naver?query=$address';
+    String naverUrl = 'nmap://search?query=$address&appname=com.example.myapp';
     if (await canLaunch(naverUrl)) {
       await launch(naverUrl);
     } else {

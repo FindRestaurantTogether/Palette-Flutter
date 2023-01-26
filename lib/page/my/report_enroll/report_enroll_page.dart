@@ -15,13 +15,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
 
   bool isReport = true;
 
-  late List<bool> ToggleSelected;
-
-  @override
-  void initState() {
-    ToggleSelected = [false, false, false];
-    super.initState();
-  }
+  List<bool> ToggleSelected = [false, false, false];
 
   @override
   void dispose() {
@@ -168,17 +162,36 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     color: Color(0xfff8f8f8),
                     shape: StadiumBorder()
                 ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(6),
-                    prefixIcon: Icon(Icons.search, size: 18),
-                    hintText: '오류 제보할 식당을 검색해주세요.',
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xffa2a2a2)
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Image.asset('assets/button_image/search_button.png'),
+                      ),
                     ),
-                    border: InputBorder.none,
-                  ),
+                    Container(
+                      width: width * 0.87 - 56,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(bottom: 12, left: 3),
+                          hintText: '오류 제보할 식당을 검색해주세요.',
+                          hintStyle: TextStyle(
+                            fontSize: 14,
+                            color: Color(0xffa2a2a2)
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               SizedBox(height: 20),
@@ -256,7 +269,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     ),
                   ],
                 ),
-              ),
+              ), // 식당 이름
               SizedBox(height: 20),
               Container(
                 width: width * 0.87,
@@ -265,19 +278,38 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     color: Color(0xfff8f8f8),
                     shape: StadiumBorder()
                 ),
-                child: TextFormField(
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(6),
-                    prefixIcon: Icon(Icons.search, size: 18),
-                    hintText: '등록할 식당 이름을 입력해주세요.',
-                    hintStyle: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xffa2a2a2)
+                padding: EdgeInsets.only(left: 10, right: 10),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 28,
+                      height: 28,
+                      child: IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Image.asset('assets/button_image/search_button.png'),
+                      ),
                     ),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
+                    Container(
+                      width: width * 0.87 - 56,
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(bottom: 12, left: 3),
+                          hintText: '등록할 식당 이름을 입력해주세요.',
+                          hintStyle: TextStyle(
+                              fontSize: 14,
+                              color: Color(0xffa2a2a2)
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ), // 등록할 식당 이름을 입력해주세요
               SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.only(left: 37),
@@ -293,7 +325,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     ),
                   ],
                 ),
-              ),
+              ), // 식당 정보
               SizedBox(height: 20),
               Container(
                 width: width * 0.87,
@@ -314,7 +346,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     border: InputBorder.none,
                   ),
                 ),
-              ),
+              ), // 식당 위치, 전화번호, 영업시간, 메뉴 등 정보를 자유롭게 입력해주세요
               SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.only(left: 37),
@@ -330,7 +362,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     ),
                   ],
                 ),
-              ),
+              ), // 식당 카테고리
               SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.only(left: 37),
@@ -339,56 +371,71 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     Container(
                       width: 50,
                       height: 25,
-                      child: OutlinedButton(
-                          onPressed: () {},
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              ToggleSelected[0] = !ToggleSelected[0];
+                              ToggleSelected[1] = false;
+                              ToggleSelected[2] = false;
+                            });
+                          },
                           child: Text(
                             '음식',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: ToggleSelected[0] ? Colors.white : Color(0xffa2a2a2), fontSize: 12),
                           ),
-                          style: OutlinedButton.styleFrom(
-                              backgroundColor: Color(0xfff42957),
-                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                          style: ElevatedButton.styleFrom(
+                              primary: ToggleSelected[0] ? Color(0xfff42957) : Color(0xfff8f8f8),
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
                               shape: StadiumBorder())),
-                    ),
-                    SizedBox(width: 3),
+                    ), // 음식
+                    SizedBox(width: 5),
                     Container(
                       width: 50,
                       height: 25,
-                      child: OutlinedButton(
-                          onPressed: () {},
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              ToggleSelected[1] = !ToggleSelected[1];
+                              ToggleSelected[0] = false;
+                              ToggleSelected[2] = false;
+                            });
+                          },
                           child: Text(
                             '카페',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: ToggleSelected[1] ? Colors.white : Color(0xffa2a2a2), fontSize: 12),
                           ),
-                          style: OutlinedButton.styleFrom(
-                              backgroundColor: Color(0xfff42957),
-                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                          style: ElevatedButton.styleFrom(
+                              primary: ToggleSelected[1] ? Color(0xfff42957) : Color(0xfff8f8f8),
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
                               shape: StadiumBorder())),
-                    ),
-                    SizedBox(width: 3),
+                    ), // 카페
+                    SizedBox(width: 5),
                     Container(
                       width: 50,
                       height: 25,
-                      child: OutlinedButton(
-                          onPressed: () {},
+                      child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              ToggleSelected[2] = !ToggleSelected[2];
+                              ToggleSelected[0] = false;
+                              ToggleSelected[1] = false;
+                            });
+                          },
                           child: Text(
                             '술집',
-                            style: TextStyle(color: Colors.white, fontSize: 12),
+                            style: TextStyle(color: ToggleSelected[2] ? Colors.white : Color(0xffa2a2a2), fontSize: 12),
                           ),
-                          style: OutlinedButton.styleFrom(
-                              backgroundColor: Color(0xfff42957),
-                              side: BorderSide(width: 1, color: Color(0xfff42957)),
+                          style: ElevatedButton.styleFrom(
+                              primary: ToggleSelected[2] ? Color(0xfff42957) : Color(0xfff8f8f8),
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
                               shape: StadiumBorder())),
-                    )
+                    ) // 술집
                   ],
                 ),
-              ),
+              ), // 토글 버튼
               SizedBox(height: 25),
               Container(
                 width: width * 0.816,
@@ -410,7 +457,7 @@ class _ReportEnrollPageState extends State<ReportEnrollPage> {
                     ),
                   ),
                 ),
-              ),
+              ), // 확인
             ]
           ],
         ),

@@ -1586,7 +1586,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 SizedBox(
                                                     width: 22,
                                                     height: 22,
-                                                    child: Image.asset('assets/button_image/location_button.png')
+                                                    child: Image.asset('assets/button_image/red_location_button.png')
                                                 ),
                                                 Text(
                                                   '  ${_FavoriteFolderPageController.folderRestaurant[index].length}',

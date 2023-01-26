@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
-import 'package:myapp/page/detail/detail_page_controller.dart';
-import 'package:myapp/page/detail/review/see_all_review_page.dart';
-import 'package:myapp/page/detail/review/write_review_page1.dart';
+import 'package:myapp/page/detail/menu/menu_page.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
@@ -22,13 +18,14 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
 
   final _NaverMapPageController = Get.put(NaverMapPageController());
-  final _DetailPageController = Get.put(DetailPageController());
   final _FavoriteListPageController = Get.put(FavoriteListPageController());
   final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
 
   final selectedRestaurant = Get.arguments;
 
   late List<bool> ToggleSelected;
+
+  bool moreOpenInformation = false;
 
   @override
   void initState() {
@@ -52,8 +49,15 @@ class _DetailPageState extends State<DetailPage> {
         Get.back();
         return false;
       },
-      child: Material(
-        child: SingleChildScrollView(
+      child: Scaffold(
+        appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.white,
+        body: SingleChildScrollView(
           child: Stack(
             children: [
               Positioned(
@@ -82,12 +86,12 @@ class _DetailPageState extends State<DetailPage> {
               ), // 배경화면
               Column(
                 children: [
-                  SizedBox(height: height * 0.17),
+                  SizedBox(height: height * 0.17), // 빈 공간
                   Center(
                     child: Container(
                       width: width * 0.87,
-                      height: _DetailPageController.mI? height * 0.36 : height * 0.355,
-                      padding: EdgeInsets.all(20),
+                      height: moreOpenInformation ? height * 0.36 + 100 : height * 0.36,
+                      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -103,25 +107,73 @@ class _DetailPageState extends State<DetailPage> {
                       child: Column(
                         children: [
                           Container(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Stack(
                               children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SizedBox(
+                                      width: 27,
+                                      height: 36,
+                                      child: IconButton(
+                                        onPressed: () {
+                                          Get.back();
+                                        },
+                                        icon: Image.asset('assets/button_image/back_button.png'),
+                                      ),
+                                    ), // 뒤로가기 버튼
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 17,
+                                          height: 21,
+                                          child: Obx(() {
+                                            return  _NaverMapPageController.restaurants[selectedIndex].favorite.value
+                                                ? IconButton(
+                                                padding: EdgeInsets.all(0.0),
+                                                onPressed: (){
+                                                  setState(() {
+                                                    _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                                                    _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
+                                                    _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
+                                                    for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
+                                                      if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
+                                                        _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);
+                                                    }
+                                                  });
+                                                },
+                                                icon: Image.asset('assets/button_image/favorite_button.png'),
+                                            )
+                                                : IconButton(
+                                                  padding: EdgeInsets.all(0.0),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      showDialog(
+                                                          context: context,
+                                                          barrierDismissible: false,
+                                                          builder: (BuildContext context) {
+                                                            return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                                          }
+                                                      );
+                                                    });
+                                                  },
+                                                  icon: Image.asset('assets/button_image/unfavorite_button.png'),
+                                                );
+                                          }),
+                                        ),
+                                        SizedBox(width: 6)
+                                      ],
+                                    ) // 즐겨찾기 버튼
+                                  ],
+                                ), // 뒤로가기 버튼, 즐겨찾기 버튼
                                 Container(
-                                  width: 27,
                                   height: 35,
-                                  child: IconButton(
-                                    onPressed: () {
-                                      Get.back();
-                                    },
-                                    icon: Image.asset('assets/button_image/back_button.png'),
-                                  ),
-                                ),
-                                Container(
                                   child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Container(
                                         child: Text(
-                                          '${selectedRestaurant.name}',
+                                          '   ${selectedRestaurant.name}',
                                           style: TextStyle(
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold),
@@ -139,7 +191,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 8,
                                             height: 8,
                                             decoration: BoxDecoration(
-                                                color: Colors.cyan.shade300,
+                                                color: Color(0xff57dde0),
                                                 shape: BoxShape.circle),
                                           ),
                                         ),
@@ -152,72 +204,27 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 8,
                                             height: 8,
                                             decoration: BoxDecoration(
-                                                color: Colors.red.shade300,
+                                                color: Color(0xfff42957),
                                                 shape: BoxShape.circle),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                Container(
-                                  height: 23,
-                                  child: Obx(() {
-                                    return  _NaverMapPageController.restaurants[selectedIndex].favorite.value
-                                        ? IconButton(
-                                        padding: EdgeInsets.all(0.0),
-                                        onPressed: (){
-                                          setState(() {
-                                            _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                                            _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
-                                            _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
-                                            for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
-                                              if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
-                                                _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);
-                                            }
-                                          });
-                                        },
-                                        icon: Icon(
-                                            Icons.bookmark,
-                                            color: Colors.pinkAccent,
-                                            size: 25
-                                        )
-                                    )
-                                        : IconButton(
-                                      padding: EdgeInsets.all(0.0),
-                                      onPressed: () {
-                                        setState(() {
-                                          showDialog(
-                                              context: context,
-                                              barrierDismissible: false,
-                                              builder: (BuildContext context) {
-                                                return SelectFolderPage(selectedRestaurant: selectedRestaurant);
-                                              }
-                                          );
-                                        });
-                                      },
-                                      icon: Icon(
-                                          Icons.bookmark_border,
-                                          color: Colors.pinkAccent,
-                                          size: 25
-                                      ),
-                                    );
-                                  }),
-                                )
+                                ), // 음식점 이름
                               ],
-                            ),
-                          ),
+                            )
+                          ), // 뒤로가기 버튼, 음식점 이름, 즐겨찾기 버튼
                           SizedBox(
                             height: height * 0.005,
-                          ),
+                          ), // 빈 공간
                           Container(
-                            // color: Colors.blue,
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Icon(
                                   Icons.star,
-                                  color: Colors.pinkAccent,
+                                  color: Color(0xfff42957),
                                   size: 18,
                                 ),
                                 SizedBox(width: 2),
@@ -227,16 +234,6 @@ class _DetailPageState extends State<DetailPage> {
                                   TextStyle(fontSize: 15),
                                 ),
                                 SizedBox(width: 1),
-                                // GestureDetector(
-                                //     onTap: () {
-                                //       setState(() {
-                                //         _DetailPageController.changeState();
-                                //       });
-                                //     },
-                                //     child: _DetailPageController.mI
-                                //         ? Icon(Icons.keyboard_arrow_up, color: Colors.black54, size: 20)
-                                //         : Icon(Icons.keyboard_arrow_down, color: Colors.black54, size: 20)
-                                // ),
                                 SizedBox(width: 5),
                                 Text(
                                   '|',
@@ -249,60 +246,19 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                               ],
                             ),
-                          ),
-                          _DetailPageController.mI
-                              ? Container(
-                            child: Column(
-                              children: [
-                                SizedBox(height: 5),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      '메뉴 ',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.pinkAccent,
-                                      size: 12,
-                                    ),
-                                    Text(
-                                      ' ${selectedRestaurant.menuRating}(${selectedRestaurant.numberOfMenuRating})',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    SizedBox(width: 13),
-                                    Text(
-                                      '매장 ',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                    Icon(
-                                      Icons.star,
-                                      color: Colors.pinkAccent,
-                                      size: 12,
-                                    ),
-                                    Text(
-                                      ' ${selectedRestaurant.restaurantRating}(${selectedRestaurant.numberOfRestaurantRating})',
-                                      style: TextStyle(fontSize: 12),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                              : SizedBox(),
-                          SizedBox(height: height * 0.016),
+                          ), // 별점, 중분류
+                          SizedBox(height: height * 0.016), // 빈 공간
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 for (int i = 0; i < selectedRestaurant.atmosphere.length; i++)
                                   Text(
                                     '#${selectedRestaurant.atmosphere[i]} ',
-                                    style: TextStyle(fontSize: 12, color: Colors.cyan.shade300),
+                                    style: TextStyle(fontSize: 12, color: Color(0xff57dde0)),
                                   )
                               ]
-                          ),
-                          SizedBox(height: height * 0.014),
+                          ), // #분위기
+                          SizedBox(height: height * 0.014), // 빈 공간
                           Container(
                             width: width * 0.67,
                             height: height * 0.16,
@@ -323,22 +279,31 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Icon(
                                         Icons.watch_later_outlined,
-                                        color: Colors.cyan.shade300,
+                                        color: Color(0xff57dde0),
                                         size: 16,
                                       ),
-                                      SizedBox(width: 6),
+                                      SizedBox(width: 6), // 빈 공간
                                       Text(
-                                        '영업 중',
+                                        selectedRestaurant.open ? '영업중' : '영업종료',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 12
+                                            fontSize: 12,
+                                            // color: selectedRestaurant.open ? Color(0xff57dde0) : Color(0xfff42957),
                                         ),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.black54,
-                                        size: 16,
-                                      ),
+                                      ), // 영업시간
+                                      SizedBox(width: 0), // 빈 공간
+                                      Container(
+                                        width: 20,
+                                        child: IconButton(
+                                          padding: EdgeInsets.all(0),
+                                          onPressed: () {
+                                            setState(() {
+                                              moreOpenInformation = !moreOpenInformation;
+                                            });
+                                          },
+                                          icon: moreOpenInformation ? Icon(Icons.keyboard_arrow_up, size: 16) : Icon(Icons.keyboard_arrow_down, size: 16),
+                                        ),
+                                      ), // 더 보기 버튼
                                     ],
                                   ),
                                 ), // 영업시간
@@ -349,7 +314,7 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Icon(
                                         Icons.location_on,
-                                        color: Colors.cyan.shade300,
+                                        color: Color(0xff57dde0),
                                         size: 16,
                                       ),
                                       SizedBox(width: 5),
@@ -357,12 +322,6 @@ class _DetailPageState extends State<DetailPage> {
                                           '${selectedRestaurant.address}',
                                           style: TextStyle(fontSize: 12)
                                       ),
-                                      // SizedBox(width: 3),
-                                      // Icon(
-                                      //   Icons.map_outlined,
-                                      //   color: Colors.grey,
-                                      //   size: 16,
-                                      // ),
                                     ],
                                   ),
                                 ), // 주소
@@ -373,7 +332,7 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Icon(
                                         Icons.person_outline,
-                                        color: Colors.cyan.shade300,
+                                        color: Color(0xff57dde0),
                                         size: 16,
                                       ),
                                       SizedBox(width: 6),
@@ -406,10 +365,10 @@ class _DetailPageState extends State<DetailPage> {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                Icon(
-                                                    Icons.call,
-                                                    color: Colors.black54,
-                                                    size: 17
+                                                SizedBox(
+                                                  width: 12,
+                                                  height: 12,
+                                                  child: Image.asset('assets/button_image/call_button.png'),
                                                 ),
                                               ],
                                             )
@@ -419,10 +378,10 @@ class _DetailPageState extends State<DetailPage> {
                                             child: Row(
                                               mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                Icon(
-                                                    Icons.open_in_new,
-                                                    color: Colors.black54,
-                                                    size: 17
+                                                SizedBox(
+                                                  width: 12,
+                                                  height: 12,
+                                                  child: Image.asset('assets/button_image/share_button.png'),
                                                 ),
                                               ],
                                             )
@@ -432,10 +391,10 @@ class _DetailPageState extends State<DetailPage> {
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              Icon(
-                                                  Icons.navigation,
-                                                  color: Colors.black54,
-                                                  size: 17
+                                              SizedBox(
+                                                width: 12,
+                                                height: 12,
+                                                child: Image.asset('assets/button_image/navigation_button.png'),
                                               ),
                                             ],
                                           ),
@@ -555,23 +514,15 @@ class _DetailPageState extends State<DetailPage> {
                                 ), // 토글버튼
                               ],
                             ),
-                          )
+                          ) // 영업시간, 주소, 서비스, 토글버튼
                         ],
                       ),
                     ),
                   ), // 위에 큰 박스
-                  SizedBox(height: height * 0.038),
+                  SizedBox(height: 30), // 빈 공간
                   Container(
                     width: width * 0.87,
-                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 25),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.black12,
-                          width: 1,
-                        ),
-                      ),
-                    ),
+                    padding: EdgeInsets.only(left: 20, right: 20, bottom: 20),
                     child: Column(
                       children: [
                         Row(
@@ -584,74 +535,76 @@ class _DetailPageState extends State<DetailPage> {
                                   fontWeight: FontWeight.bold
                               ),
                             ),
-                            Row(
-                              children: [
-                                Text(
-                                  '전체보기',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 12
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => MenuPage(), arguments: selectedRestaurant);
+                              },
+                              child: Row(
+                                children: [
+                                  Text(
+                                    '전체보기',
+                                    style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: 12
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 8),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Colors.grey,
-                                  size: 12,
-                                )
-                              ],
+                                  SizedBox(width: 8),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.grey,
+                                    size: 14,
+                                  )
+                                ],
+                              ),
                             )
                           ],
                         ), // 메뉴 & 전체보기
                         SizedBox(height: 20),
                         Container(
                           height: 50,
-                          child: ListView.separated(
+                          child: ListView.builder(
                             scrollDirection: Axis.horizontal,
-                            physics: NeverScrollableScrollPhysics(),
-                            padding: EdgeInsets.all(0),
+                            physics: BouncingScrollPhysics(),
                             itemCount: selectedRestaurant.menu.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return  Column(
+                              return  Row(
                                 children: [
-                                  Container(
-                                    width: 80,
-                                    child: Text(
-                                      '${menuName[index]}',
-                                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                                    ),
+                                  Column(
+                                    children: [
+                                      Container(
+                                        child: Center(
+                                          child: Text(
+                                            '${menuName[index]}',
+                                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 7),
+                                      Container(
+                                        child: Center(
+                                          child: Text(
+                                            ' ${menuInfo[index][0].toInt()}원',
+                                            style: TextStyle(fontSize: 15, color: Color(0xfff42957), fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 7),
-                                  Container(
-                                    width: 80,
-                                    child: Text(
-                                      ' ${menuInfo[index][0].toInt()}원',
-                                      style: TextStyle(fontSize: 15, color: Colors.pinkAccent, fontWeight: FontWeight.bold),
-                                    ),
-                                  ),
+                                  if (index != selectedRestaurant.menu.length - 1)
+                                    VerticalDivider(width: 30, color: Colors.black45)
                                 ],
                               );
                             },
-                            separatorBuilder: (BuildContext context, int index) {
-                              return VerticalDivider();
-                            },
                           ),
-                        ),
+                        ), // 메뉴들
                       ],
                     ),
                   ), // 메뉴
-                  SizedBox(height: 30),
+                  Divider(indent: 35, endIndent: 35, color: Colors.black45),
+                  SizedBox(height: 25), // 빈 공간
                   Container(
                     width: width * 0.87,
                     padding: EdgeInsets.only(left: 20, right: 20, bottom: 25),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.black12,
-                          width: 1,
-                        ),
-                      ),
-                    ),
                     child: Column(
                       children: [
                         Row(
@@ -672,40 +625,238 @@ class _DetailPageState extends State<DetailPage> {
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Row(
-                                    children: [],
-                                  )
+                                onPressed: () {},
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                          width: 10
+                                        ),
+                                        SizedBox(
+                                          width: 17,
+                                          height: 17,
+                                          child: Image.asset('assets/button_image/naver_button.png'),
+                                        ),
+                                        SizedBox(
+                                            width: 20
+                                        ),
+                                        SizedBox(
+                                          child: Text(
+                                            '네이버 리뷰',
+                                            style: TextStyle(color: Colors.black, fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ), // 아이콘, 네이버 리뷰
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: Color(0xfff42957),
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              '4.3',
+                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                            ),
+                                          ],
+                                        ), // 별점
+                                        SizedBox(
+                                            width: 15
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '16건',
+                                              style: TextStyle(color: Colors.grey, fontSize: 12),
+                                            ),
+                                            SizedBox(width: 4),
+                                            Icon(
+                                              Icons.arrow_forward_ios,
+                                              color: Colors.grey,
+                                              size: 14,
+                                            )
+                                          ]
+                                        ), // 리뷰 개수
+                                        SizedBox(width: 7)
+                                      ],
+                                    ) // 별점, 리뷰 개수
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 8),
+                            ), // 네이버 리뷰
+                            SizedBox(height: 12),
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Row(
-                                    children: [],
-                                  )
+                                onPressed: () {},
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                            width: 10
+                                        ),
+                                        SizedBox(
+                                          width: 17,
+                                          height: 17,
+                                          child: Image.asset('assets/button_image/google_button.png'),
+                                        ),
+                                        SizedBox(
+                                            width: 20
+                                        ),
+                                        SizedBox(
+                                          child: Text(
+                                            '구글 리뷰',
+                                            style: TextStyle(color: Colors.black, fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ), // 아이콘, 구글 리뷰
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: Color(0xfff42957),
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              '4.3',
+                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                            ),
+                                          ],
+                                        ), // 별점
+                                        SizedBox(
+                                            width: 15
+                                        ),
+                                        Row(
+                                            children: [
+                                              Text(
+                                                '16건',
+                                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.grey,
+                                                size: 14,
+                                              )
+                                            ]
+                                        ), // 리뷰 개수
+                                        SizedBox(width: 7)
+                                      ],
+                                    ) // 별점, 리뷰 개수
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 8),
+                            ), // 구글 리뷰
+                            SizedBox(height: 12),
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: Row(
-                                    children: [],
-                                  )
+                                onPressed: () {},
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        SizedBox(
+                                            width: 10
+                                        ),
+                                        SizedBox(
+                                          width: 17,
+                                          height: 17,
+                                          child: Image.asset('assets/button_image/kakao_button.png'),
+                                        ),
+                                        SizedBox(
+                                            width: 20
+                                        ),
+                                        SizedBox(
+                                          child: Text(
+                                            '카카오 리뷰',
+                                            style: TextStyle(color: Colors.black, fontSize: 14),
+                                          ),
+                                        )
+                                      ],
+                                    ), // 아이콘, 카카오 리뷰
+                                    Row(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Icon(
+                                              Icons.star,
+                                              color: Color(0xfff42957),
+                                              size: 15,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              '4.3',
+                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                            ),
+                                          ],
+                                        ), // 별점
+                                        SizedBox(
+                                            width: 15
+                                        ),
+                                        Row(
+                                            children: [
+                                              Text(
+                                                '16건',
+                                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.grey,
+                                                size: 14,
+                                              )
+                                            ]
+                                        ), // 리뷰 개수
+                                        SizedBox(width: 7)
+                                      ],
+                                    ) // 별점, 리뷰 개수
+                                  ],
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 3,
+                                ),
                               ),
-                            ),
-                            SizedBox(height: 8),
+                            ), // 카카오 리뷰
+                            SizedBox(height: 20),
                           ],
                         )
                       ],
                     ),
                   ), // 평점 및 리뷰
                 ],
-              ),
+              ), // 나머지
             ],
           ),
         )
@@ -743,8 +894,7 @@ class NaverMapUtils {
   NaverMapUtils._();
 
   static Future<void> OpenNaverMap(String address) async {
-    String naverUrl =
-        'https://m.map.naver.com/search2/search.naver?query=$address';
+    String naverUrl = 'nmap://search?query=$address&appname=com.example.myapp';
     if (await canLaunch(naverUrl)) {
       await launch(naverUrl);
     } else {

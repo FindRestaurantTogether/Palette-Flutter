@@ -41,6 +41,7 @@ class _ListPageState extends State<ListPage> {
         elevation: 0,
       ),
       extendBodyBehindAppBar: true,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           SizedBox(height: height * 0.076),
