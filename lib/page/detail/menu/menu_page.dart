@@ -36,7 +36,7 @@ class MenuPage extends StatelessWidget {
                           onPressed: () {
                             Get.back();
                           },
-                          icon: Image.asset('assets/button_image/back_button.png'), // 서울시 어르신 복지과
+                          icon: Image.asset('assets/button_image/back_button.png'),
                         ),
                       ),
                     ],
@@ -59,7 +59,7 @@ class MenuPage extends StatelessWidget {
             ),
           ), // 백 버튼과 오류 제보/식당 등록
           SizedBox(height: 15),
-          Divider(indent: 25, endIndent: 25, height: 1),
+          Divider(indent: 25ㅅ, endIndent: 25, height: 1),
           Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 38, vertical: 25),
