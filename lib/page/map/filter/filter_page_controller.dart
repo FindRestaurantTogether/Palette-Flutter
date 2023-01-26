@@ -8,6 +8,7 @@ class FilterPageController extends GetxController {
   List<bool> OuterSelected = [false, false, false, false, false].obs;
   // 음식, 카페, 술집, 서비스, 분위기 중 현재 선택된 필터 인덱스
   RxInt CurrentOuterIndex = 5.obs;
+  // 대분류
   // 음식, 카페, 술집, 서비스, 분위기 중 어떤 필터가 선택되어 빨간색으로 버튼으로 바뀌었는지
   List<bool> FilterSelected = [false, false, false, false, false].obs;
 
@@ -22,9 +23,7 @@ class FilterPageController extends GetxController {
       ChangeOuterSelected(i, false);
   }
 
-
-  // 음식, 카페, 술집, 서비스, 분위기 전체선택 여부
-  List<bool> SwitchSelected = [false, false, false, false, false].obs;
+  // 중분류
   // 한식, 양식, 중식, 일식, 베트남, 멕시칸, 기타 선택 여부
   List<bool> OuterFoodSelected = [false, false, false, false, false, false, false].obs; // 한식, 중식 ~
   // 프랜차이즈, 개인 선택 여부
@@ -35,6 +34,9 @@ class FilterPageController extends GetxController {
   List<bool> OuterServiceSelected = [false, false, false, false, false, false, false, false, false, false, false, false, false].obs;
   // 데이트, 가성비, 조용한, 친절한, 인스타, 깨끗한, 고급, 이색적인, 혼밥, 단체, 다이어트, 뷰가 좋은, 방송 맛집 선택 여부
   List<bool> OuterMoodSelected = [false, false, false, false, false, false, false, false, false, false, false, false, false].obs;
+
+  // 음식, 카페, 술집, 서비스, 분위기 전체선택 여부
+  List<bool> SwitchSelected = [false, false, false, false, false].obs;
 
   void ChangeOuterFoodSelected(int index, bool selected) {
     OuterFoodSelected[index] = selected;

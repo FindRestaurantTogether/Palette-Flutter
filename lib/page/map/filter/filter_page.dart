@@ -19,11 +19,6 @@ class _FilterPageState extends State<FilterPage> {
   List<String> FilterListService = ["주차", "24시 영업", "포장", "예약", "애완동물 출입가능", "코스", "뷔페", "배달", "무한리필", "오마카세", "미슐랭", "콜키지", "룸"];
   List<String> FilterListMood = ["데이트", "가성비", "조용한", "친절한", "인스타", "깨끗한", "고급", "이색적인","혼밥", "단체", "다이어트", "뷰가 좋은", "방송 맛집"];
 
-  // List<String> InnerFilterListKorean = ["회/게", "분식", "고기", "전", "곱창/대창/막창", "백반", "닭갈비", "국밥", "탕", "기타"];
-  // List<String> InnerFilterListWestern = ["치킨", "피자", "햄버거", "파스타", "스테이크", "샌드위치", "기타"];
-  // List<String> InnerFilterListChinese = ["일반", "마라/훠궈", "양꼬치", "딤섬", "기타"];
-  // List<String> InnerFilterListJapanese = ["초밥/회", "돈까스", "라멘", "우동/모밀", "덮밥", "기타"];
-
   @override
   void dispose() {
     _FilterPageController.dispose();
@@ -277,47 +272,47 @@ class _FilterPageState extends State<FilterPage> {
                   for (int i = 0; i < 4; i++) ...[
                     Controller.OuterFoodSelected[i]
                         ? Container(
-                      width: 48,
-                      child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, false);
-                              Controller.FixOuterFoodSelected();
-                            });
-                          },
-                          child: Text(
-                            FilterListFood[i],
-                            style: TextStyle(color: Colors.white, fontSize: 12),
-                          ),
-                          style: OutlinedButton.styleFrom(
-                              backgroundColor: Color(0xfff42957),
-                              side: BorderSide(width: 1, color: Color(0xfff42957)),
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.zero,
-                              shape: StadiumBorder())),
-                    )
+                          width: 48,
+                          child: OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  Controller.ChangeOuterFoodSelected(i, false);
+                                  Controller.FixOuterFoodSelected();
+                                });
+                              }, // 필터가 눌렸음을 백에 알려줘야 함
+                              child: Text(
+                                FilterListFood[i],
+                                style: TextStyle(color: Colors.white, fontSize: 12),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                  backgroundColor: Color(0xfff42957),
+                                  side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.zero,
+                                  shape: StadiumBorder())),
+                        ) // 눌렸을 때
                         : Container(
-                      width: 48,
-                      child: OutlinedButton(
-                          onPressed: () {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, true);
-                              Controller.FixOuterFoodSelected();
-                            });
-                          },
-                          child: Text(
-                            FilterListFood[i],
-                            style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                          width: 48,
+                          child: OutlinedButton(
+                              onPressed: () {
+                                setState(() {
+                                  Controller.ChangeOuterFoodSelected(i, true);
+                                  Controller.FixOuterFoodSelected();
+                                });
+                              }, // 필터가 눌렸음을 백에 알려줘야 함
+                              child: Text(
+                                FilterListFood[i],
+                                style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                              ),
+                              style: OutlinedButton.styleFrom(
+                                  backgroundColor: Color(0xfffff6f8),
+                                  side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.zero,
+                                  shape: StadiumBorder()
+                              )
                           ),
-                          style: OutlinedButton.styleFrom(
-                              backgroundColor: Color(0xfffff6f8),
-                              side: BorderSide(width: 1, color: Color(0xfff42957)),
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.zero,
-                              shape: StadiumBorder()
-                          )
-                      ),
-                    ),
+                        ), // 안 눌렸을 때
                     SizedBox(
                       width: width * 0.016,
                     ),
@@ -402,7 +397,7 @@ class _FilterPageState extends State<FilterPage> {
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
                               shape: StadiumBorder())),
-                    )
+                    ) // 눌려졌을 때 필터
                         : Container(
                       width: 56,
                       child: OutlinedButton(
@@ -422,7 +417,7 @@ class _FilterPageState extends State<FilterPage> {
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
                               shape: StadiumBorder())),
-                    ),
+                    ), // 안 눌려졌을 때 필터
                     SizedBox(
                       width: width * 0.016,
                     ),

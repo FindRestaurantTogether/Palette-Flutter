@@ -25,7 +25,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
 
   final _MapPageController = Get.put(MapPageController());
   final _FilterPageController = Get.put(FilterPageController());
-  final _NaverMapPageController = Get.put(NaverMapPageController()); // 데이터 생성 완료(리스트에 추가되면서)
+  final _NaverMapPageController = Get.put(NaverMapPageController());
 
   // 사용자가 움직여서 카메라가 움직였나 확인하기 위해
   bool cameraChange = false;
@@ -114,7 +114,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
               mapType: MapType.Basic,
               initialCameraPosition: CameraPosition(target: LatLng(37.49369555120038, 127.01370530988898)),
               onCameraChange: _onCameraChange,
-              onCameraIdle: _onCameraIdle,
+              // onCameraIdle: _onCameraIdle,
               markers: _NaverMapPageController.markers,
               onMapTap: _onMapTap,
             ),
@@ -208,7 +208,12 @@ class _NaverMapPageState extends State<NaverMapPage> {
                     width: 190,
                     height: 36,
                     child: ElevatedButton(
-                        onPressed: (){},
+                        onPressed: () {
+                          print("========================================");
+                          print('중심: ${centerPosition}');
+                          print('북동쪽: ${rightUpPosition}');
+                          print('남서쪽: ${leftDownPosition}');
+                        }, // 이 지도에서 재검색 버튼
                         style: ElevatedButton.styleFrom(
                             shape: StadiumBorder(),
                             primary: Colors.grey.withOpacity(0.8)
@@ -267,14 +272,9 @@ class _NaverMapPageState extends State<NaverMapPage> {
     // print('북동쪽: ${bound.northeast}');
     // print('남서쪽: ${bound.southwest}');
   }
-  void _onCameraIdle() {
-    // print('카메라 움직임 멈춤');
-
-    print("========================================");
-    print('중심: ${centerPosition}');
-    print('북동쪽: ${rightUpPosition}');
-    print('남서쪽: ${leftDownPosition}');
-  }
+  // void _onCameraIdle() {
+  //   // print('카메라 움직임 멈춤');
+  // }
   void _onMapTap(LatLng latLng) {
 
     // 바텀시트 상태 변경

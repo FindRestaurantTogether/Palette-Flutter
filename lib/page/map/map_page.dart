@@ -115,30 +115,33 @@ class _MapPageState extends State<MapPage> {
                   ),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          showDialog(
-                            barrierDismissible: false,
-                            context: context,
-                            builder: (context) {
-                              return HotPlacePage();
-                            },
-                          );
-                        },
-                        child: Container(
-                          height: height * 0.06,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.25),
-                                spreadRadius: 2,
-                                blurRadius: 7,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Image.asset('assets/button_image/hot_place_button.png'),
+                      Container(
+                        height: height * 0.06,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.25),
+                              spreadRadius: 2,
+                              blurRadius: 7,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          padding: EdgeInsets.all(0),
+                          onPressed: () {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return HotPlacePage();
+                              },
+                            );
+                          },
+                          icon: Image.asset('assets/button_image/hot_place_button.png'),
                         ),
                       ),
                       SizedBox(width: width * 0.065),
