@@ -2,12 +2,11 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/my/account/account_page.dart';
-import 'package:myapp/page/my/login/login_page.dart';
 import 'package:myapp/page/my/my_page_controller.dart';
-import 'package:myapp/page/my/my_review/my_review_page.dart';
 import 'package:myapp/page/my/notice/notice_page.dart';
 import 'package:myapp/page/my/report_enroll/report_enroll_page.dart';
 import 'package:myapp/page/my/setting/setting_page.dart';
+import 'package:myapp/page/my/signin/signin_page.dart';
 import 'package:myapp/page/my/slider/first_slider_page.dart';
 import 'package:myapp/page/my/slider/fourth_slider_page.dart';
 import 'package:myapp/page/my/slider/second_slider_page.dart';
@@ -22,27 +21,6 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-
-  final _Authentication = FirebaseAuth.instance;
-  User? loggedUser;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = _Authentication.currentUser;
-      if (user != null) {
-        loggedUser = user;
-      }
-    } catch(e) {
-      print(e);
-    }
-  }
 
   final _MyPageController = Get.put(MyPageController());
   final _PageController = PageController(initialPage: 0);
@@ -290,75 +268,6 @@ class _MyPageState extends State<MyPage> {
                         ),
                       ), // 이벤트
                       SizedBox(height: 10),
-                      // // Container(
-                      // //   width: width * 0.87,
-                      // //   height: height * 0.055,
-                      // //   padding: EdgeInsets.only(top: 10, bottom: 10, left: 17),
-                      // //   decoration: BoxDecoration(
-                      // //     color: Colors.white,
-                      // //     borderRadius: BorderRadius.circular(12),
-                      // //     boxShadow: [
-                      // //       BoxShadow(
-                      // //         color: Colors.black.withOpacity(0.08),
-                      // //         spreadRadius: 1.8,
-                      // //         blurRadius: 9,
-                      // //         offset: Offset(1, 2),
-                      // //       ),
-                      // //     ],
-                      // //   ),
-                      // //   child: Row(
-                      // //     children: [
-                      // //       Icon(Icons.people_alt_outlined, size: 20),
-                      // //       SizedBox(width: 10),
-                      // //       Text(
-                      // //         '친구',
-                      // //         style: TextStyle(
-                      // //             color: Color(0xff464646),
-                      // //             fontWeight: FontWeight.bold,
-                      // //             fontSize: 14
-                      // //         ),
-                      // //       )
-                      // //     ],
-                      // //   ),
-                      // // ), // 친구
-                      // // SizedBox(height: 10),
-                      // // GestureDetector(
-                      // //   onTap: () {
-                      // //     Get.to(() => MyReviewPage());
-                      // //   },
-                      // //   child: Container(
-                      // //     width: width * 0.87,
-                      // //     height: height * 0.055,
-                      // //     padding: EdgeInsets.only(top: 10, bottom: 10, left: 17),
-                      // //     decoration: BoxDecoration(
-                      // //       color: Colors.white,
-                      // //       borderRadius: BorderRadius.circular(12),
-                      // //       boxShadow: [
-                      // //         BoxShadow(
-                      // //           color: Colors.black.withOpacity(0.08),
-                      // //           spreadRadius: 1.8,
-                      // //           blurRadius: 9,
-                      // //           offset: Offset(1, 2),
-                      // //         ),
-                      // //       ],
-                      // //     ),
-                      // //     child: Row(
-                      // //       children: [
-                      // //         Icon(Icons.edit_outlined, size: 20),
-                      // //         SizedBox(width: 10),
-                      // //         Text(
-                      // //           '내가 쓴 리뷰',
-                      // //           style: TextStyle(
-                      // //               color: Color(0xff464646),
-                      // //               fontWeight: FontWeight.bold,
-                      // //               fontSize: 14
-                      // //           ),
-                      // //         )
-                      // //       ],
-                      // //     ),
-                      // //   ),
-                      // // ), // 내가 쓴 리뷰
-                      // SizedBox(height: 10),
                       GestureDetector(
                         onTap: () {
                           Get.to(() => ReportEnrollPage());

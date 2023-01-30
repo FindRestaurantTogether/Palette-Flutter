@@ -90,8 +90,7 @@ class _DetailPageState extends State<DetailPage> {
                   Center(
                     child: Container(
                       width: width * 0.87,
-                      height: moreOpenInformation ? height * 0.36 + 100 : height * 0.36,
-                      padding: EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                      padding: EdgeInsets.only(top: 20, bottom: 30, left: 20, right: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -114,7 +113,7 @@ class _DetailPageState extends State<DetailPage> {
                                   children: [
                                     SizedBox(
                                       width: 27,
-                                      height: 36,
+                                      height: 34,
                                       child: IconButton(
                                         onPressed: () {
                                           Get.back();
@@ -215,9 +214,7 @@ class _DetailPageState extends State<DetailPage> {
                               ],
                             )
                           ), // 뒤로가기 버튼, 음식점 이름, 즐겨찾기 버튼
-                          SizedBox(
-                            height: height * 0.005,
-                          ), // 빈 공간
+                          SizedBox(height: 5), // 빈 공간
                           Container(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -247,7 +244,7 @@ class _DetailPageState extends State<DetailPage> {
                               ],
                             ),
                           ), // 별점, 중분류
-                          SizedBox(height: height * 0.016), // 빈 공간
+                          SizedBox(height: 14), // 빈 공간
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -258,10 +255,9 @@ class _DetailPageState extends State<DetailPage> {
                                   )
                               ]
                           ), // #분위기
-                          SizedBox(height: height * 0.014), // 빈 공간
+                          SizedBox(height: 12), // 빈 공간
                           Container(
                             width: width * 0.67,
-                            height: height * 0.16,
                             padding: EdgeInsets.only(top: 10),
                             decoration: BoxDecoration(
                                 border: Border(
@@ -274,7 +270,7 @@ class _DetailPageState extends State<DetailPage> {
                             child: Column(
                               children: [
                                 Container(
-                                  height: height * 0.02,
+                                  height: 15,
                                   child: Row(
                                     children: [
                                       Icon(
@@ -307,9 +303,9 @@ class _DetailPageState extends State<DetailPage> {
                                     ],
                                   ),
                                 ), // 영업시간
-                                SizedBox(height: height * 0.01),
+                                SizedBox(height: 6),
                                 Container(
-                                  height: height * 0.02,
+                                  height: 15,
                                   child: Row(
                                     children: [
                                       Icon(
@@ -325,13 +321,13 @@ class _DetailPageState extends State<DetailPage> {
                                     ],
                                   ),
                                 ), // 주소
-                                SizedBox(height: height * 0.01),
+                                SizedBox(height: 6),
                                 Container(
-                                  height: height * 0.02,
+                                  height: 15,
                                   child: Row(
                                     children: [
                                       Icon(
-                                        Icons.person_outline,
+                                        Icons.info_outline_rounded,
                                         color: Color(0xff57dde0),
                                         size: 16,
                                       ),
@@ -357,7 +353,7 @@ class _DetailPageState extends State<DetailPage> {
                                 SizedBox(height: 15),
                                 Center(
                                   child: Container(
-                                    height: height * 0.04,
+                                    height: 30,
                                     child: ToggleButtons(
                                       children: [
                                         Container(

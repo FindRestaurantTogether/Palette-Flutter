@@ -53,7 +53,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     return Container(
       padding: EdgeInsets.only(top: 25, bottom: 25, left: 35, right: 35),
       width: width,
-      height: height * 0.3,
+      height: 215,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.white,

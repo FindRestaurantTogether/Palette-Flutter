@@ -31,6 +31,10 @@ class _SignupPageState extends State<SignupPage> {
     }
   }
 
+  void authPersistence() async{
+    await FirebaseAuth.instance.setPersistence(Persistence.NONE);
+  } // 회원가입, 로그인시 사용자 영속
+
   @override
   void dispose() {
     _NameTextEditingController.dispose();
@@ -283,26 +287,36 @@ class _SignupPageState extends State<SignupPage> {
                             email: id,
                             password: password
                         );
-
                         await FirebaseFirestore.instance.collection('user') // cloud firestore user에
                             .doc(user.user!.uid)
                             .set({
                               'name': name,
                               'email': id
-                            }); // map 형태로 앞에 받은 user 정보 저장
-
+                            }
+                        ); // map 형태로 앞에 받은 user 정보 저장
                         if (user.user != null) {
                           Get.back();
                         }
-                      } catch(e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content:
-                              Text('이름 또는 아이디 또는 비밀번호를 다시 확인해주세요.'),
-                              backgroundColor: Color(0xfff42957),
-                            )
-                        );
+                      } on FirebaseAuthException catch(e) {
+                        if (e.code == 'weak-password') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                Text('제공된 비밀번호가 너무 약합니다.'),
+                                backgroundColor: Color(0xfff42957),
+                              )
+                          );
+                        } else if (e.code == 'email-already-in-use') {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                Text('해당 이메일에 대한 계정이 이미 존재합니다.'),
+                                backgroundColor: Color(0xfff42957),
+                              )
+                          );
+                        }
                       }
+                      authPersistence();
                     },
                     child: Text(
                       '확인',
