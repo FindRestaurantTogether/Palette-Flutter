@@ -18,7 +18,6 @@ class _SignupPageState extends State<SignupPage> {
   final _IdTextEditingController = TextEditingController();
   final _PasswordTextEditingController = TextEditingController();
   final _GlobalKey = GlobalKey<FormState>();
-  final _Authentication = FirebaseAuth.instance;
 
   String name = '';
   String id = '';
@@ -35,13 +34,13 @@ class _SignupPageState extends State<SignupPage> {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   } // 회원가입, 로그인시 사용자 영속
 
-  @override
-  void dispose() {
-    _NameTextEditingController.dispose();
-    _IdTextEditingController.dispose();
-    _PasswordTextEditingController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _NameTextEditingController.dispose();
+  //   _IdTextEditingController.dispose();
+  //   _PasswordTextEditingController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -282,19 +281,20 @@ class _SignupPageState extends State<SignupPage> {
                     onPressed: () async {
                       _tryValidation();
                       try {
-                        final user = await _Authentication
-                            .createUserWithEmailAndPassword(
+                        final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                             email: id,
                             password: password
                         );
-                        await FirebaseFirestore.instance.collection('user') // cloud firestore user에
-                            .doc(user.user!.uid)
-                            .set({
-                              'name': name,
-                              'email': id
-                            }
-                        ); // map 형태로 앞에 받은 user 정보 저장
+                        print(3);
                         if (user.user != null) {
+                          print(4);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('회원가입이 완료되었습니다.'),
+                                backgroundColor: Color(0xfff42957),
+                              )
+                          );
+                          print(5);
                           Get.back();
                         }
                       } on FirebaseAuthException catch(e) {

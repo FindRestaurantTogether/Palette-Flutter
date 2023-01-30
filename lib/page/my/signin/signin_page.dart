@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math';
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myapp/page/my/my_page_controller.dart';
@@ -19,7 +18,6 @@ class _LoginPageState extends State<LoginPage> {
   final _IdTextEditingController = TextEditingController();
   final _PasswordTextEditingController = TextEditingController();
   final _GlobalKey = GlobalKey<FormState>();
-  final _Authentication = FirebaseAuth.instance;
 
   String id = '';
   String password = '';
@@ -35,13 +33,13 @@ class _LoginPageState extends State<LoginPage> {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   } // 회원가입, 로그인시 사용자 영속
 
-  @override
-  void dispose() {
-    _MyPageController.dispose();
-    _IdTextEditingController.dispose();
-    _PasswordTextEditingController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _MyPageController.dispose();
+  //   _IdTextEditingController.dispose();
+  //   _PasswordTextEditingController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -284,11 +282,14 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: () async {
                       _tryValidation();
                       try {
-                        final user = await _Authentication.signInWithEmailAndPassword(
+                        print(1);
+                        final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
                             email: id,
                             password: password
                         );
+                        print(2);
                         if (user.user != null) {
+                            print(3);
                             setState(() {
                               _MyPageController.isLoginChangeState();
                             });
