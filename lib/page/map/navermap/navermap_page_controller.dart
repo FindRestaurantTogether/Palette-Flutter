@@ -13,11 +13,11 @@ class NaverMapPageController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchData();
+    fetchRestaurantData();
   }
 
   // 백에서 데이터 가져오기
-  void fetchData() {
+  void fetchRestaurantData() {
 
     // await Future.delayed(Duration(seconds: 1));
 

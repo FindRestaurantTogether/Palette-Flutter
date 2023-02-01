@@ -28,23 +28,53 @@ class _LoginPageState extends State<LoginPage> {
       _GlobalKey.currentState!.save();
     }
   }
-
   void authPersistence() async{
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   } // 회원가입, 로그인시 사용자 영속
 
-  // @override
-  // void dispose() {
-  //   _MyPageController.dispose();
-  //   _IdTextEditingController.dispose();
-  //   _PasswordTextEditingController.dispose();
-  //   super.dispose();
-  // }
+  bool signUpLoading = false;
+  void signInButton() async {
+    _tryValidation();
+    setState(() {
+      signUpLoading = true;
+    });
+    try {
+      final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: id,
+          password: password
+      );
+      if (user.user != null) {
+        setState(() {
+          _MyPageController.isLoginChangeState();
+        });
+        Get.back();
+      }
+    } on FirebaseAuthException catch(e) {
+      if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('해당 아이디가 존재하지 않습니다.'),
+              backgroundColor: Color(0xfff42957),
+            )
+        );
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('비밀번호를 잘못 입력하셨습니다.'),
+              backgroundColor: Color(0xfff42957),
+            )
+        );
+      }
+    } finally {
+      setState(() {
+        signUpLoading = false;
+      });
+    }
+    authPersistence();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    final user = FirebaseAuth.instance.currentUser;
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -112,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                                   onChanged: (value) {
                                     id = value;
                                   },
+                                  textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     errorStyle: TextStyle(fontSize: 10, height: 0.5),
                                     enabledBorder: UnderlineInputBorder(
@@ -197,7 +228,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     suffixIconConstraints: BoxConstraints(maxHeight: 20),
-                                    hintText: '영문, 숫자, 특수문자 조합',
+                                    hintText: '******',
                                     hintStyle: TextStyle(
                                         color: Color(0xffb9b9b9),
                                         fontSize: 12
@@ -275,59 +306,29 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ), // 간편로그인들
                 SizedBox(height: height * 0.1),
-                Container(
-                  width: width - 60,
-                  height: 50,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      _tryValidation();
-                      try {
-                        print(1);
-                        final user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: id,
-                            password: password
-                        );
-                        print(2);
-                        if (user.user != null) {
-                            print(3);
-                            setState(() {
-                              _MyPageController.isLoginChangeState();
-                            });
-                            Get.back();
-                        }
-                      } on FirebaseAuthException catch(e) {
-                        if (e.code == 'user-not-found') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('해당 아이디가 존재하지 않습니다.'),
-                                backgroundColor: Color(0xfff42957),
-                              )
-                          );
-                        } else if (e.code == 'wrong-password') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('비밀번호를 잘못 입력하셨습니다.'),
-                                backgroundColor: Color(0xfff42957),
-                              )
-                          );
-                        }
-                      }
-                      authPersistence();
-                    },
-                    child: Text(
-                      '확인',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
+                signUpLoading
+                    ? Center(
+                    child: CircularProgressIndicator(color: Color(0xfff42957))
+                    )
+                    : Container(
+                      width: width - 60,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: signInButton,
+                        child: Text(
+                          '확인',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xfff42957),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      primary: Color(0xfff42957),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                  ),
-                ) // 확인박스
+                    ) // 확인박스
               ],
             ),
           ),

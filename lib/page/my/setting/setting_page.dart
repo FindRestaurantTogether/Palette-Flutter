@@ -13,30 +13,6 @@ class SettingPage extends StatefulWidget {
 
 class _SettingPageState extends State<SettingPage> {
 
-  User? loggedUser;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getCurrentUser();
-  }
-
-  void getCurrentUser() {
-    try {
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        loggedUser = user;
-      }
-    } catch(e) {
-      print(e);
-    }
-  } // 현재 유저 정보 조회
-
-  void signOut() async{
-    await FirebaseAuth.instance.signOut();
-  } // 로그아웃
-
   Future<void> deleteUser(String email) async{
     final user = FirebaseAuth.instance.currentUser;
     await user?.delete();
@@ -160,12 +136,10 @@ class _SettingPageState extends State<SettingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset('assets/button_image/front_button.png'),
-                              ),
+                              padding: EdgeInsets.only(right: 10),
+                              width: 18,
+                              height: 18,
+                              child: Image.asset('assets/button_image/front_button.png'),
                             ),
                           ],
                         ),
@@ -196,12 +170,10 @@ class _SettingPageState extends State<SettingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset('assets/button_image/front_button.png'),
-                              ),
+                              padding: EdgeInsets.only(right: 10),
+                              width: 18,
+                              height: 18,
+                              child: Image.asset('assets/button_image/front_button.png'),
                             ),
                           ],
                         ),
@@ -233,12 +205,10 @@ class _SettingPageState extends State<SettingPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                onPressed: () {},
-                                icon: Image.asset('assets/button_image/front_button.png'),
-                              ),
+                              padding: EdgeInsets.only(right: 10),
+                              width: 18,
+                              height: 18,
+                              child: Image.asset('assets/button_image/front_button.png'),
                             ),
                           ],
                         ),
@@ -281,56 +251,6 @@ class _SettingPageState extends State<SettingPage> {
                       ],
                     ),
                   ), // 버전 정보
-                  if (loggedUser != null) ... [
-                    Divider(height: 1),
-                    GestureDetector(
-                      onTap: () {
-                        signOut();
-                      },
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.only(
-                            top: 15, bottom: 15, left: 36, right: 32),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '로그아웃',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xff464646)
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ), // 로그아웃
-                    Divider(height: 1),
-                    GestureDetector(
-                      onTap: () {
-                        deleteUser(loggedUser!.email!);
-                      },
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.only(
-                            top: 15, bottom: 15, left: 36, right: 32),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              '회원 탈퇴',
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Color(0xffc6c6c6)
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ), // 회원 탈퇴
-                  ]
                 ],
               ),
             )

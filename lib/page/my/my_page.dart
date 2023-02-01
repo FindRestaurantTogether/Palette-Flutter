@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -33,12 +34,37 @@ class _MyPageState extends State<MyPage> {
     FourthSliderPage()
   ];
 
-  @override
-  void dispose() {
-    _MyPageController.dispose();
-    _PageController.dispose();
-    super.dispose();
+  User? loggedUser;
+  String? loggedUserUid = '';
+  String? loggedUserImageUrl = '';
+  String? loggedUserName = '';
+  String? loggedUserEmail = '';
+  void getLoggedUserData() async {
+    try {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        loggedUser = user;
+      }
+      loggedUserUid = loggedUser?.uid;
+
+      final loggedUserDoc =  await FirebaseFirestore.instance.collection('users').doc(loggedUserUid).get();
+      setState(() {
+        loggedUserImageUrl = loggedUserDoc.get('imageUrl');
+        loggedUserName = loggedUserDoc.get('name');
+        loggedUserEmail = loggedUserDoc.get('id');
+      });
+
+    } catch(e) {
+      print(e);
+    }
   }
+
+  @override
+  void initState() {
+    super.initState();
+    getLoggedUserData();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -60,134 +86,142 @@ class _MyPageState extends State<MyPage> {
                 builder: (_MyPageController) {
                   return _MyPageController.iL
                       ? Container(
-                    padding: EdgeInsets.only(right: 30, left: 30, bottom: 20),
-                    decoration: BoxDecoration(color: Colors.white),
-                    child: Column(
-                      children: [
-                        SizedBox(height: height * 0.08),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '마이페이지',
-                              style: TextStyle(
-                                  color: Color(0xff464646),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            )
-                        ), // 마이페이지
-                        SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => AccountPage());
-                          },
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 35,
-                                backgroundImage: AssetImage('assets/login_image/food.png'),
-                              ), // 원형 아바타
-                              SizedBox(width: 16),
-                              Center(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: width * 0.5,
-                                      // color: Colors.red,
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '채영',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 16
-                                            ),
-                                          ),
-                                          SizedBox(height: 3),
-                                          Text(
-                                            '@ackjdk0981',
-                                            style: TextStyle(
-                                                color: Colors.black54
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Icon(Icons.arrow_forward_ios, size: 23),
-                                    )
-                                  ],
-                                ),
-                              ), // 옆에 이름&아이디와 버튼
-                            ],
-                          ),
-                        ), // 상단 마이페이지 말고 나머지
-                      ],
-                    ),
-                  )
-                      : Container(
-                    padding: EdgeInsets.only(left: 30, bottom: 20),
-                    decoration: BoxDecoration(color: Colors.white),
-                    child: Column(
-                      children: [
-                        SizedBox(height: height * 0.08),
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '마이페이지',
-                              style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold
-                              ),
-                            )
-                        ), // 마이페이지
-                        SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(() => LoginPage());
-                          },
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                radius: 35,
-                                backgroundColor: Colors.black12,
-                              ), // 원형 아바타
-                              SizedBox(width: 20),
-                              Center(
-                                child: Container(
-                                  width: width * 0.6,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        padding: EdgeInsets.only(right: 25, left: 30, bottom: 20),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 45),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '마이페이지',
+                                  style: TextStyle(
+                                      color: Color(0xff464646),
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                )
+                            ), // 마이페이지
+                            SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => AccountPage());
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
                                     children: [
-                                      Text(
-                                        '로그인/회원가입 하기',
-                                        style: TextStyle(
-                                            color: Color(0xfff42957),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16
+                                      CircleAvatar(
+                                        radius: 35,
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: NetworkImage(loggedUserImageUrl!),
+                                      ), // 원형 아바타
+                                      SizedBox(width: 16),
+                                      Center(
+                                        child: Container(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                loggedUserName!,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 16
+                                                ),
+                                              ), // 이름
+                                              SizedBox(height: 3),
+                                              Text(
+                                                loggedUserEmail!,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    color: Colors.black54
+                                                ),
+                                              ) // 이메일
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                      Icon(Icons.arrow_forward_ios, size: 23, color: Color(0xfff42957)),
+                                      ) // 이름 & 이메일
                                     ],
                                   ),
-                                ),
-                              ), // 옆에 이름&아이디와 버튼
-                            ],
-                          ),
-                        ), // 상단 마이페이지 말고 나머지
-                      ],
-                    ),
-                  );
+                                  Center(
+                                    child: Container(
+                                      child: Icon(Icons.arrow_forward_ios, size: 23),
+                                    )
+                                  ), // 버튼
+                                ],
+                              ),
+                            ), // 상단 마이페이지 말고 나머지
+                          ],
+                        ),
+                      )
+                      : Container(
+                        padding: EdgeInsets.only(right: 25, left: 30, bottom: 20),
+                        decoration: BoxDecoration(color: Colors.white),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 45),
+                            Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  '마이페이지',
+                                  style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.bold
+                                  ),
+                                )
+                            ), // 마이페이지
+                            SizedBox(height: 20),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => LoginPage());
+                              },
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CircleAvatar(
+                                        radius: 35,
+                                        backgroundColor: Color(0xfff42957),
+                                        child: CircleAvatar(
+                                          radius: 33,
+                                          backgroundColor: Colors.white,
+                                          child: Image.asset('assets/folder_image/folder_palette.png'),
+                                        ),
+                                      ), // 원형 아바타
+                                      SizedBox(width: 20),
+                                      Center(
+                                        child: Text(
+                                          '로그인/회원가입 하기',
+                                          style: TextStyle(
+                                              color: Color(0xfff42957),
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16
+                                          ),
+                                        ),
+                                      ) // 로그인/회원가입 하기
+                                    ],
+                                  ),
+                                  Center(
+                                    child: Icon(Icons.arrow_forward_ios, size: 23, color: Color(0xfff42957)),
+                                  ), // 옆에 이름&아이디와 버튼
+                                ],
+                              ),
+                            ), // 상단 마이페이지 말고 나머지
+                          ],
+                        ),
+                      );
                 }
-            ),// 상단 페이지
+            ), // 상단 페이지
             Container(
               width: width,
               height: 6,
               color: Colors.black12,
             ), // 회색 바
-            SizedBox(height: height * 0.015),
+            SizedBox(height: height * 0.015), // 빈 공간
             Expanded(
               child: SingleChildScrollView(
                 child: Container(
@@ -384,7 +418,7 @@ class _MyPageState extends State<MyPage> {
                   ),
                 ),
               ),
-            )
+            ) // 이벤트, 오류제보 등등
           ],
         )
     );

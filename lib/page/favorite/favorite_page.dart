@@ -1559,7 +1559,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                               ),
                                                                             ),
                                                                           ],
-                                                                        ) //
+                                                                        )
                                                                       ],
                                                                     )
                                                                 ),
@@ -1682,12 +1682,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     child: Container(
                                                         height: 50,
                                                         child: Align(
-                                                          alignment: Alignment.topLeft,
-                                                          child: SizedBox(
-                                                              width: 25,
-                                                              height: 25,
-                                                              child: Image.asset('assets/button_image/close_button.png')
-                                                          ),
+                                                            alignment: Alignment.topLeft,
+                                                            child: Icon(Icons.close, size: 26)
                                                         )
                                                     ),
                                                   ),
@@ -1734,8 +1730,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 height: 50,
                                                 child: ElevatedButton(
                                                   onPressed: () {
-                                                    Navigator.pop(context);
                                                     _FavoriteFolderPageController.addFolder(_TextEditingController.text);
+                                                    Navigator.pop(context);
                                                   },
                                                   child: Text(
                                                     '확인',

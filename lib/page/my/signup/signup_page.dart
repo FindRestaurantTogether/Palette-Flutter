@@ -1,9 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/page/my/my_page_controller.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignupPage extends StatefulWidget {
   SignupPage({Key? key}) : super(key: key);
@@ -29,18 +32,96 @@ class _SignupPageState extends State<SignupPage> {
       _GlobalKey.currentState!.save();
     }
   }
-
   void authPersistence() async{
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   } // 회원가입, 로그인시 사용자 영속
 
-  // @override
-  // void dispose() {
-  //   _NameTextEditingController.dispose();
-  //   _IdTextEditingController.dispose();
-  //   _PasswordTextEditingController.dispose();
-  //   super.dispose();
-  // }
+  File? _pickedImage;
+  void pickImageFromCamera() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(source: ImageSource.camera, imageQuality: 10);
+    final pickedImageFile = File(pickedImage!.path);
+    setState(() {
+      _pickedImage = pickedImageFile;
+    });
+    Navigator.pop(context);
+  }
+  void pickImageFromGallery() async {
+    final picker = ImagePicker();
+    final pickedImage = await picker.getImage(source: ImageSource.gallery);
+    final pickedImageFile = File(pickedImage!.path);
+    setState(() {
+      _pickedImage = pickedImageFile;
+    });
+    Navigator.pop(context);
+  }
+
+  String? url;
+  bool signUpLoading = false;
+  void signUpButton() async {
+    _tryValidation();
+    if (_pickedImage != null) {
+      try {
+        setState(() {
+          signUpLoading = true;
+        });
+        final ref = FirebaseStorage.instance.ref().child('usersImages').child(id + '.jpg');
+        await ref.putFile(_pickedImage!);
+        url = await ref.getDownloadURL();
+        final createdUser = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: id,
+            password: password
+        );
+        final currentUser = FirebaseAuth.instance.currentUser;
+        final currentUserUid = currentUser!.uid;
+        await FirebaseFirestore.instance.collection('users').doc(currentUserUid).set({
+          'uid': currentUserUid,
+          'name': name,
+          'id': id,
+          'imageUrl': url,
+        });
+        if (createdUser.user != null) {
+          await ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('회원가입이 완료되었습니다.'),
+                backgroundColor: Color(0xfff42957),
+              )
+          );
+          Get.back();
+        }
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                Text('제공된 비밀번호가 너무 약합니다.'),
+                backgroundColor: Color(0xfff42957),
+              )
+          );
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content:
+                Text('해당 이메일에 대한 계정이 이미 존재합니다.'),
+                backgroundColor: Color(0xfff42957),
+              )
+          );
+        }
+      } finally {
+        setState(() {
+          signUpLoading = false;
+        });
+      }
+      authPersistence();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('프로필 사진을 업로드해주세요.'),
+            backgroundColor: Color(0xfff42957),
+          )
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +147,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: height * 0.14),
+                SizedBox(height: 80),
                 Text(
                   '회원가입하기',
                   style: TextStyle(
@@ -75,7 +156,107 @@ class _SignupPageState extends State<SignupPage> {
                       fontSize: 25
                   ),
                 ), // 회원가입하기
-                SizedBox(height: height * 0.08),
+                SizedBox(height: 50),
+                Center(
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        radius: 55,
+                        backgroundColor: Color(0xfff42957),
+                        child: CircleAvatar(
+                          radius: 53,
+                          backgroundColor: Colors.white,
+                          backgroundImage: _pickedImage == null
+                              ? null
+                              : FileImage(_pickedImage!),
+                          child: _pickedImage == null
+                              ? Image.asset('assets/folder_image/folder_palette.png')
+                              : null,
+                        ),
+                      ),
+                      Positioned(
+                          bottom: -5,
+                          right: -25,
+                          child: RawMaterialButton(
+                            fillColor: Color(0xfff42957),
+                            child: Icon(Icons.photo_camera, size: 18, color: Colors.white),
+                            shape: CircleBorder(),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30),
+                                    ),
+                                  ),
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Container(
+                                      height: 210,
+                                      child: Center(
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 30),
+                                            Text(
+                                              '프로필 사진 설정',
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(height: 25),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: pickImageFromCamera,
+                                                  child: Container(
+                                                    child: Column(
+                                                      children: [
+                                                        CircleAvatar(
+                                                          radius: 35,
+                                                          backgroundColor: Colors.black,
+                                                          child: Icon(Icons.camera_alt, color: Colors.white, size: 32),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                            '사진 찰영'
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                                GestureDetector(
+                                                  onTap: pickImageFromGallery,
+                                                  child: Container(
+                                                    child: Column(
+                                                      children: [
+                                                        CircleAvatar(
+                                                          radius: 35,
+                                                          backgroundColor: Colors.black,
+                                                          child: Icon(Icons.photo, color: Colors.white, size: 32),
+                                                        ),
+                                                        SizedBox(height: 10),
+                                                        Text(
+                                                            '사진 선택'
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                              );
+                            }
+                          )
+                      ),
+                    ],
+                  ),
+                ), // 사진
+                SizedBox(height: 40),
                 Container(
                   child: Form(
                       key: _GlobalKey,
@@ -111,6 +292,7 @@ class _SignupPageState extends State<SignupPage> {
                                   onChanged: (value) {
                                     name = value;
                                   },
+                                  textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     errorStyle: TextStyle(fontSize: 10, height: 0.5),
                                     enabledBorder: UnderlineInputBorder(
@@ -143,7 +325,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ],
                           ), // 이름
-                          SizedBox(height: height * 0.04),
+                          SizedBox(height: 25),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -174,6 +356,7 @@ class _SignupPageState extends State<SignupPage> {
                                   onChanged: (value) {
                                     id = value;
                                   },
+                                  textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     errorStyle: TextStyle(fontSize: 10, height: 0.5),
                                     enabledBorder: UnderlineInputBorder(
@@ -206,7 +389,7 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ],
                           ), // 아이디
-                          SizedBox(height: height * 0.04),
+                          SizedBox(height: 25),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -259,7 +442,7 @@ class _SignupPageState extends State<SignupPage> {
                                       ),
                                     ),
                                     suffixIconConstraints: BoxConstraints(maxHeight: 20),
-                                    hintText: '영문, 숫자, 특수문자 조합',
+                                    hintText: '최소 7자 이상 입력해주세요',
                                     hintStyle: TextStyle(
                                         color: Color(0xffb9b9b9),
                                         fontSize: 12
@@ -273,55 +456,20 @@ class _SignupPageState extends State<SignupPage> {
                       )
                   ),
                 ), // 이름 & 아이디 & 비밀번호
-                SizedBox(height: height * 0.23),
-                Container(
+                SizedBox(height: 60),
+                signUpLoading
+                  ? Center(
+                    child: CircularProgressIndicator(color: Color(0xfff42957))
+                )
+                  : Container(
                   width: width - 60,
                   height: 50,
                   child: ElevatedButton(
-                    onPressed: () async {
-                      _tryValidation();
-                      try {
-                        final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                            email: id,
-                            password: password
-                        );
-                        print(3);
-                        if (user.user != null) {
-                          print(4);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('회원가입이 완료되었습니다.'),
-                                backgroundColor: Color(0xfff42957),
-                              )
-                          );
-                          print(5);
-                          Get.back();
-                        }
-                      } on FirebaseAuthException catch(e) {
-                        if (e.code == 'weak-password') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                Text('제공된 비밀번호가 너무 약합니다.'),
-                                backgroundColor: Color(0xfff42957),
-                              )
-                          );
-                        } else if (e.code == 'email-already-in-use') {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content:
-                                Text('해당 이메일에 대한 계정이 이미 존재합니다.'),
-                                backgroundColor: Color(0xfff42957),
-                              )
-                          );
-                        }
-                      }
-                      authPersistence();
-                    },
+                    onPressed: signUpButton,
                     child: Text(
                       '확인',
                       style: TextStyle(
-                        fontWeight: FontWeight.bold
+                          fontWeight: FontWeight.bold
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
@@ -331,7 +479,8 @@ class _SignupPageState extends State<SignupPage> {
                       ),
                     ),
                   ),
-                ) // 확인박스
+                ), // 확인박스
+                SizedBox(height: 60),
               ],
             ),
           ),
