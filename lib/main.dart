@@ -15,7 +15,10 @@ void main() async{
   );
 
   WidgetsFlutterBinding.ensureInitialized();
-  KakaoSdk.init(nativeAppKey: 'f967051526ddc92370564aba68e7ba65');
+  KakaoSdk.init(
+    nativeAppKey: 'f967051526ddc92370564aba68e7ba65',
+    javaScriptAppKey: 'bbaa604b07ac838b689d7529d40425de',
+  );
 
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);

@@ -51,9 +51,9 @@ class _HotPlacePageState extends State<HotPlacePage> {
           children: [
             Center(
               child: Container(
-                width: width * 0.8,
-                height: 440,
-                padding: EdgeInsets.only(top: 20, bottom: 25, left: 20, right: 20),
+                width: width * 0.85,
+                height: 485,
+                padding: EdgeInsets.only(top: 12, bottom: 25, left: 16, right: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                     color: Colors.white
@@ -65,7 +65,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                       child: Material(
                         color: Colors.transparent,
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
                               width: 30,
@@ -79,22 +79,10 @@ class _HotPlacePageState extends State<HotPlacePage> {
                                 icon: Image.asset('assets/button_image/close_button.png'),
                               ),
                             ), // 나가기
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: IconButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onPressed: () {
-                                  // Get.back();
-                                },
-                                icon: Image.asset('assets/button_image/front_button.png'),
-                              ),
-                            ), // 초기화
                           ],
                         ),
                       ),
-                    ), // 뒤로가기와 초기화 버튼
+                    ), // 뒤로가기 버튼
                     Text(
                       '핫플레이스',
                       style: TextStyle(
@@ -103,8 +91,8 @@ class _HotPlacePageState extends State<HotPlacePage> {
                           fontSize: 22,
                           color: Colors.black
                       ),
-                    ),
-                    SizedBox(height: 16),
+                    ), // 핫 플레이스
+                    SizedBox(height: 13),
                     Expanded(
                       child: ListView(
                         children: [
@@ -675,7 +663,29 @@ class _HotPlacePageState extends State<HotPlacePage> {
                           )
                         ],
                       ),
-                    ) // 필터들
+                    ), // 필터들
+                    SizedBox(height: 10),
+                    Container(
+                      width: width * 0.85 - 32,
+                      height: 50,
+                      child: ElevatedButton(
+                        onPressed: () {
+
+                        },
+                        child: Text(
+                          '이동',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Color(0xfff42957),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ) // 확인박스
                   ],
                 ),
               ),

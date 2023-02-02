@@ -396,6 +396,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ),
                                       ],
+                                      highlightColor: Colors.transparent,
                                       fillColor: Colors.white,
                                       onPressed: (int index) {
                                         setState(() {

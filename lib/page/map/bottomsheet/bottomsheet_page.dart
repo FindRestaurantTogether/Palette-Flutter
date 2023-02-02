@@ -5,7 +5,9 @@ import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
+import 'package:myapp/page/share/share_template.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk_share.dart';
 
 class BottomsheetPage extends StatefulWidget {
 
@@ -53,7 +55,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     return Container(
       padding: EdgeInsets.only(top: 25, bottom: 25, left: 35, right: 35),
       width: width,
-      height: 215,
+      height: 205,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.white,
@@ -121,33 +123,43 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                   ],
                 ),
               ), // 음식점 이름 및 분류
-              Obx(() {
-                return _NaverMapPageController.restaurants[selectedIndex].favorite.value
-                    ? GestureDetector(
-                        onTap: (){
-                          _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                          _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
-                          _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
-                          for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
-                            if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
-                              _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);
-                          }
-                        },
-                        child: Icon(Icons.bookmark, size: 28, color: Colors.pinkAccent)
-                    )
-                    : GestureDetector(
-                        onTap: (){
-                          showDialog(
-                              context: context,
-                              barrierDismissible: false,
-                              builder: (BuildContext context) {
-                                return SelectFolderPage(selectedRestaurant: selectedRestaurant);
-                              }
-                          );
-                        },
-                        child: Icon(Icons.bookmark_border, size: 28, color: Color(0xfff42957))
-                    );  // 즐겨찾기
-              })
+              SizedBox(
+                width: 17,
+                height: 20,
+                child: Obx(() {
+                  return  _NaverMapPageController.restaurants[selectedIndex].favorite.value
+                      ? IconButton(
+                    padding: EdgeInsets.all(0.0),
+                    onPressed: (){
+                      setState(() {
+                        _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
+                        _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
+                        _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
+                        for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
+                          if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
+                            _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);
+                        }
+                      });
+                    },
+                    icon: Image.asset('assets/button_image/favorite_button.png'),
+                  )
+                      : IconButton(
+                    padding: EdgeInsets.all(0.0),
+                    onPressed: () {
+                      setState(() {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                            }
+                        );
+                      });
+                    },
+                    icon: Image.asset('assets/button_image/unfavorite_button.png'),
+                  );
+                }),
+              ),
             ],
           ), // 음식점 이름 & 즐겨찾기
           SizedBox(height: 5),
@@ -234,32 +246,134 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
           Container(
             height: 35,
             child: ToggleButtons(
+              fillColor: Colors.white,
+              highlightColor: Colors.transparent,
+              onPressed: (int index) async {
+                setState(() {
+                  for (int i = 0; i < ToggleSelected.length; i++) {
+                    ToggleSelected[i] = i == index;
+                  }
+                });
+                if (ToggleSelected[0]) {
+                  launch("tel://01012341234");
+                } else if (ToggleSelected[1]) {
+                  bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
+
+                  if (isKakaoTalkSharingAvailable) {
+                    try {
+                      Uri uri = await ShareClient.instance.shareDefault(template: defaultFeed);
+                      await ShareClient.instance.launchKakaoTalk(uri);
+                      print('카카오톡 공유 완료');
+                    } catch (error) {
+                      print('카카오톡 공유 실패 $error');
+                    }
+                  } else {
+                    try {
+                      Uri shareUrl = await WebSharerClient.instance.makeDefaultUrl(template: defaultFeed);
+                      await launchBrowserTab(shareUrl, popupOpen: true);
+                    } catch (error) {
+                      print('카카오톡 공유 실패 $error');
+                    }
+                  }
+                } else if (ToggleSelected[2]) {
+                  showModalBottomSheet(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(30),
+                        ),
+                      ),
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Container(
+                          height: 220,
+                          child: Center(
+                            child: Column(
+                              children: [
+                                SizedBox(height: 30),
+                                Text(
+                                  '길찾기 앱을 선택해주세요',
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        KakaoMapUtils.OpenKakaoMap('서울특별시 마포구 상수동 93-44번지');
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: AssetImage('assets/direction_image/kakao_map.png'),
+                                              radius: 40,
+                                              backgroundColor: Colors.transparent,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                                '카카오맵'
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        GoogleMapUtils.OpenGoogleMap('서울특별시 마포구 상수동 93-44번지');
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: AssetImage('assets/direction_image/google_map.png'),
+                                              radius: 40,
+                                              backgroundColor: Colors.transparent,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                                '구글 지도'
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        NaverMapUtils.OpenNaverMap('서울특별시 마포구 상수동 93-44번지');
+                                      },
+                                      child: Container(
+                                        child: Column(
+                                          children: [
+                                            CircleAvatar(
+                                              backgroundImage: AssetImage('assets/direction_image/naver_map.png'),
+                                              radius: 40,
+                                              backgroundColor: Colors.transparent,
+                                            ),
+                                            SizedBox(height: 10),
+                                            Text(
+                                                '네이버 지도'
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                  );
+                }
+              },
+              isSelected: ToggleSelected,
+              borderRadius: BorderRadius.all(Radius.circular(10)),
               children: [
-                Container(
-                    width: (width - 72) * 0.33,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 15,
-                          height: 15,
-                          child: Image.asset('assets/button_image/call_button.png'),
-                        ),
-                      ],
-                    )),
-                Container(
-                    width: (width - 72) * 0.33,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 15,
-                          height: 15,
-                          child: Image.asset('assets/button_image/share_button.png'),
-                        ),
-                      ],
-                    )),
-                Container(
+              Container(
                   width: (width - 72) * 0.33,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -267,121 +381,36 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       SizedBox(
                         width: 15,
                         height: 15,
-                        child: Image.asset('assets/button_image/navigation_button.png'),
+                        child: Image.asset('assets/button_image/call_button.png'),
                       ),
                     ],
-                  ),
+                  )),
+              Container(
+                  width: (width - 72) * 0.33,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 15,
+                        height: 15,
+                        child: Image.asset('assets/button_image/share_button.png'),
+                      ),
+                    ],
+                  )),
+              Container(
+                width: (width - 72) * 0.33,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 15,
+                      height: 15,
+                      child: Image.asset('assets/button_image/navigation_button.png'),
+                    ),
+                  ],
                 ),
-              ],
-              fillColor: Colors.white,
-              onPressed: (int index) {
-                setState(() {
-                  for (int i = 0; i < ToggleSelected.length; i++) {
-                    ToggleSelected[i] = i == index;
-                  }
-
-                  if (ToggleSelected[0]) {
-                    launch("tel://01012341234");
-                  } else if (ToggleSelected[1]) {
-
-                  } else if (ToggleSelected[2]) {
-                    showModalBottomSheet(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(30),
-                          ),
-                        ),
-                        context: context,
-                        builder: (BuildContext context) {
-                          return Container(
-                            height: 220,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  SizedBox(height: 30),
-                                  Text(
-                                    '길찾기 앱을 선택해주세요',
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  SizedBox(height: 20),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      GestureDetector(
-                                        onTap: () {
-                                          KakaoMapUtils.OpenKakaoMap('서울특별시 마포구 상수동 93-44번지');
-                                        },
-                                        child: Container(
-                                          child: Column(
-                                            children: [
-                                              CircleAvatar(
-                                                backgroundImage: AssetImage('assets/direction_image/kakao_map.png'),
-                                                radius: 40,
-                                                backgroundColor: Colors.transparent,
-                                              ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                  '카카오맵'
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          GoogleMapUtils.OpenGoogleMap('서울특별시 마포구 상수동 93-44번지');
-                                        },
-                                        child: Container(
-                                          child: Column(
-                                            children: [
-                                              CircleAvatar(
-                                                backgroundImage: AssetImage('assets/direction_image/google_map.png'),
-                                                radius: 40,
-                                                backgroundColor: Colors.transparent,
-                                              ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                  '구글 지도'
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          NaverMapUtils.OpenNaverMap('서울특별시 마포구 상수동 93-44번지');
-                                        },
-                                        child: Container(
-                                          child: Column(
-                                            children: [
-                                              CircleAvatar(
-                                                backgroundImage: AssetImage('assets/direction_image/naver_map.png'),
-                                                radius: 40,
-                                                backgroundColor: Colors.transparent,
-                                              ),
-                                              SizedBox(height: 10),
-                                              Text(
-                                                  '네이버 지도'
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          );
-                        }
-                    );
-                  }
-                });
-              },
-              isSelected: ToggleSelected,
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+            ],
             ),
           ) // toggle button
         ],
