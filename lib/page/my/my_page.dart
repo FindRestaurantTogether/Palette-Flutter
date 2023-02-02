@@ -23,7 +23,6 @@ class MyPage extends StatefulWidget {
 
 class _MyPageState extends State<MyPage> {
 
-  final _MyPageController = Get.put(MyPageController());
   final _PageController = PageController(initialPage: 0);
   double _activePage = 0;
 
@@ -39,8 +38,12 @@ class _MyPageState extends State<MyPage> {
   String? loggedUserImageUrl = '';
   String? loggedUserName = '';
   String? loggedUserEmail = '';
+  bool imageUploadLoading = false;
   void getLoggedUserData() async {
     try {
+      setState(() {
+        imageUploadLoading = true;
+      });
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         loggedUser = user;
@@ -53,7 +56,9 @@ class _MyPageState extends State<MyPage> {
         loggedUserName = loggedUserDoc.get('name');
         loggedUserEmail = loggedUserDoc.get('id');
       });
-
+      setState(() {
+        imageUploadLoading = false;
+      });
     } catch(e) {
       print(e);
     }
@@ -114,8 +119,18 @@ class _MyPageState extends State<MyPage> {
                                     children: [
                                       CircleAvatar(
                                         radius: 35,
-                                        backgroundColor: Colors.white,
-                                        backgroundImage: NetworkImage(loggedUserImageUrl!),
+                                        backgroundColor: Color(0xfff42957),
+                                        child: imageUploadLoading
+                                            ? CircleAvatar(
+                                              radius: 33,
+                                              backgroundColor: Colors.white,
+                                              child: Center(child: CircularProgressIndicator(color: Color(0xfff42957)))
+                                            )
+                                            : CircleAvatar(
+                                              radius: 33,
+                                              backgroundColor: Colors.white,
+                                              backgroundImage: NetworkImage(loggedUserImageUrl!),
+                                            ),
                                       ), // 원형 아바타
                                       SizedBox(width: 16),
                                       Center(

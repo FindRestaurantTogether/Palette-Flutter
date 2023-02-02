@@ -477,14 +477,14 @@ class _FolderPageState extends State<FolderPage> {
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '${_selectedRestaurants.elementAt(index).overallRating}',
+                                                    '${_selectedRestaurants.elementAt(index).naverRating}',
                                                     style: TextStyle(
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.bold),
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '(${_selectedRestaurants.elementAt(index).numberOfOverallRating}건)',
+                                                    '(${_selectedRestaurants.elementAt(index).numberOfNaverRating}건)',
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                     ),
@@ -585,14 +585,14 @@ class _FolderPageState extends State<FolderPage> {
                                               ),
                                               SizedBox(width: 3),
                                               Text(
-                                                '${_selectedRestaurants.elementAt(index).overallRating}',
+                                                '${_selectedRestaurants.elementAt(index).naverRating}',
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold),
                                               ),
                                               SizedBox(width: 3),
                                               Text(
-                                                '(${_selectedRestaurants.elementAt(index).numberOfOverallRating}건)',
+                                                '(${_selectedRestaurants.elementAt(index).numberOfNaverRating}건)',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                 ),

@@ -1040,14 +1040,14 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
-                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).overallRating}',
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).naverRating}',
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           fontWeight: FontWeight.bold),
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
-                                                      '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfOverallRating}건)',
+                                                      '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfNaverRating}건)',
                                                       style: TextStyle(
                                                         fontSize: 10,
                                                       ),
@@ -1148,14 +1148,14 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 ),
                                                 SizedBox(width: 3),
                                                 Text(
-                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).overallRating}',
+                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).naverRating}',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight: FontWeight.bold),
                                                 ),
                                                 SizedBox(width: 3),
                                                 Text(
-                                                  '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfOverallRating}건)',
+                                                  '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfNaverRating}건)',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                   ),
@@ -1389,252 +1389,254 @@ class _FavoritePageState extends State<FavoritePage> {
               Expanded(
                   child: Stack(
                     children: [
-                      ListView.separated(
-                        physics: BouncingScrollPhysics(),
-                        padding: EdgeInsets.all(3),
-                        itemCount: _FavoriteFolderPageController.folderName.length,
-                        itemBuilder: (context, index){
-                          return GestureDetector(
-                            onTap: () {
-                              Get.to(() => FolderPage(), arguments: index);
-                            },
-                            child: Column(
-                              children: [
-                                SizedBox(height: 10),
-                                Container(
-                                  child: Row(
-                                    children: [
-                                      SizedBox(
-                                        width: width * 0.06,
-                                      ),
-                                      Container(
-                                        width: width * 0.3,
-                                        height: height * 0.11,
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            color: Colors.black12
+                      Obx(() {
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.all(3),
+                          itemCount: _FavoriteFolderPageController.folderName.length,
+                          itemBuilder: (context, index){
+                            return GestureDetector(
+                              onTap: () {
+                                Get.to(() => FolderPage(), arguments: index);
+                              },
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  Container(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: width * 0.06,
                                         ),
-                                        child: Center(
-                                          child: SizedBox(
-                                              width: 50,
-                                              height: 50,
-                                              child: Image.asset('assets/folder_image/folder_palette.png')
+                                        Container(
+                                          width: width * 0.3,
+                                          height: height * 0.11,
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.black12
+                                          ),
+                                          child: Center(
+                                            child: SizedBox(
+                                                width: 50,
+                                                height: 50,
+                                                child: Image.asset('assets/folder_image/folder_palette.png')
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        width: width * 0.04,
-                                      ),
-                                      Container(
-                                        width: width * 0.52,
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  ' ${_FavoriteFolderPageController.folderName[index]}',
-                                                  style: TextStyle(
-                                                      color: Color(0xff464646),
-                                                      fontWeight: FontWeight.bold,
-                                                      fontSize: 18
-                                                  ),
-                                                ), // 폴더 이름
-                                                Row(
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () {
-                                                        showDialog(
-                                                          context: context,
-                                                          builder: (context) {
-                                                            return Material(
-                                                              color: Colors.transparent,
-                                                              child: Center(
-                                                                child: Container(
-                                                                    width: 300,
-                                                                    height: 235,
-                                                                    padding: EdgeInsets.all(20),
-                                                                    decoration: BoxDecoration(
-                                                                        color: Colors.white,
-                                                                        borderRadius: BorderRadius.circular(30)
-                                                                    ),
-                                                                    child: Column(
-                                                                      children: [
-                                                                        Row(
-                                                                          children: [
-                                                                            GestureDetector(
-                                                                              onTap: (){
-                                                                                Navigator.pop(context);
-                                                                                _TextEditingController.clear();
-                                                                              },
-                                                                              child: Container(
-                                                                                  height: 50,
-                                                                                  child: Align(
-                                                                                      alignment: Alignment.topLeft,
-                                                                                      child: Icon(Icons.close, size: 26)
+                                        SizedBox(
+                                          width: width * 0.04,
+                                        ),
+                                        Container(
+                                          width: width * 0.52,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    ' ${_FavoriteFolderPageController.folderName[index]}',
+                                                    style: TextStyle(
+                                                        color: Color(0xff464646),
+                                                        fontWeight: FontWeight.bold,
+                                                        fontSize: 18
+                                                    ),
+                                                  ), // 폴더 이름
+                                                  Row(
+                                                    children: [
+                                                      GestureDetector(
+                                                        onTap: () {
+                                                          showDialog(
+                                                            context: context,
+                                                            builder: (context) {
+                                                              return Material(
+                                                                color: Colors.transparent,
+                                                                child: Center(
+                                                                  child: Container(
+                                                                      width: 300,
+                                                                      height: 235,
+                                                                      padding: EdgeInsets.all(20),
+                                                                      decoration: BoxDecoration(
+                                                                          color: Colors.white,
+                                                                          borderRadius: BorderRadius.circular(30)
+                                                                      ),
+                                                                      child: Column(
+                                                                        children: [
+                                                                          Row(
+                                                                            children: [
+                                                                              GestureDetector(
+                                                                                onTap: (){
+                                                                                  Navigator.pop(context);
+                                                                                  _TextEditingController.clear();
+                                                                                },
+                                                                                child: Container(
+                                                                                    height: 50,
+                                                                                    child: Align(
+                                                                                        alignment: Alignment.topLeft,
+                                                                                        child: Icon(Icons.close, size: 26)
+                                                                                    )
+                                                                                ),
+                                                                              ),
+                                                                              SizedBox(
+                                                                                width: 75,
+                                                                              ),
+                                                                              Container(
+                                                                                height: 50,
+                                                                                child: Align(
+                                                                                  alignment: Alignment.center,
+                                                                                  child: Text(
+                                                                                    '폴더 수정',
+                                                                                    style: TextStyle(
+                                                                                        fontWeight: FontWeight.bold,
+                                                                                        fontSize: 22
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          ),
+                                                                          Padding(
+                                                                            padding: EdgeInsets.only(left: 4, right: 4),
+                                                                            child: TextField(
+                                                                              controller: _TextEditingController,
+                                                                              maxLength: 20,
+                                                                              decoration: InputDecoration(
+                                                                                  hintText: _FavoriteFolderPageController.folderName[index],
+                                                                                  suffixIcon: IconButton(
+                                                                                      onPressed: () {
+                                                                                        _TextEditingController.clear();
+                                                                                      },
+                                                                                      icon: Padding(
+                                                                                        padding: EdgeInsets.only(left: 15),
+                                                                                        child: Icon(Icons.clear, size: 18),
+                                                                                      )
                                                                                   )
                                                                               ),
                                                                             ),
-                                                                            SizedBox(
-                                                                              width: 75,
-                                                                            ),
-                                                                            Container(
-                                                                              height: 50,
-                                                                              child: Align(
-                                                                                alignment: Alignment.center,
-                                                                                child: Text(
-                                                                                  '폴더 수정',
-                                                                                  style: TextStyle(
-                                                                                      fontWeight: FontWeight.bold,
-                                                                                      fontSize: 22
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ],
-                                                                        ),
-                                                                        Padding(
-                                                                          padding: EdgeInsets.only(left: 4, right: 4),
-                                                                          child: TextField(
-                                                                            controller: _TextEditingController,
-                                                                            maxLength: 20,
-                                                                            decoration: InputDecoration(
-                                                                                hintText: _FavoriteFolderPageController.folderName[index],
-                                                                                suffixIcon: IconButton(
-                                                                                    onPressed: () {
-                                                                                      _TextEditingController.clear();
-                                                                                    },
-                                                                                    icon: Padding(
-                                                                                      padding: EdgeInsets.only(left: 15),
-                                                                                      child: Icon(Icons.clear, size: 18),
-                                                                                    )
-                                                                                )
-                                                                            ),
                                                                           ),
-                                                                        ),
-                                                                        SizedBox(height: 15),
-                                                                        Row(
-                                                                          children: [
-                                                                            Container(
-                                                                              width: 125,
-                                                                              height: 50,
-                                                                              child: ElevatedButton(
-                                                                                onPressed: () {
-                                                                                  Navigator.pop(context);
-                                                                                  _FavoriteFolderPageController.removeFolder(index);
-                                                                                },
-                                                                                child: Text(
-                                                                                  '삭제',
-                                                                                  style: TextStyle(
-                                                                                      fontWeight: FontWeight.bold
+                                                                          SizedBox(height: 15),
+                                                                          Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                width: 125,
+                                                                                height: 50,
+                                                                                child: ElevatedButton(
+                                                                                  onPressed: () {
+                                                                                    Navigator.pop(context);
+                                                                                    _FavoriteFolderPageController.removeFolder(index);
+                                                                                  },
+                                                                                  child: Text(
+                                                                                    '삭제',
+                                                                                    style: TextStyle(
+                                                                                        fontWeight: FontWeight.bold
+                                                                                    ),
                                                                                   ),
-                                                                                ),
-                                                                                style: ElevatedButton.styleFrom(
-                                                                                  primary: Color(0xfff42957),
-                                                                                  shape: RoundedRectangleBorder(
-                                                                                    borderRadius: BorderRadius.circular(10),
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            SizedBox(width: 10),
-                                                                            Container(
-                                                                              width: 125,
-                                                                              height: 50,
-                                                                              child: ElevatedButton(
-                                                                                onPressed: () {
-                                                                                  Navigator.pop(context);
-                                                                                  _FavoriteFolderPageController.editFolderName(index, _TextEditingController.text);
-                                                                                },
-                                                                                child: Text(
-                                                                                    '확인'
-                                                                                ),
-                                                                                style: ElevatedButton.styleFrom(
-                                                                                  primary: Color(0xff57dde0),
-                                                                                  shape: RoundedRectangleBorder(
-                                                                                    borderRadius: BorderRadius.circular(10),
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    primary: Color(0xfff42957),
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(10),
+                                                                                    ),
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ),
-                                                                          ],
-                                                                        )
-                                                                      ],
-                                                                    )
+                                                                              SizedBox(width: 10),
+                                                                              Container(
+                                                                                width: 125,
+                                                                                height: 50,
+                                                                                child: ElevatedButton(
+                                                                                  onPressed: () {
+                                                                                    Navigator.pop(context);
+                                                                                    _FavoriteFolderPageController.editFolderName(index, _TextEditingController.text);
+                                                                                  },
+                                                                                  child: Text(
+                                                                                      '확인'
+                                                                                  ),
+                                                                                  style: ElevatedButton.styleFrom(
+                                                                                    primary: Color(0xff57dde0),
+                                                                                    shape: RoundedRectangleBorder(
+                                                                                      borderRadius: BorderRadius.circular(10),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ),
+                                                                            ],
+                                                                          )
+                                                                        ],
+                                                                      )
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                      child: SizedBox(
-                                                          width: 22,
-                                                          height: 22,
-                                                          child: Image.asset('assets/button_image/edit_button.png')
+                                                              );
+                                                            },
+                                                          );
+                                                        },
+                                                        child: SizedBox(
+                                                            width: 22,
+                                                            height: 22,
+                                                            child: Image.asset('assets/button_image/edit_button.png')
+                                                        ),
                                                       ),
-                                                    ),
-                                                    // SizedBox(width: 10),
-                                                    // Icon(Icons.open_in_new, size: 20, color: Colors.black54),
-                                                  ],
-                                                ), // 편집 및 공유 버튼
-                                              ],
-                                            ), // 식당 이름 & 아이콘 2개
-                                            SizedBox(height: 10),
-                                            Row(
-                                              children: [
-                                                SizedBox(
-                                                    width: 22,
-                                                    height: 22,
-                                                    child: Image.asset('assets/button_image/red_location_button.png')
-                                                ),
-                                                Text(
-                                                  '  ${_FavoriteFolderPageController.folderRestaurant[index].length}',
-                                                  style: TextStyle(
-                                                      fontSize: 16,
-                                                      color: Color(0xfff42957)
+                                                      // SizedBox(width: 10),
+                                                      // Icon(Icons.open_in_new, size: 20, color: Colors.black54),
+                                                    ],
+                                                  ), // 편집 및 공유 버튼
+                                                ],
+                                              ), // 식당 이름 & 아이콘 2개
+                                              SizedBox(height: 10),
+                                              Row(
+                                                children: [
+                                                  SizedBox(
+                                                      width: 22,
+                                                      height: 22,
+                                                      child: Image.asset('assets/button_image/red_location_button.png')
                                                   ),
-                                                ),
-                                                SizedBox(width: 30),
-                                                for(var i = 0; i < _FavoriteFolderPageController.folderRestaurant[index].length; i++) ... [
-                                                  if (i == 0) ... [
-                                                    Text(
-                                                      overflow: TextOverflow.ellipsis,
-                                                      '${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Color(
-                                                              0xffb9b9b9)
-                                                      ),
-                                                    )
-                                                  ] else ... [
-                                                    Text(
-                                                      overflow: TextOverflow.ellipsis,
-                                                      ', ${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
-                                                      style: TextStyle(
-                                                          fontSize: 14,
-                                                          color: Color(0xffb9b9b9)
-                                                      ),
-                                                    )
+                                                  Text(
+                                                    '  ${_FavoriteFolderPageController.folderRestaurant[index].length}',
+                                                    style: TextStyle(
+                                                        fontSize: 16,
+                                                        color: Color(0xfff42957)
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 30),
+                                                  for(var i = 0; i < _FavoriteFolderPageController.folderRestaurant[index].length; i++) ... [
+                                                    if (i == 0) ... [
+                                                      Text(
+                                                        overflow: TextOverflow.ellipsis,
+                                                        '${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Color(
+                                                                0xffb9b9b9)
+                                                        ),
+                                                      )
+                                                    ] else ... [
+                                                      Text(
+                                                        overflow: TextOverflow.ellipsis,
+                                                        ', ${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
+                                                        style: TextStyle(
+                                                            fontSize: 14,
+                                                            color: Color(0xffb9b9b9)
+                                                        ),
+                                                      )
+                                                    ]
                                                   ]
-                                                ]
-                                              ],
-                                            ), // 핀 갯수 & 음식점 이름
-                                          ],
-                                        ),
-                                      )
-                                    ],
+                                                ],
+                                              ), // 핀 갯수 & 음식점 이름
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                SizedBox(height: 10),
-                              ],
-                            ),
-                          );
-                        },
-                        separatorBuilder: (context, index) {
-                          return Divider();
-                        },
-                      ),
+                                  SizedBox(height: 10),
+                                ],
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider();
+                          },
+                        );
+                      }),
                       Positioned(
                         right: 20,
                         bottom: 30,

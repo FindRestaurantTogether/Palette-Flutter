@@ -11,7 +11,6 @@ abstract class NaverMapPageModel {
   final String classification = '';
   final double distance = 0.0;
   RxBool favorite = false as RxBool;
-  final String folder = '';
   final List<String> atmosphere = [];
   final double naverRating = 0.0;
   final int numberOfNaverRating = 0;
@@ -43,8 +42,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   final String classification;
   @override
   RxBool favorite = false.obs;
-  @override
-  final String folder;
   @override
   final double distance;
   @override
@@ -82,7 +79,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
     required this.classification,
     required this.distance,
     favorite,
-    required this.folder,
     required this.atmosphere,
     required this.naverRating,
     required this.numberOfNaverRating,
