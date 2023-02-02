@@ -102,7 +102,7 @@ class ListviewPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  '${_NaverMapPageController.restaurants[index].overallRating}',
+                                  '${_NaverMapPageController.restaurants[index].naverRating}',
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class ListviewPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  '(${_NaverMapPageController.restaurants[index].numberOfOverallRating}건)',
+                                  '(${_NaverMapPageController.restaurants[index].numberOfNaverRating}건)',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff464646)

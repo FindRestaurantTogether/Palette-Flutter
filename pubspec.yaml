@@ -93,15 +93,14 @@ flutter:
     - assets/direction_image/
     - assets/list_image/
     - assets/login_image/
-    - assets/search_data/recent_data.json
     - assets/background_image/
-    - assets/marker_image/japan_image/
+    - assets/marker_image/
     - assets/folder_image/
     - assets/onboarding_image/
     - assets/splash_image/
     - assets/button_image/
-    - assets/pin_image/
-    - assets/bottomnavigation_image/home_image/
+    - assets/bottomnavigation_image/
+    - assets/search_data/recent_data.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

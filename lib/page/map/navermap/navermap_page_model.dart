@@ -7,22 +7,23 @@ abstract class NaverMapPageModel {
   final String exteriorImage = '';
   final String name = '';
   final bool open = false;
+  final Map<String, String> open_hour = {};
   final String classification = '';
   final double distance = 0.0;
   RxBool favorite = false as RxBool;
   final String folder = '';
   final List<String> atmosphere = [];
-  final double overallRating = 0.0;
-  final int numberOfOverallRating = 0;
-  final double menuRating = 0.0;
-  final int numberOfMenuRating = 0;
-  final double restaurantRating = 0.0;
-  final int numberOfRestaurantRating = 0;
+  final double naverRating = 0.0;
+  final int numberOfNaverRating = 0;
+  final double googleRating = 0.0;
+  final int numberOfGoogleRating = 0;
+  final double kakaoRating = 0.0;
+  final int numberOfKakaoRating = 0;
   final List<String> service = [];
   final String address = '';
   final int phoneNumber = 0;
   final LocationClass position = LocationClass(longitude: 0.0, latitude: 0.0);
-  final Map<String,List<double>> menu = {};
+  final Map<String,int> menu = {};
 }
 
 class NaverMapPageRestaurant implements NaverMapPageModel {
@@ -37,6 +38,8 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final bool open;
   @override
+  Map<String, String> open_hour;
+  @override
   final String classification;
   @override
   RxBool favorite = false.obs;
@@ -47,17 +50,17 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final List<String> atmosphere;
   @override
-  final double overallRating;
+  final double naverRating;
   @override
-  final int numberOfOverallRating;
+  final int numberOfNaverRating;
   @override
-  final double menuRating;
+  final double googleRating;
   @override
-  final int numberOfMenuRating;
+  final int numberOfGoogleRating;
   @override
-  final double restaurantRating;
+  final double kakaoRating;
   @override
-  final int numberOfRestaurantRating;
+  final int numberOfKakaoRating;
   @override
   final List<String> service;
   @override
@@ -67,7 +70,7 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final LocationClass position;
   @override
-  final Map<String,List<double>> menu;
+  final Map<String,int> menu;
 
   NaverMapPageRestaurant({
     required this.uid,
@@ -75,17 +78,18 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
     required this.exteriorImage,
     required this.name,
     required this.open,
+    required this.open_hour,
     required this.classification,
     required this.distance,
     favorite,
     required this.folder,
     required this.atmosphere,
-    required this.overallRating,
-    required this.numberOfOverallRating,
-    required this.restaurantRating,
-    required this.numberOfRestaurantRating,
-    required this.menuRating,
-    required this.numberOfMenuRating,
+    required this.naverRating,
+    required this.numberOfNaverRating,
+    required this.googleRating,
+    required this.numberOfGoogleRating,
+    required this.kakaoRating,
+    required this.numberOfKakaoRating,
     required this.service,
     required this.address,
     required this.phoneNumber,

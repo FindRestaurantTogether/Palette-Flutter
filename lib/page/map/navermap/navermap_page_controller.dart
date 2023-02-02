@@ -24,48 +24,50 @@ class NaverMapPageController extends GetxController {
     // 이거는 가져왔다는 가정하에 데이터 추가한거
     List<NaverMapPageRestaurant> restaurantData = [
       NaverMapPageRestaurant(
-        uid: '1',
-        markerImage: 'assets/marker_image/japan_image/japan_ramen.png',
-        exteriorImage: 'assets/background_image/taroya.jpeg',
-        name: '타로야1',
+        uid: '1', // 음식점 고유 번호
+        markerImage: 'assets/marker_image/alcohol_cocktail_5.0.png', // 음식점 마커 이미지
+        exteriorImage: 'assets/background_image/taroya.jpeg', // 음식점 외부 이미지
+        name: '타로야1', // 음식점 이름
         open: true,
-        classification: '이자카야',
-        distance: 1.5,
-        folder: '',
-        atmosphere: ['데이트', '조용한'],
-        overallRating: 4.38,
-        numberOfOverallRating: 108,
-        menuRating: 4.4,
-        numberOfMenuRating: 74,
-        restaurantRating: 4.1,
-        numberOfRestaurantRating: 34,
-        service: ['주차', '24시영업','포장'],
-        address: '서울 마포구 상수동 93-44번지 2층',
-        phoneNumber: 01054538839,
+        open_hour: {'월': '12:00 - 22:00', '화': '12:00 - 22:00', '수': '12:00 - 22:00', '목': '12:00 - 22:00','금': '12:00 - 23:00', '토': '12:00 - 23:00', '일': '12:00 - 22:00'}, // 음식점 영업 시간
+        classification: '이자카야', // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
+        distance: 1.5, // 음식점의 현 위치와의 거리
+        folder: '', // 즐겨찾기 된 경우 음식점의 즐겨찾기 폴더 이름
+        atmosphere: ['데이트', '조용한'], // 음식점 분위기
+        naverRating: 4.38, // 음식점 네이버 평점
+        numberOfNaverRating: 108, // 음식점 네이버 리뷰 개수
+        googleRating: 4.38, // 음식점 구글 평점
+        numberOfGoogleRating: 108, // 음식점 구글 리뷰 개수
+        kakaoRating: 4.38, // 음식점 카카오 평점
+        numberOfKakaoRating: 108, // 음식점 카카오 리뷰 개수
+        service: ['주차', '24시영업','포장'], // 음식점 서비스
+        address: '서울 마포구 상수동 93-44번지 2층', // 음식점 주소
+        phoneNumber: 01054538839, // 음식점 전화번호
         position: LocationClass(latitude: 37.49369555120038, longitude: 127.01370530988898),
-        menu: {'모둠 사시미': [26000,4.3,16], '광어 사시미': [22000,3.1,240], '참치 와사비': [20000,3.0,10], '모둠 초회': [18000,2.0,70]},
+        menu: {'모둠 사시미': 26000, '광어 사시미': 22000, '참치 와사비': 20000, '모둠 초회': 18000}, // 음식점 메뉴
       ),
       NaverMapPageRestaurant(
-        uid: '2',
-        markerImage: 'assets/marker_image/japan_image/japan_udon.png',
-        exteriorImage: 'assets/background_image/taroya.jpeg',
-        name: '타로야2',
-        open: false,
-        classification: '이자카야',
-        distance: 1.5,
-        folder: '',
-        atmosphere: ['데이트', '조용한', '고급스러운'],
-        overallRating: 4.38,
-        numberOfOverallRating: 108,
-        menuRating: 4.4,
-        numberOfMenuRating: 74,
-        restaurantRating: 4.1,
-        numberOfRestaurantRating: 34,
-        service: ['주차', '24시영업'],
-        address: '서울 마포구 상수동 93-44번지 2층',
-        phoneNumber: 01054538839,
-        position: LocationClass(latitude: 37.49351762541697, longitude: 126.9864954393495),
-        menu: {'모둠 사시미': [26000,4.3,16], '광어 사시미': [22000,3.1,240], '참치 와사비': [20000,3.0,10], '모둠 초회': [18000,2.0,70]},
+        uid: '2', // 음식점 고유 번호
+        markerImage: 'assets/marker_image/alcohol_cocktail_5.0.png', // 음식점 마커 이미지
+        exteriorImage: 'assets/background_image/taroya.jpeg', // 음식점 외부 이미지
+        name: '타로야2', // 음식점 이름
+        open: true,
+        open_hour: {'월': '12:00 - 22:00', '화': '12:00 - 22:00', '수': '12:00 - 22:00', '목': '12:00 - 22:00','금': '12:00 - 23:00', '토': '12:00 - 23:00', '일': '12:00 - 22:00'}, // 음식점 영업 시간
+        classification: '이자카야', // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
+        distance: 1.5, // 음식점의 현 위치와의 거리
+        folder: '', // 즐겨찾기 된 경우 음식점의 즐겨찾기 폴더 이름
+        atmosphere: ['데이트', '조용한'], // 음식점 분위기
+        naverRating: 4.38, // 음식점 네이버 평점
+        numberOfNaverRating: 108, // 음식점 네이버 리뷰 개수
+        googleRating: 4.38, // 음식점 구글 평점
+        numberOfGoogleRating: 108, // 음식점 구글 리뷰 개수
+        kakaoRating: 4.38, // 음식점 카카오 평점
+        numberOfKakaoRating: 108, // 음식점 카카오 리뷰 개수
+        service: ['주차', '24시영업','포장'], // 음식점 서비스
+        address: '서울 마포구 상수동 93-44번지 2층', // 음식점 주소
+        phoneNumber: 01054538839, // 음식점 전화번호
+        position: LocationClass(latitude: 37.49369555120038, longitude: 127.01370530988898),
+        menu: {'모둠 사시미': 26000, '광어 사시미': 22000, '참치 와사비': 20000, '모둠 초회': 18000}, // 음식점 메뉴
       ),
     ];
 

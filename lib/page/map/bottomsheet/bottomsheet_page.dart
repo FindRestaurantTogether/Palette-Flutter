@@ -192,7 +192,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 4),
               Text(
-                '${selectedRestaurant.overallRating}',
+                '${selectedRestaurant.naverRating}',
                 style:
                 TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
@@ -203,7 +203,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 10),
               Text(
-                '${selectedRestaurant.numberOfOverallRating}건',
+                '${selectedRestaurant.numberOfNaverRating}건',
                 style: TextStyle(color: Colors.black87, fontSize: 13),
               )
             ],

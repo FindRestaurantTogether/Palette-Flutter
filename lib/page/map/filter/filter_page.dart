@@ -13,7 +13,7 @@ class _FilterPageState extends State<FilterPage> {
   final _FilterPageController = Get.put(FilterPageController());
 
   List<String> FilterList = ["음식", "카페", "술집", "서비스", "분위기"];
-  List<String> FilterListFood = ["한식", "양식", "중식", "일식", "베트남", "멕시칸", "기타"];
+  List<String> FilterListFood = ["한식", "양식", "중식", "일식", "아시안", "멕시칸", "기타"];
   List<String> FilterListCafe = ["프랜차이즈", "개인"];
   List<String> FilterListAlcohol = ["주점", "호프", "와인", "이자카야", "칵테일/양주"];
   List<String> FilterListService = ["주차", "24시 영업", "포장", "예약", "애완동물 출입가능", "코스", "뷔페", "배달", "무한리필", "오마카세", "미슐랭", "콜키지", "룸"];
@@ -364,7 +364,7 @@ class _FilterPageState extends State<FilterPage> {
                     SizedBox(
                       width: width * 0.016,
                     ),
-                  ] // 베트남
+                  ] // 아시안
                 ],
               ),
             ), // 첫째줄 필터
