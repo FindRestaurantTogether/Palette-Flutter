@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
 
 class FilterPage extends StatefulWidget {
   @override
@@ -18,6 +19,8 @@ class _FilterPageState extends State<FilterPage> {
   List<String> FilterListAlcohol = ["주점", "호프", "와인", "이자카야", "칵테일/양주"];
   List<String> FilterListService = ["주차", "24시 영업", "포장", "예약", "애완동물 출입가능", "코스", "뷔페", "배달", "무한리필", "오마카세", "미슐랭", "콜키지", "룸"];
   List<String> FilterListMood = ["데이트", "가성비", "조용한", "친절한", "인스타", "깨끗한", "고급", "이색적인","혼밥", "단체", "다이어트", "뷰가 좋은", "방송 맛집"];
+
+  var filter = new List.empty(growable: true);
 
   @override
   void dispose() {
@@ -274,11 +277,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                           width: 48,
                           child: OutlinedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 setState(() {
                                   Controller.ChangeOuterFoodSelected(i, false);
                                   Controller.FixOuterFoodSelected();
                                 });
+                                filter = read_all();
+                                Network network = Network(filter, '');
+                                var store = await network.getJsonData();
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -294,11 +300,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                           width: 48,
                           child: OutlinedButton(
-                              onPressed: () {
+                              onPressed: () async {
                                 setState(() {
                                   Controller.ChangeOuterFoodSelected(i, true);
                                   Controller.FixOuterFoodSelected();
                                 });
+                                filter = read_all();
+                                Network network = Network(filter, '');
+                                var store = await network.getJsonData();
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -322,11 +331,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -342,11 +354,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -381,11 +396,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -401,11 +419,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -427,11 +448,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -447,11 +471,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListFood[i],
@@ -546,11 +573,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 72,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterCafeSelected(i, false);
                               Controller.FixOuterCafeSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -566,11 +596,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 74,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterCafeSelected(i, true);
                               Controller.FixOuterCafeSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -592,11 +625,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterCafeSelected(i, false);
                               Controller.FixOuterCafeSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -612,11 +648,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterCafeSelected(i, true);
                               Controller.FixOuterCafeSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -711,11 +750,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -731,11 +773,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -757,11 +802,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -777,11 +825,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -814,11 +865,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 78,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -834,11 +888,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 78,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -933,11 +990,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -953,11 +1013,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -979,11 +1042,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 80,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -999,11 +1065,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 74,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1025,11 +1094,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: width * 0.13,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1045,11 +1117,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: width * 0.13,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1082,11 +1157,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 104,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1102,11 +1180,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 104,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1128,11 +1209,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1148,11 +1232,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1185,11 +1272,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1205,11 +1295,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1231,11 +1324,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1251,11 +1347,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1288,11 +1387,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 40,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1308,11 +1410,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 40,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListService[i],
@@ -1407,11 +1512,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1427,11 +1535,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1464,11 +1575,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1484,11 +1598,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 56,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1510,11 +1627,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1530,11 +1650,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1556,11 +1679,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1576,11 +1702,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1613,11 +1742,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1633,11 +1765,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 48,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1659,11 +1794,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1679,11 +1817,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 64,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1705,11 +1846,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 70,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1725,11 +1869,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 70,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1762,11 +1909,14 @@ class _FilterPageState extends State<FilterPage> {
                         ? Container(
                       width: 70,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1782,11 +1932,14 @@ class _FilterPageState extends State<FilterPage> {
                         : Container(
                       width: 70,
                       child: OutlinedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             setState(() {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
+                            filter = read_all();
+                            Network network = Network(filter, '');
+                            var store = await network.getJsonData();
                           },
                           child: Text(
                             FilterListMood[i],

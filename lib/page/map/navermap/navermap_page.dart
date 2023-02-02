@@ -11,7 +11,13 @@ import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
+
+// 우측 위 좌표
+late LatLng rightUpPosition;
+// 좌측 밑 좌표
+late LatLng leftDownPosition;
 
 class NaverMapPage extends StatefulWidget {
 
@@ -29,13 +35,9 @@ class _NaverMapPageState extends State<NaverMapPage> {
 
   // 사용자가 움직여서 카메라가 움직였나 확인하기 위해
   bool cameraChange = false;
+  var filter = new List.empty(growable: true);
 
-  // 중심 좌표
-  late LatLng centerPosition;
-  // 우측 위 좌표
-  late LatLng rightUpPosition;
-  // 좌측 밑 좌표
-  late LatLng leftDownPosition;
+
 
   @override
   void initState() {
@@ -45,8 +47,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
       // restaurants 데이터들로 CustomMarker 생성 후 markers에 저장
       _NaverMapPageController.restaurants.forEach((NaverMapPageModel restaurant) async {
         CustomMarker customMarker = CustomMarker(
-            restaurant: restaurant,
-            position: restaurant.position,
+          restaurant: restaurant,
+          position: restaurant.position,
         );
         customMarker.createImage(context);
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
@@ -119,100 +121,107 @@ class _NaverMapPageState extends State<NaverMapPage> {
               onMapTap: _onMapTap,
             ),
             GetBuilder<MapPageController>(
-              builder: (_MapPageController) {
-                return Positioned(
-                  right: 20,
-                  bottom: _MapPageController.bS ? 230 : 30,
-                  child: Column(
-                    children: [
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 6,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: FloatingActionButton(
-                          heroTag: null,
-                          child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: Image.asset('assets/button_image/current_page_button.png')
+                builder: (_MapPageController) {
+                  return Positioned(
+                    right: 20,
+                    bottom: _MapPageController.bS ? 230 : 30,
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 2,
+                                blurRadius: 6,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
                           ),
-                          backgroundColor: Colors.white,
-                          onPressed: () {
-                            showMaterialModalBottomSheet(
-                                isDismissible: true,
-                                barrierColor: Colors.black54,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(30),
+                          child: FloatingActionButton(
+                            heroTag: null,
+                            child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset('assets/button_image/current_page_button.png')
+                            ),
+                            backgroundColor: Colors.white,
+                            onPressed: () {
+                              showMaterialModalBottomSheet(
+                                  isDismissible: true,
+                                  barrierColor: Colors.black54,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(30),
+                                    ),
                                   ),
-                                ),
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return DialogPage();
-                                }
-                            );
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 15),
-                      Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              spreadRadius: 2,
-                              blurRadius: 6,
-                              offset: Offset(0, 0),
-                            ),
-                          ],
-                        ),
-                        child: FloatingActionButton(
-                          heroTag: null,
-                          child: SizedBox(
-                              width: 25,
-                              height: 25,
-                              child: Image.asset('assets/button_image/current_position_button.png')
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DialogPage();
+                                  }
+                              );
+                            },
                           ),
-                          backgroundColor: Colors.white,
-                          onPressed: () async {
-                            final controller = await _controller.future;
-                            final Position position = await Geolocator.getCurrentPosition();
-                            CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude));
-                            controller.moveCamera(cameraUpdate);
-                          },
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              }
+                        SizedBox(height: 15),
+                        Container(
+                          width: 46,
+                          height: 46,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 2,
+                                blurRadius: 6,
+                                offset: Offset(0, 0),
+                              ),
+                            ],
+                          ),
+                          child: FloatingActionButton(
+                            heroTag: null,
+                            child: SizedBox(
+                                width: 25,
+                                height: 25,
+                                child: Image.asset('assets/button_image/current_position_button.png')
+                            ),
+                            backgroundColor: Colors.white,
+                            onPressed: () async {
+                              final controller = await _controller.future;
+                              final Position position = await Geolocator.getCurrentPosition();
+                              CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude));
+                              controller.moveCamera(cameraUpdate);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
             ), // 우측 아래 동그라미 버튼 두개
             if (cameraChange == true && _FilterPageController.FilterSelected.contains(true))
               Positioned(
-              left: width * 0.5 - 95,
-              bottom: 68,
-              child: Container(
+                left: width * 0.5 - 95,
+                bottom: 68,
+                child: Container(
                     width: 190,
                     height: 36,
                     child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           print("========================================");
-                          print('중심: ${centerPosition}');
-                          print('북동쪽: ${rightUpPosition}');
-                          print('남서쪽: ${leftDownPosition}');
+                          filter = read_all();
+                          Network network = Network(filter, '');
+                          var store = await network.getJsonData();
+                          print(1);
+                          print(2);
+                          print(store);
+                          print("========================================");
+                          print(store.length);
+                          print(store['1']['call']);
+                          print("========================================");
                         }, // 이 지도에서 재검색 버튼
                         style: ElevatedButton.styleFrom(
                             shape: StadiumBorder(),
@@ -232,7 +241,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
                         )
                     )
                 ),
-            ) // 이 지도에서 재검색
+              ) // 이 지도에서 재검색
           ],
         ),
       ),
@@ -263,7 +272,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
     LatLngBounds bound = await Controller.getVisibleRegion();
     CameraPosition position = await Controller.getCameraPosition();
     setState(() {
-      centerPosition = position.target;
       rightUpPosition = bound.northeast;
       leftDownPosition = bound.southwest;
     });
@@ -294,6 +302,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
   }
 }
 
+
 class LocationClass extends LatLng {
   final double latitude;
   final double longitude;
@@ -314,5 +323,4 @@ class LocationService {
     return false;
   }
 }
-
 

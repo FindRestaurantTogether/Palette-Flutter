@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
 
 class SearchPage extends StatefulWidget {
 
@@ -51,11 +52,19 @@ class _SearchPageState extends State<SearchPage> {
                     child: TextFormField(
                       textInputAction: TextInputAction.go,
                       onFieldSubmitted: (value) async{
-                        setState(() {
+                        setState(() async {
                           if(_items.length >=10){
                             _items.removeAt(0);
                           }
                           _items.add(value);
+
+                          // 여기가 검색 클릭하는 곳인가??
+                          // 근데 이거보다 naverpage에 보내서 한번에 처리하는게 좋을것 같은데!!!!
+                          List filter = read_all();
+                          Network network = Network(filter, value);
+                          var store = await network.getJsonData();
+                          print(store);
+                          //
                         });
                       },
                       controller: _TextEditingController,
@@ -147,7 +156,6 @@ class _SearchPageState extends State<SearchPage> {
                       height: 1,
                       color: Colors.grey[300],
                     )
-
                   ]
                 ],
               ),
