@@ -16,7 +16,7 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
   
   String? DropdownSelected = DropdownList.first;
-  String? DropdownSelected2 = DropdownList2.first;
+  String? DropdownSelected2;
 
   bool Open = false;
   
@@ -236,6 +236,13 @@ class _ListPageState extends State<ListPage> {
                             child: DropdownButton2(
                               focusColor: Color(0xfff42957),
                               isExpanded: true,
+                              hint: Text(
+                                  '최소 평점',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    color: Color(0xff787878),
+                                  ),
+                              ),
                               items: DropdownList2
                                   .map((item) => DropdownMenuItem<String>(
                                   value: item,

@@ -39,7 +39,10 @@ class _DetailPageState extends State<DetailPage> {
     final int selectedIndex = _NaverMapPageController.restaurants.indexWhere((NaverMapPageModel restaurant) => restaurant.uid == selectedRestaurant.uid);
 
     final menuName = selectedRestaurant.menu.keys.toList();
-    final menuInfo = selectedRestaurant.menu.values.toList();
+    final menuPrice = selectedRestaurant.menu.values.toList();
+
+    final openDay = selectedRestaurant.open_hour.keys.toList();
+    final openHour = selectedRestaurant.open_hour.values.toList();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -177,7 +180,7 @@ class _DetailPageState extends State<DetailPage> {
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                      ),
+                                      ), // 음식점 이름
                                       SizedBox(
                                         width: 3,
                                       ),
@@ -226,12 +229,11 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 SizedBox(width: 2),
                                 Text(
-                                  ' ${selectedRestaurant.overallRating}(${selectedRestaurant.numberOfOverallRating})',
+                                  ' ${selectedRestaurant.naverRating}(${selectedRestaurant.numberOfNaverRating})',
                                   style:
                                   TextStyle(fontSize: 15),
                                 ),
-                                SizedBox(width: 1),
-                                SizedBox(width: 5),
+                                SizedBox(width: 6),
                                 Text(
                                   '|',
                                   style: TextStyle(fontSize: 15, color: Colors.black87),
@@ -303,6 +305,27 @@ class _DetailPageState extends State<DetailPage> {
                                     ],
                                   ),
                                 ), // 영업시간
+                                moreOpenInformation
+                                    ? Container(
+                                        child:  Column(
+                                          children: [
+                                            SizedBox(height: 5),
+                                            for (var i=0; i<openDay.length ; i++) ... [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    '        ${openDay[i]} : ${openHour[i]}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                  )
+                                                ],
+                                              )
+                                            ]
+                                          ],
+                                        ),
+                                    )
+                                    : SizedBox(),
                                 SizedBox(height: 6),
                                 Container(
                                   height: 15,
@@ -580,7 +603,7 @@ class _DetailPageState extends State<DetailPage> {
                                       Container(
                                         child: Center(
                                           child: Text(
-                                            ' ${menuInfo[index][0].toInt()}원',
+                                            ' ${menuPrice[index]}원',
                                             style: TextStyle(fontSize: 15, color: Color(0xfff42957), fontWeight: FontWeight.bold),
                                           ),
                                         ),
@@ -597,7 +620,7 @@ class _DetailPageState extends State<DetailPage> {
                       ],
                     ),
                   ), // 메뉴
-                  Divider(indent: 35, endIndent: 35, color: Colors.black45),
+                  Divider(indent: 35, endIndent: 35, color: Colors.black45), // 회색선
                   SizedBox(height: 25), // 빈 공간
                   Container(
                     width: width * 0.87,
@@ -622,7 +645,14 @@ class _DetailPageState extends State<DetailPage> {
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final naverReviewUrl = Uri.parse('https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll');
+                                  if (await canLaunchUrl(naverReviewUrl)) {
+                                    await launchUrl(naverReviewUrl);
+                                  } else {
+                                    throw 'Could not open the naverReviewUrl.';
+                                  }
+                                },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -658,7 +688,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              '4.3',
+                                              selectedRestaurant.naverRating.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -669,7 +699,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '16건',
+                                              '${selectedRestaurant.numberOfNaverRating.toString()}건',
                                               style: TextStyle(color: Colors.grey, fontSize: 12),
                                             ),
                                             SizedBox(width: 4),
@@ -698,7 +728,14 @@ class _DetailPageState extends State<DetailPage> {
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final googleReviewUrl = Uri.parse('https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko');
+                                  if (await canLaunchUrl(googleReviewUrl)) {
+                                  await launchUrl(googleReviewUrl);
+                                  } else {
+                                  throw 'Could not open the googleReviewUrl.';
+                                  }
+                                },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -734,7 +771,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              '4.3',
+                                              selectedRestaurant.googleRating.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -745,7 +782,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '16건',
+                                                '${selectedRestaurant.numberOfGoogleRating.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),
@@ -774,7 +811,14 @@ class _DetailPageState extends State<DetailPage> {
                             SizedBox(
                               height: 45,
                               child: ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  final kakaoReviewUrl = Uri.parse('https://place.map.kakao.com/m/11101743#comment');
+                                  if (await canLaunchUrl(kakaoReviewUrl)) {
+                                  await launchUrl(kakaoReviewUrl);
+                                  } else {
+                                  throw 'Could not open the kakaoReviewUrl.';
+                                  }
+                                },
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -810,7 +854,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              '4.3',
+                                                selectedRestaurant.kakaoRating.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -821,7 +865,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '16건',
+                                                '${selectedRestaurant.numberOfKakaoRating.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),

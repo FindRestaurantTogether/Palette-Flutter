@@ -12,17 +12,11 @@ class CustomMarker extends Marker {
     required this.restaurant,
     required LocationClass position,
   }) : super(
-      width: 51,
-      height: 69,
+      width: 50,
+      height: 82,
       markerId: restaurant.uid,
       position: position,
-      anchor: AnchorPoint(0.15,0.85),
-      captionText: restaurant.name,
-      captionTextSize: 10,
-      captionColor: Color(0xfff42957),
-      captionHaloColor: Colors.white,
-      captionOffset: 0,
-      captionPerspectiveEnabled: true,
+      anchor: AnchorPoint(0.15,0.7),
   );
 
   factory CustomMarker.fromRestaurant(NaverMapPageModel restaurant) =>
