@@ -414,7 +414,7 @@ class _FolderPageState extends State<FolderPage> {
                                                   children: [
                                                     Container(
                                                       child: Text(
-                                                        '${_selectedRestaurants.elementAt(index).name}',
+                                                        '${_selectedRestaurants.elementAt(index).store_name}',
                                                         style: TextStyle(
                                                             fontSize: 18,
                                                             fontWeight: FontWeight.bold),
@@ -456,7 +456,7 @@ class _FolderPageState extends State<FolderPage> {
                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                         children: [
                                                           Text(
-                                                            '  ${_selectedRestaurants.elementAt(index).classification}',
+                                                            '  ${_selectedRestaurants.elementAt(index).category}',
                                                             style: TextStyle(
                                                                 color: Colors.grey, fontSize: 11),
                                                           ),
@@ -477,14 +477,14 @@ class _FolderPageState extends State<FolderPage> {
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '${_selectedRestaurants.elementAt(index).naverRating}',
+                                                    '${_selectedRestaurants.elementAt(index).naver_star}',
                                                     style: TextStyle(
                                                         fontSize: 12,
                                                         fontWeight: FontWeight.bold),
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '(${_selectedRestaurants.elementAt(index).numberOfNaverRating}건)',
+                                                    '(${_selectedRestaurants.elementAt(index).naver_cnt}건)',
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                     ),
@@ -522,7 +522,7 @@ class _FolderPageState extends State<FolderPage> {
                                               children: [
                                                 Container(
                                                   child: Text(
-                                                    '${_selectedRestaurants.elementAt(index).name}',
+                                                    '${_selectedRestaurants.elementAt(index).store_name}',
                                                     style: TextStyle(
                                                         fontSize: 20,
                                                         fontWeight: FontWeight.bold),
@@ -564,7 +564,7 @@ class _FolderPageState extends State<FolderPage> {
                                                     mainAxisAlignment: MainAxisAlignment.end,
                                                     children: [
                                                       Text(
-                                                        '  ${_selectedRestaurants.elementAt(index).classification}',
+                                                        '  ${_selectedRestaurants.elementAt(index).category}',
                                                         style: TextStyle(
                                                             color: Colors.grey, fontSize: 13),
                                                       ),
@@ -585,14 +585,14 @@ class _FolderPageState extends State<FolderPage> {
                                               ),
                                               SizedBox(width: 3),
                                               Text(
-                                                '${_selectedRestaurants.elementAt(index).naverRating}',
+                                                '${_selectedRestaurants.elementAt(index).naver_star}',
                                                 style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.bold),
                                               ),
                                               SizedBox(width: 3),
                                               Text(
-                                                '(${_selectedRestaurants.elementAt(index).numberOfNaverRating}건)',
+                                                '(${_selectedRestaurants.elementAt(index).naver_cnt}건)',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                 ),
@@ -622,7 +622,7 @@ class _FolderPageState extends State<FolderPage> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
-                                          image: AssetImage(_selectedRestaurants.elementAt(index).exteriorImage),
+                                          image: AssetImage(_selectedRestaurants.elementAt(index).store_image),
                                           fit: BoxFit.fill
                                       ),
                                     ),

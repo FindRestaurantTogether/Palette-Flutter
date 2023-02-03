@@ -339,91 +339,54 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                               SizedBox(height: 1),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: width - 130,
-                                    height: 45,
-                                    child: TextFormField(
-                                      key: ValueKey(1),
-                                      controller: _IdTextEditingController,
-                                      keyboardType: TextInputType.emailAddress,
-                                      validator: (value) {
-                                        if (value!.isEmpty || !(value.contains('@'))) {
-                                          return '아이디를 다시 입력해주세요.';
-                                        }
-                                        return null;
-                                      },
-                                      onSaved: (value) {
-                                        id = value!;
-                                      },
-                                      onChanged: (value) {
-                                        id = value;
-                                      },
-                                      textInputAction: TextInputAction.next,
-                                      decoration: InputDecoration(
-                                        errorStyle: TextStyle(fontSize: 10, height: 0.5),
-                                        enabledBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xfff42957),
-                                          ),
-                                        ),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(
-                                            color: Color(0xfff42957),
-                                          ),
-                                        ),
-                                        suffixIcon: GestureDetector(
-                                          onTap: () {
-                                            _IdTextEditingController.clear();
-                                          },
-                                          child: Icon(
-                                            Icons.clear,
-                                            color: Color(0xfff42957),
-                                          ),
-                                        ),
-                                        suffixIconConstraints: BoxConstraints(maxHeight: 20),
-                                        hintText: 'abc@naver.com',
-                                        hintStyle: TextStyle(
-                                            color: Color(0xffb9b9b9),
-                                            fontSize: 14
-                                        ),
+                              Container(
+                                height: 45,
+                                child: TextFormField(
+                                  key: ValueKey(1),
+                                  controller: _IdTextEditingController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: (value) {
+                                    if (value!.isEmpty || !(value.contains('@'))) {
+                                      return '아이디를 다시 입력해주세요.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    id = value!;
+                                  },
+                                  onChanged: (value) {
+                                    id = value;
+                                  },
+                                  textInputAction: TextInputAction.next,
+                                  decoration: InputDecoration(
+                                    errorStyle: TextStyle(fontSize: 10, height: 0.5),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xfff42957),
                                       ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xfff42957),
+                                      ),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        _IdTextEditingController.clear();
+                                      },
+                                      child: Icon(
+                                        Icons.clear,
+                                        color: Color(0xfff42957),
+                                      ),
+                                    ),
+                                    suffixIconConstraints: BoxConstraints(maxHeight: 20),
+                                    hintText: 'palette@naver.com',
+                                    hintStyle: TextStyle(
+                                        color: Color(0xffb9b9b9),
+                                        fontSize: 14
                                     ),
                                   ),
-                                  Container(
-                                    width: 60,
-                                    height: 45,
-                                    alignment: Alignment.bottomCenter,
-                                    child: SizedBox(
-                                      width: 60,
-                                      height: 30,
-                                      child: OutlinedButton(
-                                        onPressed: () {
-
-                                        },
-                                        child: Text(
-                                          '인증 요청',
-                                          style: TextStyle(
-                                            fontSize: 10,
-                                            color: Color(0xfff42957),
-                                            fontWeight: FontWeight.bold
-                                          ),
-                                        ),
-                                        style: OutlinedButton.styleFrom(
-                                          primary:  Color(0xfff42957),
-                                          padding: EdgeInsets.zero,
-                                          side: BorderSide(width: 1.2, color: Color(0xfff42957)),
-                                          backgroundColor: Color(0xfffff6f8),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(5),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
+                                ),
                               ),
                             ],
                           ), // 아이디

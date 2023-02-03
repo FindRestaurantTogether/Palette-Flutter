@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:myapp/page/my/my_page_controller.dart';
 import 'package:get/get.dart';
+import 'package:myapp/page/my/signin/forgetpassword_page.dart';
 import 'package:myapp/page/my/signup/signup_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -165,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                                       ),
                                     ),
                                     suffixIconConstraints: BoxConstraints(maxHeight: 20),
-                                    hintText: 'abc@naver.com',
+                                    hintText: 'palette@naver.com',
                                     hintStyle: TextStyle(
                                       color: Color(0xffb9b9b9),
                                       fontSize: 14
@@ -280,22 +281,38 @@ class _LoginPageState extends State<LoginPage> {
                       //       color: Color(0xffb9b9b9)
                       //   ),
                       // ),
-                      Text(
-                        '비밀번호 찾기',
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xff787878)
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) {
+                              return ForgetPasswordPage();
+                            },
+                          );
+                        },
+                        child: Text(
+                          '비밀번호 찾기',
+                          style: TextStyle(
+                              fontSize: 13,
+                              color: Color(0xff787878)
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ), // 회원가입 & 아이디 찾기 & 비밀번호 찾기
-                SizedBox(height: height * 0.1),
-                Container(
-                    width: width * 0.33,
-                    child: Image(image: AssetImage('assets/login_image/easy_login.png'))
+                SizedBox(height: 50),
+                Row(
+                  children: [
+                    SizedBox(width: 10),
+                    Container(
+                        width: 100,
+                        child: Image(image: AssetImage('assets/login_image/easy_login.png'))
+                    ),
+                  ],
                 ), // 말풍선
-                SizedBox(height: height * 0.02),
+                SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -305,7 +322,7 @@ class _LoginPageState extends State<LoginPage> {
                     Image.asset('assets/login_image/apple.png', height: 50, width: 50),
                   ],
                 ), // 간편로그인들
-                SizedBox(height: height * 0.1),
+                SizedBox(height: 60),
                 signUpLoading
                     ? Center(
                     child: CircularProgressIndicator(color: Color(0xfff42957))

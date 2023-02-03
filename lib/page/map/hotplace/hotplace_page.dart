@@ -101,7 +101,6 @@ class _HotPlacePageState extends State<HotPlacePage> {
 
     Widget hotPlaceFilter (int index) {
       return Container(
-        // color: Colors.yellow,
         width: 100,
         height: index == 3 || index == 9 || index == 14 ? 40 : 20,
         child: Row(
@@ -142,7 +141,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
       onWillPop: () async{
         Get.back();
         return false;
-      }, // 뒤로가기 버튼, 적용된 핫플 필터 백에 전달
+      }, // 뒤로가기 버튼
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -977,7 +977,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     children: [
                                                       Container(
                                                         child: Text(
-                                                          '${_FavoriteListPageController.listRestaurant.elementAt(index).name}',
+                                                          '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
                                                           style: TextStyle(
                                                               fontSize: 18,
                                                               fontWeight: FontWeight.bold),
@@ -1019,7 +1019,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                           mainAxisAlignment: MainAxisAlignment.end,
                                                           children: [
                                                             Text(
-                                                              '  ${_FavoriteListPageController.listRestaurant.elementAt(index).classification}',
+                                                              '  ${_FavoriteListPageController.listRestaurant.elementAt(index).category}',
                                                               style: TextStyle(
                                                                   color: Colors.grey, fontSize: 11),
                                                             ),
@@ -1085,7 +1085,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 children: [
                                                   Container(
                                                     child: Text(
-                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).name}',
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
                                                       style: TextStyle(
                                                           fontSize: 20,
                                                           fontWeight: FontWeight.bold),
@@ -1127,7 +1127,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                       mainAxisAlignment: MainAxisAlignment.end,
                                                       children: [
                                                         Text(
-                                                          '  ${_FavoriteListPageController.listRestaurant.elementAt(index).classification}',
+                                                          '  ${_FavoriteListPageController.listRestaurant.elementAt(index).category}',
                                                           style: TextStyle(
                                                               color: Colors.grey, fontSize: 13),
                                                         ),
@@ -1148,14 +1148,14 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 ),
                                                 SizedBox(width: 3),
                                                 Text(
-                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).naverRating}',
+                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).naver_star}',
                                                   style: TextStyle(
                                                       fontSize: 14,
                                                       fontWeight: FontWeight.bold),
                                                 ),
                                                 SizedBox(width: 3),
                                                 Text(
-                                                  '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfNaverRating}건)',
+                                                  '(${_FavoriteListPageController.listRestaurant.elementAt(index).naver_cnt}건)',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                   ),
@@ -1185,7 +1185,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
-                                            image: AssetImage(_FavoriteListPageController.listRestaurant.elementAt(index).exteriorImage),
+                                            image: AssetImage(_FavoriteListPageController.listRestaurant.elementAt(index).store_image),
                                             fit: BoxFit.fill
                                         ),
                                       ),
@@ -1601,7 +1601,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     if (i == 0) ... [
                                                       Text(
                                                         overflow: TextOverflow.ellipsis,
-                                                        '${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
+                                                        '${_FavoriteFolderPageController.folderRestaurant[index][i].store_name}',
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             color: Color(
@@ -1611,7 +1611,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     ] else ... [
                                                       Text(
                                                         overflow: TextOverflow.ellipsis,
-                                                        ', ${_FavoriteFolderPageController.folderRestaurant[index][i].name}',
+                                                        ', ${_FavoriteFolderPageController.folderRestaurant[index][i].store_name}',
                                                         style: TextStyle(
                                                             fontSize: 14,
                                                             color: Color(0xffb9b9b9)
