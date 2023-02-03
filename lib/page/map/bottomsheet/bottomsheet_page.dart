@@ -75,7 +75,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       height: 24,
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        '${selectedRestaurant.name}',
+                        '${selectedRestaurant.store_name}',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                     ), // 타로야
@@ -116,7 +116,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       height: 24,
                       alignment: Alignment.bottomRight,
                       child: Text(
-                        '${selectedRestaurant.classification}  |  ${selectedRestaurant.distance}km',
+                        '${selectedRestaurant.category}  |  ${selectedRestaurant.distance}km',
                         style: TextStyle(color: Colors.grey, fontSize: 14),
                       ),
                     ), // 이자카야 | 1.5km
@@ -174,9 +174,9 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
             height: 20,
             child: Row(
               children: [
-                for (int i = 0; i < selectedRestaurant.atmosphere.length; i++)
+                for (int i = 0; i < selectedRestaurant.theme.length; i++)
                     Text(
-                      '#${selectedRestaurant.atmosphere[i]} ',
+                      '#${selectedRestaurant.theme[i]} ',
                       style: TextStyle(fontSize: 13, color: Color(0xff57dde0)),
                     )
               ]
@@ -192,7 +192,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 4),
               Text(
-                '${selectedRestaurant.naverRating}',
+                '${selectedRestaurant.naver_star}',
                 style:
                 TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
@@ -203,7 +203,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 10),
               Text(
-                '${selectedRestaurant.numberOfNaverRating}건',
+                '${selectedRestaurant.naver_cnt}건',
                 style: TextStyle(color: Colors.black87, fontSize: 13),
               )
             ],

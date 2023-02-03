@@ -41,8 +41,8 @@ class _DetailPageState extends State<DetailPage> {
     final menuName = selectedRestaurant.menu.keys.toList();
     final menuPrice = selectedRestaurant.menu.values.toList();
 
-    final openDay = selectedRestaurant.open_hour.keys.toList();
-    final openHour = selectedRestaurant.open_hour.values.toList();
+    final openDay = selectedRestaurant.opening_hour.keys.toList();
+    final openHour = selectedRestaurant.opening_hour.values.toList();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -80,7 +80,7 @@ class _DetailPageState extends State<DetailPage> {
                     height: height * 0.32,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(selectedRestaurant.exteriorImage),
+                          image: AssetImage(selectedRestaurant.store_image),
                           fit: BoxFit.fill
                       ),
                     ),
@@ -93,7 +93,7 @@ class _DetailPageState extends State<DetailPage> {
                   Center(
                     child: Container(
                       width: width * 0.87,
-                      padding: EdgeInsets.only(top: 20, bottom: 30, left: 20, right: 20),
+                      padding: EdgeInsets.only(top: 22, bottom: 30, left: 20, right: 20),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(20),
@@ -175,7 +175,7 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          '   ${selectedRestaurant.name}',
+                                          '   ${selectedRestaurant.store_name}',
                                           style: TextStyle(
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold),
@@ -229,7 +229,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 SizedBox(width: 2),
                                 Text(
-                                  ' ${selectedRestaurant.naverRating}(${selectedRestaurant.numberOfNaverRating})',
+                                  ' ${selectedRestaurant.naver_star}(${selectedRestaurant.naver_cnt})',
                                   style:
                                   TextStyle(fontSize: 15),
                                 ),
@@ -240,7 +240,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 SizedBox(width: 7),
                                 Text(
-                                  '${selectedRestaurant.classification}      ',
+                                  '${selectedRestaurant.category}      ',
                                   style: TextStyle(fontSize: 15),
                                 ),
                               ],
@@ -250,9 +250,9 @@ class _DetailPageState extends State<DetailPage> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                for (int i = 0; i < selectedRestaurant.atmosphere.length; i++)
+                                for (int i = 0; i < selectedRestaurant.theme.length; i++)
                                   Text(
-                                    '#${selectedRestaurant.atmosphere[i]} ',
+                                    '#${selectedRestaurant.theme[i]} ',
                                     style: TextStyle(fontSize: 12, color: Color(0xff57dde0)),
                                   )
                               ]
@@ -688,7 +688,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              selectedRestaurant.naverRating.toString(),
+                                              selectedRestaurant.naver_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -699,7 +699,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '${selectedRestaurant.numberOfNaverRating.toString()}건',
+                                              '${selectedRestaurant.naver_cnt.toString()}건',
                                               style: TextStyle(color: Colors.grey, fontSize: 12),
                                             ),
                                             SizedBox(width: 4),
@@ -771,7 +771,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              selectedRestaurant.googleRating.toString(),
+                                              selectedRestaurant.google_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -782,7 +782,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '${selectedRestaurant.numberOfGoogleRating.toString()}건',
+                                                '${selectedRestaurant.google_cnt.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),
@@ -854,7 +854,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                                selectedRestaurant.kakaoRating.toString(),
+                                                selectedRestaurant.kakao_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -865,7 +865,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '${selectedRestaurant.numberOfKakaoRating.toString()}건',
+                                                '${selectedRestaurant.kakao_cnt.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),

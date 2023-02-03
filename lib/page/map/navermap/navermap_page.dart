@@ -19,6 +19,8 @@ late LatLng rightUpPosition;
 // 좌측 밑 좌표
 late LatLng leftDownPosition;
 
+Completer<NaverMapController> naverMapCompleter = Completer();
+
 class NaverMapPage extends StatefulWidget {
 
   @override
@@ -26,8 +28,6 @@ class NaverMapPage extends StatefulWidget {
 }
 
 class _NaverMapPageState extends State<NaverMapPage> {
-
-  Completer<NaverMapController> _controller = Completer();
 
   final _MapPageController = Get.put(MapPageController());
   final _FilterPageController = Get.put(FilterPageController());
@@ -37,11 +37,9 @@ class _NaverMapPageState extends State<NaverMapPage> {
   bool cameraChange = false;
   var filter = new List.empty(growable: true);
 
-
-
   @override
   void initState() {
-    // sleep(Duration(seconds: 2));
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!this.mounted) return;
       // restaurants 데이터들로 CustomMarker 생성 후 markers에 저장
@@ -54,7 +52,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
           final NaverMapPageModel selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
           setState(() async {
-            final controller = await _controller.future;
+            final controller = await naverMapCompleter.future;
             await controller.moveCamera(CameraUpdate.scrollTo(marker.position));
             if (_MapPageController.bS == false) {
               _MapPageController.ChangeState();
@@ -86,13 +84,13 @@ class _NaverMapPageState extends State<NaverMapPage> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    _MapPageController.dispose();
-    _FilterPageController.dispose();
-    _NaverMapPageController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   _MapPageController.dispose();
+  //   _FilterPageController.dispose();
+  //   _NaverMapPageController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -190,10 +188,10 @@ class _NaverMapPageState extends State<NaverMapPage> {
                             ),
                             backgroundColor: Colors.white,
                             onPressed: () async {
-                              final controller = await _controller.future;
+                              final naverMapController = await naverMapCompleter.future;
                               final Position position = await Geolocator.getCurrentPosition();
                               CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude));
-                              controller.moveCamera(cameraUpdate);
+                              naverMapController.moveCamera(cameraUpdate);
                             },
                           ),
                         ),
@@ -215,8 +213,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
                           filter = read_all();
                           Network network = Network(filter, '');
                           var store = await network.getJsonData();
-                          print(1);
-                          print(2);
                           print(store);
                           print("========================================");
                           print(store.length);
@@ -248,16 +244,22 @@ class _NaverMapPageState extends State<NaverMapPage> {
     );
   }
 
-  Future<void> onMapCreated(NaverMapController controller) async {
-    if (_controller.isCompleted) _controller = Completer();
-    _controller.complete(controller);
+  Future<void> onMapCreated(NaverMapController naverMapController) async {
+    if (naverMapCompleter.isCompleted) naverMapCompleter = Completer();
+    naverMapCompleter.complete(naverMapController);
 
     // 위치정보 허락 받고 허락 받으면 맵 생성시 현 위치로 위치 옮겨주기
     LocationService locationService = LocationService();
     if (await locationService.canGetCurrentLocation()){
       final Position position = await Geolocator.getCurrentPosition();
-      controller.moveCamera(CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude)));
+      naverMapController.moveCamera(CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude)));
     }
+
+    LatLngBounds bound = await naverMapController.getVisibleRegion();
+    setState(() {
+      rightUpPosition = bound.northeast;
+      leftDownPosition = bound.southwest;
+    });
   }
   Future<void> _onCameraChange(LatLng latLng, CameraChangeReason reason, bool isAnimated) async {
     // print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
@@ -268,9 +270,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
     if (cameraChange == false)
       setState(() {cameraChange = true;});
 
-    NaverMapController Controller = await _controller.future;
-    LatLngBounds bound = await Controller.getVisibleRegion();
-    CameraPosition position = await Controller.getCameraPosition();
+    NaverMapController naverMapController = await naverMapCompleter.future;
+    LatLngBounds bound = await naverMapController.getVisibleRegion();
     setState(() {
       rightUpPosition = bound.northeast;
       leftDownPosition = bound.southwest;

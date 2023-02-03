@@ -50,7 +50,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
               child: Column(
                 children: [
                   Text(
-                    '${selectedRestaurant.name}',
+                    '${selectedRestaurant.store_name}',
                     style: TextStyle(
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.bold,

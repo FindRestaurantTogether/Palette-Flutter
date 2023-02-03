@@ -38,7 +38,7 @@ class ListviewPage extends StatelessWidget {
                                 children: [
                                   Container(
                                     child: Text(
-                                      '${_NaverMapPageController.restaurants[index].name}',
+                                      '${_NaverMapPageController.restaurants[index].store_name}',
                                       style: TextStyle(
                                           color: Color(0xff464646),
                                           fontSize: 20,
@@ -81,7 +81,7 @@ class ListviewPage extends StatelessWidget {
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         Text(
-                                          '  ${_NaverMapPageController.restaurants[index].classification}',
+                                          '  ${_NaverMapPageController.restaurants[index].category}',
                                           style: TextStyle(
                                               color: Color(0xff838383), fontSize: 13),
                                         ),
@@ -102,7 +102,7 @@ class ListviewPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  '${_NaverMapPageController.restaurants[index].naverRating}',
+                                  '${_NaverMapPageController.restaurants[index].naver_star}',
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold,
@@ -111,7 +111,7 @@ class ListviewPage extends StatelessWidget {
                                 ),
                                 SizedBox(width: 3),
                                 Text(
-                                  '(${_NaverMapPageController.restaurants[index].numberOfNaverRating}건)',
+                                  '(${_NaverMapPageController.restaurants[index].naver_cnt}건)',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff464646)
@@ -144,7 +144,7 @@ class ListviewPage extends StatelessWidget {
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                            image: AssetImage(_NaverMapPageController.restaurants[index].exteriorImage),
+                            image: AssetImage(_NaverMapPageController.restaurants[index].store_image),
                             fit: BoxFit.fill
                         ),
                       ),

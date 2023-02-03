@@ -33,11 +33,10 @@ class _MyPageState extends State<MyPage> {
     FourthSliderPage()
   ];
 
-  User? loggedUser;
-  String? loggedUserUid = '';
-  String? loggedUserImageUrl = '';
-  String? loggedUserName = '';
-  String? loggedUserEmail = '';
+  String loggedUserUid = '';
+  String loggedUserImageUrl = '';
+  String loggedUserName = '';
+  String loggedUserEmail = '';
   bool imageUploadLoading = false;
   void getLoggedUserData() async {
     try {
@@ -46,9 +45,8 @@ class _MyPageState extends State<MyPage> {
       });
       final user = FirebaseAuth.instance.currentUser;
       if (user != null) {
-        loggedUser = user;
+        loggedUserUid = user.uid;
       }
-      loggedUserUid = loggedUser?.uid;
 
       final loggedUserDoc =  await FirebaseFirestore.instance.collection('users').doc(loggedUserUid).get();
       setState(() {
@@ -67,9 +65,9 @@ class _MyPageState extends State<MyPage> {
   @override
   void initState() {
     super.initState();
+    Get.put(MyPageController());
     getLoggedUserData();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +127,7 @@ class _MyPageState extends State<MyPage> {
                                             : CircleAvatar(
                                               radius: 33,
                                               backgroundColor: Colors.white,
-                                              backgroundImage: NetworkImage(loggedUserImageUrl!),
+                                              backgroundImage: NetworkImage(loggedUserImageUrl),
                                             ),
                                       ), // 원형 아바타
                                       SizedBox(width: 16),
@@ -140,7 +138,7 @@ class _MyPageState extends State<MyPage> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                loggedUserName!,
+                                                loggedUserName,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.bold,
@@ -149,7 +147,7 @@ class _MyPageState extends State<MyPage> {
                                               ), // 이름
                                               SizedBox(height: 3),
                                               Text(
-                                                loggedUserEmail!,
+                                                loggedUserEmail,
                                                 overflow: TextOverflow.ellipsis,
                                                 style: TextStyle(
                                                     color: Colors.black54

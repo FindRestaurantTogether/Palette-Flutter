@@ -245,7 +245,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: height * 0.03),
                 Container(
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
                         onTap: () {
@@ -260,26 +260,26 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       Text(
-                          '|',
+                          '   |   ',
                         style: TextStyle(
                             fontSize: 13,
                             color: Color(0xffb9b9b9)
                         ),
                       ),
-                      Text(
-                        '아이디 찾기',
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xff787878)
-                        ),
-                      ),
-                      Text(
-                          '|',
-                        style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xffb9b9b9)
-                        ),
-                      ),
+                      // Text(
+                      //   '아이디 찾기',
+                      //   style: TextStyle(
+                      //       fontSize: 13,
+                      //       color: Color(0xff787878)
+                      //   ),
+                      // ),
+                      // Text(
+                      //     '|',
+                      //   style: TextStyle(
+                      //       fontSize: 13,
+                      //       color: Color(0xffb9b9b9)
+                      //   ),
+                      // ),
                       Text(
                         '비밀번호 찾기',
                         style: TextStyle(

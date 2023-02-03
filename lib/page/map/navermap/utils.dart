@@ -15,7 +15,8 @@ class Network{
   Map<String,dynamic> store_dict = Map();
   Map<String,dynamic> menu = Map();
   Map<String,dynamic> hour = Map();
-  Map<String,dynamic> name = {'해산물(게)': 'Food_Korean_Seafood_Crab',
+  Map<String,dynamic> name = {
+    '해산물(게)': 'Food_Korean_Seafood_Crab',
     '해산물(문어)': 'Food_Korean_Seafood_Octopus',
     '해산물(생선)': 'Food_Korean_Seafood_Fish',
     '해산물(조개)': 'Food_Korean_Seafood_Seashell',
@@ -54,7 +55,8 @@ class Network{
     '호프': 'Alcohol_Hof',
     '이자카야': 'Alcohol_Izakaya',
     '와인': 'Alcohol_Wine',
-    '칵테일,양주': 'Alcohol_Cocktail'};
+    '칵테일,양주': 'Alcohol_Cocktail'
+  };
 
   Future<dynamic> getJsonData() async {
     // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
@@ -73,67 +75,64 @@ class Network{
     print(url2);
 
     http.Response response = await http.get(Uri.parse(url));
-    return response;
-    // if (response.statusCode == 200) {
-    //   //String jsonData = response.body;
-    //   var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-    //   var store = parsingData;
-    //   print(store); ///////////////////////////////
-    //   return store;
-      // for(int i=1;i<=store.length;i++){
-      //   try {
-      //     store["store$i"]["road_address"] = "서울 " + store["store$i"]["road_address"];
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]["latitude"] = double.parse(store["store$i"]["latitude"]);
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]["longitude"] = double.parse(store["store$i"]["longitude"]);
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]["call"] = store["store$i"]["call"].replaceAll(RegExp('[^0-9\\s]'), "");
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]['kakao_star'] = double.parse(store["store$i"]['kakao_star']);
-      //     store["store$i"]['kakao_cnt'] = int.parse(store["store$i"]['kakao_cnt']);
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]['naver_star'] = double.parse(store["store$i"]['naver_star']);
-      //     store["store$i"]['naver_cnt'] = int.parse(store["store$i"]['naver_cnt']);
-      //   }
-      //   catch(e) {}
-      //   try {
-      //     store["store$i"]['google_star'] = double.parse(store["store$i"]['google_star']);
-      //     store["store$i"]['google_cnt'] = int.parse(store["store$i"]['google_cnt']);
-      //   }
-      //   catch(e) {}
-      //   try{
-      //     for(int j=0;j<store["store$i"]['opening_hour'].length;j++){
-      //       hour.addAll(store["store$i"]['opening_hour'][j]);
-      //     }
-      //     store["store$i"]['opening_hour'] = hour;
-      //   }
-      //   catch(e){}
-      //   try{
-      //     for(int j=0;j<store["store$i"]['menu'].length;j++){
-      //       menu.addAll(store["store$i"]['menu'][j]);
-      //     }
-      //     store["store$i"]['menu'] = menu;
-      //   }
-      //   catch(e){}
-      //   try {
-      //     store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
-      //   }
-      //   catch(e) {}
-      //   store_dict["$i"] = store["store$i"];
-      // }
-      // return store_dict;
-    // }
+    if (response.statusCode == 200) {
+      //String jsonData = response.body;
+      var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+      var store = parsingData;
+      for(int i=1;i<=store.length;i++){
+        try {
+          store["store$i"]["road_address"] = "서울 " + store["store$i"]["road_address"];
+        }
+        catch(e) {}
+        try {
+          store["store$i"]["latitude"] = double.parse(store["store$i"]["latitude"]);
+        }
+        catch(e) {}
+        try {
+          store["store$i"]["longitude"] = double.parse(store["store$i"]["longitude"]);
+        }
+        catch(e) {}
+        try {
+          store["store$i"]["call"] = store["store$i"]["call"].replaceAll(RegExp('[^0-9\\s]'), "");
+        }
+        catch(e) {}
+        try {
+          store["store$i"]['kakao_star'] = double.parse(store["store$i"]['kakao_star']);
+          store["store$i"]['kakao_cnt'] = int.parse(store["store$i"]['kakao_cnt']);
+        }
+        catch(e) {}
+        try {
+          store["store$i"]['naver_star'] = double.parse(store["store$i"]['naver_star']);
+          store["store$i"]['naver_cnt'] = int.parse(store["store$i"]['naver_cnt']);
+        }
+        catch(e) {}
+        try {
+          store["store$i"]['google_star'] = double.parse(store["store$i"]['google_star']);
+          store["store$i"]['google_cnt'] = int.parse(store["store$i"]['google_cnt']);
+        }
+        catch(e) {}
+        try{
+          for(int j=0;j<store["store$i"]['opening_hour'].length;j++){
+            hour.addAll(store["store$i"]['opening_hour'][j]);
+          }
+          store["store$i"]['opening_hour'] = hour;
+        }
+        catch(e){}
+        try{
+          for(int j=0;j<store["store$i"]['menu'].length;j++){
+            menu.addAll(store["store$i"]['menu'][j]);
+          }
+          store["store$i"]['menu'] = menu;
+        }
+        catch(e){}
+        try {
+          store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
+        }
+        catch(e) {}
+        store_dict["$i"] = store["store$i"];
+      }
+      return store_dict;
+    }
   }
 }
 

@@ -20,6 +20,7 @@ class _SignupPageState extends State<SignupPage> {
   final _NameTextEditingController = TextEditingController();
   final _IdTextEditingController = TextEditingController();
   final _PasswordTextEditingController = TextEditingController();
+  final _PasswordConfirmTextEditingController = TextEditingController();
   final _GlobalKey = GlobalKey<FormState>();
 
   String name = '';
@@ -338,54 +339,91 @@ class _SignupPageState extends State<SignupPage> {
                                 ),
                               ),
                               SizedBox(height: 1),
-                              Container(
-                                height: 45,
-                                child: TextFormField(
-                                  key: ValueKey(1),
-                                  controller: _IdTextEditingController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: (value) {
-                                    if (value!.isEmpty || !(value.contains('@'))) {
-                                      return '아이디를 다시 입력해주세요.';
-                                    }
-                                    return null;
-                                  },
-                                  onSaved: (value) {
-                                    id = value!;
-                                  },
-                                  onChanged: (value) {
-                                    id = value;
-                                  },
-                                  textInputAction: TextInputAction.next,
-                                  decoration: InputDecoration(
-                                    errorStyle: TextStyle(fontSize: 10, height: 0.5),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xfff42957),
-                                      ),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                        color: Color(0xfff42957),
-                                      ),
-                                    ),
-                                    suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        _IdTextEditingController.clear();
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: width - 130,
+                                    height: 45,
+                                    child: TextFormField(
+                                      key: ValueKey(1),
+                                      controller: _IdTextEditingController,
+                                      keyboardType: TextInputType.emailAddress,
+                                      validator: (value) {
+                                        if (value!.isEmpty || !(value.contains('@'))) {
+                                          return '아이디를 다시 입력해주세요.';
+                                        }
+                                        return null;
                                       },
-                                      child: Icon(
-                                        Icons.clear,
-                                        color: Color(0xfff42957),
+                                      onSaved: (value) {
+                                        id = value!;
+                                      },
+                                      onChanged: (value) {
+                                        id = value;
+                                      },
+                                      textInputAction: TextInputAction.next,
+                                      decoration: InputDecoration(
+                                        errorStyle: TextStyle(fontSize: 10, height: 0.5),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xfff42957),
+                                          ),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                            color: Color(0xfff42957),
+                                          ),
+                                        ),
+                                        suffixIcon: GestureDetector(
+                                          onTap: () {
+                                            _IdTextEditingController.clear();
+                                          },
+                                          child: Icon(
+                                            Icons.clear,
+                                            color: Color(0xfff42957),
+                                          ),
+                                        ),
+                                        suffixIconConstraints: BoxConstraints(maxHeight: 20),
+                                        hintText: 'abc@naver.com',
+                                        hintStyle: TextStyle(
+                                            color: Color(0xffb9b9b9),
+                                            fontSize: 14
+                                        ),
                                       ),
-                                    ),
-                                    suffixIconConstraints: BoxConstraints(maxHeight: 20),
-                                    hintText: 'abc@naver.com',
-                                    hintStyle: TextStyle(
-                                        color: Color(0xffb9b9b9),
-                                        fontSize: 14
                                     ),
                                   ),
-                                ),
+                                  Container(
+                                    width: 60,
+                                    height: 45,
+                                    alignment: Alignment.bottomCenter,
+                                    child: SizedBox(
+                                      width: 60,
+                                      height: 30,
+                                      child: OutlinedButton(
+                                        onPressed: () {
+
+                                        },
+                                        child: Text(
+                                          '인증 요청',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            color: Color(0xfff42957),
+                                            fontWeight: FontWeight.bold
+                                          ),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                          primary:  Color(0xfff42957),
+                                          padding: EdgeInsets.zero,
+                                          side: BorderSide(width: 1.2, color: Color(0xfff42957)),
+                                          backgroundColor: Color(0xfffff6f8),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(5),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                             ],
                           ), // 아이디
@@ -413,12 +451,6 @@ class _SignupPageState extends State<SignupPage> {
                                       return '비밀번호를 다시 입력해주세요.';
                                     }
                                     return null;
-                                  },
-                                  onSaved: (value) {
-                                    password = value!;
-                                  },
-                                  onChanged: (value) {
-                                    password = value;
                                   },
                                   decoration: InputDecoration(
                                     errorStyle: TextStyle(fontSize: 10, height: 0.5),
@@ -452,10 +484,73 @@ class _SignupPageState extends State<SignupPage> {
                               ),
                             ],
                           ), // 비밀번호
+                          SizedBox(height: 25),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '비밀번호 확인',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xfff42957)
+                                ),
+                              ),
+                              SizedBox(height: 1),
+                              Container(
+                                height: 45,
+                                child: TextFormField(
+                                  key: ValueKey(3),
+                                  controller: _PasswordConfirmTextEditingController,
+                                  obscureText: true,
+                                  validator: (value) {
+                                    if (value!.isEmpty || _PasswordTextEditingController.text != _PasswordConfirmTextEditingController.text) {
+                                      return '비밀번호가 일치하지 않습니다.';
+                                    }
+                                    return null;
+                                  },
+                                  onSaved: (value) {
+                                    password = value!;
+                                  },
+                                  onChanged: (value) {
+                                    password = value;
+                                  },
+                                  decoration: InputDecoration(
+                                    errorStyle: TextStyle(fontSize: 10, height: 0.5),
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xfff42957),
+                                      ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Color(0xfff42957),
+                                      ),
+                                    ),
+                                    suffixIcon: GestureDetector(
+                                      onTap: () {
+                                        _PasswordTextEditingController.clear();
+                                      },
+                                      child: Icon(
+                                        Icons.clear,
+                                        color: Color(0xfff42957),
+                                      ),
+                                    ),
+                                    suffixIconConstraints: BoxConstraints(maxHeight: 20),
+                                    hintText: '위의 비밀번호와 일치하게 입력해주세요.',
+                                    hintStyle: TextStyle(
+                                        color: Color(0xffb9b9b9),
+                                        fontSize: 12
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ), // 비밀번호 확인
                         ],
                       )
                   ),
-                ), // 이름 & 아이디 & 비밀번호
+                ), // 이름 & 아이디 & 비밀번호 & 비밀번호 확인
                 SizedBox(height: 60),
                 signUpLoading
                   ? Center(

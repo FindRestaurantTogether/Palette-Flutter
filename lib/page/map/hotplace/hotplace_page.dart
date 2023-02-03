@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page_controller.dart';
+import 'package:naver_map_plugin/naver_map_plugin.dart';
+import 'package:myapp/page/map/navermap/navermap_page.dart' as naver;
 
 class HotPlacePage extends StatefulWidget {
 
@@ -14,24 +16,81 @@ class _HotPlacePageState extends State<HotPlacePage> {
 
   final _HotPlacePageController = Get.put(HotPlacePageController());
 
-  List<String> hotPlace = [
-    '강남/논현',
-    '선릉/삼성',
-    '청담/압구정로데오',
-    '신사/가로수길',
-    '여의도/영등포',
-    '성수/건대',
-    '을지로/종로/광화문',
-    '서울역/용산',
+  List<String> hotPlaceName = [
     '이태원/한남',
-    '홍대/신촌',
-    '잠실',
-    '사당/이수',
-    '신림/서울대입구',
-    '마곡/등촌',
-    '목동',
+    '동대문/혜화',
+    '서울역/용산',
+    '을지로/종로/\n 광화문',
+    '건대/성수',
     '왕십리',
-    '혜화/동대문'
+    '강남/신논현',
+    '신사/가로수길',
+    '선릉/삼성',
+    '압구정로데오/\n 청담',
+    '잠실',
+    '등촌/마곡',
+    '목동',
+    '사당/이수',
+    '서울대입구/\n 신림',
+    '여의도/영등포',
+    '신촌/홍대',
+  ];
+  List<double> hotPlaceLatitude = [
+    37.5320851,
+    37.5763477,
+    37.5415225,
+    37.5701711,
+    37.5422108,
+    37.5619913,
+    37.5011706,
+    37.5212472,
+    37.5070476,
+    37.5241203,
+    37.5134484,
+    37.5580485,
+    37.5258933,
+    37.4812085,
+    37.4834383,
+    37.5196882,
+    37.5570545
+  ];
+  List<double> hotPlaceLongitude = [
+    127.0011958,
+    127.0053033,
+    126.9700918,
+    126.9826873,
+    127.0638464,
+    127.0385065,
+    127.0260717,
+    127.0228374,
+    127.0564363,
+    127.046364,
+    127.0997688,
+    126.8439202,
+    126.8644512,
+    126.981785,
+    126.9414087,
+    126.9169253,
+    126.9312741
+  ];
+  List<double> hotPlaceZoomLevel = [
+    15, // 100
+    14, // 200
+    14, // 200
+    14, // 200
+    14, // 200
+    16, // 50
+    15, // 100
+    16,// 50
+    15, // 100
+    16, // 50
+    16, // 50
+    14, // 200
+    16, // 50
+    15, // 100
+    14, // 200
+    14, // 200
+    14 // 200
   ];
 
   @override
@@ -40,19 +99,58 @@ class _HotPlacePageState extends State<HotPlacePage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
+    Widget hotPlaceFilter (int index) {
+      return Container(
+        // color: Colors.yellow,
+        width: 100,
+        height: index == 3 || index == 9 || index == 14 ? 40 : 20,
+        child: Row(
+          children: [
+            Material(
+              color: Colors.white,
+              child: Container(
+                width: 30,
+                child: Checkbox(
+                  value: _HotPlacePageController.hotPlaceIsChecked[index],
+                  onChanged: (bool? value) {
+                    for (var i=0 ; i<17 ; i++) {
+                      if (i != index) {
+                        _HotPlacePageController.hotPlaceIsChecked[i] = false;
+                      }
+                    }
+                    _HotPlacePageController.hotPlaceIsChecked[index] = !_HotPlacePageController.hotPlaceIsChecked[index];
+                  },
+                  shape: CircleBorder(),
+                  checkColor: Colors.white,
+                  activeColor: Color(0xfff42957),
+                ),
+              ),
+            ),
+            Container(
+              alignment: index == 3 || index == 9 || index == 14 ? Alignment.bottomCenter : null,
+              child: Text(
+                ' ${hotPlaceName[index]}',
+                style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w700),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     return WillPopScope(
       onWillPop: () async{
         Get.back();
         return false;
       }, // 뒤로가기 버튼, 적용된 핫플 필터 백에 전달
-      child: Obx(() {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Obx(() {
+            return Center(
               child: Container(
                 width: width * 0.85,
-                height: 485,
+                height: 581,
                 padding: EdgeInsets.only(top: 12, bottom: 25, left: 16, right: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -93,584 +191,263 @@ class _HotPlacePageState extends State<HotPlacePage> {
                       ),
                     ), // 핫 플레이스
                     SizedBox(height: 13),
-                    Expanded(
-                      child: ListView(
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Column(
                         children: [
-                          SizedBox(
-                            height: 35,
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[0],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[0] = !_HotPlacePageController.hotPlaceIsChecked[0];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[0]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
+                                Container(
+                                  height: 75,
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '도심권',
+                                    style: TextStyle(
+                                      color: Color(0xff787878),
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[1],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[1] = !_HotPlacePageController.hotPlaceIsChecked[1];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[1]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
+                                  width: 20,
+                                  height: 75,
                                 ),
-                              ],
+                                Expanded(
+                                  child: Container(
+                                    height: 75,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(0), // 이태원/한남
+                                            hotPlaceFilter(1) // 동대문/혜화
+                                          ],
+                                        ), // 이태원/한남 & 동대문/혜화
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(2), // 서울역/용산
+                                            hotPlaceFilter(3) // 을지로/종로/광화문
+                                          ],
+                                        ),  // 서울역/용산 & 을지로/종로/광화문
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ], // 도심권
                             ),
-                          ),
-                          SizedBox(
-                            height: 35,
+                          ), // 도심권 필터들
+                          Divider(height: 1,thickness: 1),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[2],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[2] = !_HotPlacePageController.hotPlaceIsChecked[2];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[2]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
+                                Container(
+                                  height: 35,
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '동북권',
+                                    style: TextStyle(
+                                        color: Color(0xff787878),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[3],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[3] = !_HotPlacePageController.hotPlaceIsChecked[3];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[3]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
+                                  width: 20,
+                                  height: 35,
                                 ),
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[4],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[4] = !_HotPlacePageController.hotPlaceIsChecked[4];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[4]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[5],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[5] = !_HotPlacePageController.hotPlaceIsChecked[5];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[5]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
+                                Expanded(
+                                  child: Container(
+                                    height: 35,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(4), // 건대/성수
+                                            hotPlaceFilter(5) // 왕십리
+                                          ],
+                                        ), // 건대/성수 & 왕십리
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 35,
+                          ), // 동북권 필터들
+                          Divider(height: 1,thickness: 1),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[6],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[6] = !_HotPlacePageController.hotPlaceIsChecked[6];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[6]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
+                                Container(
+                                  height: 95,
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '동남권',
+                                    style: TextStyle(
+                                        color: Color(0xff787878),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                    ),
                                   ),
                                 ),
                                 SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[7],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[7] = !_HotPlacePageController.hotPlaceIsChecked[7];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[7]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
+                                  width: 20,
+                                  height: 95,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 95,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(6), // 강남/신논현
+                                            hotPlaceFilter(7) // 신사/가로수길
+                                          ],
+                                        ), // 강남/신논현 & 신사/가로수길
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(8), // 선릉/삼성
+                                            hotPlaceFilter(9) // 압구정로데오/청담
+                                          ],
+                                        ),  // 선릉/삼성 & 압구정로데오/청담
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            hotPlaceFilter(10), // 잠실
+                                          ],
+                                        ),  // 잠실
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ], // 도심권
+                            ),
+                          ), // 동남권 필터들
+                          Divider(height: 1,thickness: 1),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 95,
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '서남권',
+                                    style: TextStyle(
+                                        color: Color(0xff787878),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                  height: 95,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 95,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(11), // 등촌/마곡
+                                            hotPlaceFilter(12) // 목동
+                                          ],
+                                        ), // 등촌/마곡 & 목동
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            hotPlaceFilter(13), // 사당/이수
+                                            hotPlaceFilter(14) // 서울대입구/신림
+                                          ],
+                                        ),  // 사당/이수 & 서울대입구/신림
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            hotPlaceFilter(15), // 여의도/영등포
+                                          ],
+                                        ),  // 여의도/영등포
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ], // 도심권
+                            ),
+                          ), // 서남권 필터들
+                          Divider(height: 1,thickness: 1),
+                          Padding(
+                            padding: EdgeInsets.only(top: 15),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 35,
+                                  alignment: Alignment.topCenter,
+                                  child: Text(
+                                    '서북권',
+                                    style: TextStyle(
+                                        color: Color(0xff787878),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 20,
+                                  height: 35,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 35,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            hotPlaceFilter(16), // 신촌/홍대
+                                          ]//                                          ],
+                                        ), // 신촌/홍대
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],
                             ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[8],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[8] = !_HotPlacePageController.hotPlaceIsChecked[8];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[8]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[9],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[9] = !_HotPlacePageController.hotPlaceIsChecked[9];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[9]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[10],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[10] = !_HotPlacePageController.hotPlaceIsChecked[10];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[10]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[11],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[11] = !_HotPlacePageController.hotPlaceIsChecked[11];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[11]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[12],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[12] = !_HotPlacePageController.hotPlaceIsChecked[12];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[12]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[13],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[13] = !_HotPlacePageController.hotPlaceIsChecked[13];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[13]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 130,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[14],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[14] = !_HotPlacePageController.hotPlaceIsChecked[14];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[14]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 110,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[15],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[15] = !_HotPlacePageController.hotPlaceIsChecked[15];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[15]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                          SizedBox(
-                            height: 35,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: 135,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Material(
-                                        color: Colors.white,
-                                        child: Container(
-                                          width: 30,
-                                          child: Checkbox(
-                                            value: _HotPlacePageController.hotPlaceIsChecked[16],
-                                            onChanged: (bool? value) {
-                                              for (var i=0 ; i<17 ; i++)
-                                                _HotPlacePageController.hotPlaceIsChecked[i] = false;
-                                              _HotPlacePageController.hotPlaceIsChecked[16] = !_HotPlacePageController.hotPlaceIsChecked[16];
-                                            },
-                                            shape: CircleBorder(),
-                                            checkColor: Colors.white,
-                                            activeColor: Color(0xfff42957),
-                                          ),
-                                        ),
-                                      ),
-                                      Text(
-                                        '${hotPlace[16]}',
-                                        style: TextStyle(color: Color(0xff787878), fontSize: 13),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )
+                          ), // 서북권 필터들
                         ],
                       ),
-                    ), // 필터들
+                    ), // 핕러들
                     SizedBox(height: 10),
                     Container(
                       width: width * 0.85 - 32,
                       height: 50,
                       child: ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
+                          int selectedIndex = _HotPlacePageController.hotPlaceIsChecked.indexWhere((e) => e == true);
 
+                          final naverMapController = await naver.naverMapCompleter.future;
+                          CameraPosition cameraPosition =  CameraPosition(target: LatLng(hotPlaceLatitude[selectedIndex], hotPlaceLongitude[selectedIndex]), zoom: hotPlaceZoomLevel[selectedIndex]);
+                          CameraUpdate cameraUpdate = CameraUpdate.toCameraPosition(cameraPosition);
+                          // CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(hotPlaceLatitude[selectedIndex], hotPlaceLongitude[selectedIndex]));
+                          naverMapController.moveCamera(cameraUpdate);
+                          Get.back();
                         },
                         child: Text(
                           '이동',
@@ -689,10 +466,10 @@ class _HotPlacePageState extends State<HotPlacePage> {
                   ],
                 ),
               ),
-            )
-          ],
-        );
-      }),
+            );
+          }),
+        ],
+      )
     );
   }
 }
