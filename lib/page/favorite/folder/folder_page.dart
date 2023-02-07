@@ -497,7 +497,7 @@ class _FolderPageState extends State<FolderPage> {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    '${_selectedRestaurants.elementAt(index).address.substring(0,_selectedRestaurants.elementAt(index).address.indexOf('동') + 1)}',
+                                                    '${_selectedRestaurants.elementAt(index).jibun_address.substring(0,_selectedRestaurants.elementAt(index).jibun_address.indexOf('동') + 1)}',
                                                     style: TextStyle(
                                                       fontSize: 10,
                                                     ),
@@ -605,7 +605,7 @@ class _FolderPageState extends State<FolderPage> {
                                           child: Row(
                                             children: [
                                               Text(
-                                                '${_selectedRestaurants.elementAt(index).address.substring(0,_selectedRestaurants.elementAt(index).address.indexOf('동') + 1)}',
+                                                '${_selectedRestaurants.elementAt(index).jibun_address.substring(0,_selectedRestaurants.elementAt(index).jibun_address.indexOf('동') + 1)}',
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                 ),
@@ -622,7 +622,7 @@ class _FolderPageState extends State<FolderPage> {
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       image: DecorationImage(
-                                          image: AssetImage(_selectedRestaurants.elementAt(index).store_image),
+                                          image: AssetImage(_selectedRestaurants.elementAt(index).store_image[0]),
                                           fit: BoxFit.fill
                                       ),
                                     ),

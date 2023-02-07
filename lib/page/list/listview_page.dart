@@ -125,7 +125,7 @@ class ListviewPage extends StatelessWidget {
                             child: Row(
                               children: [
                                 Text(
-                                  '${_NaverMapPageController.restaurants[index].address.substring(0,_NaverMapPageController.restaurants[index].address.indexOf('동') + 1)}',
+                                  '${_NaverMapPageController.restaurants[index].jibun_address.substring(0,_NaverMapPageController.restaurants[index].jibun_address.indexOf('동') + 1)}',
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Color(0xff464646)
@@ -144,7 +144,7 @@ class ListviewPage extends StatelessWidget {
                         color: Colors.grey,
                         borderRadius: BorderRadius.circular(10),
                         image: DecorationImage(
-                            image: AssetImage(_NaverMapPageController.restaurants[index].store_image),
+                            image: AssetImage(_NaverMapPageController.restaurants[index].store_image[0]),
                             fit: BoxFit.fill
                         ),
                       ),

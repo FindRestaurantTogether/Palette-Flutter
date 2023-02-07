@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:myapp/page/my/my_page.dart';
 import 'package:myapp/page/my/my_page_controller.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,39 +20,13 @@ class _AccountPageState extends State<AccountPage> {
   final _MyPageController = Get.put(MyPageController());
   final _TextEditingController = TextEditingController();
 
-  User? loggedUser;
-  String? loggedUserUid = '';
-  String? loggedUserImageUrl = '';
-  String? loggedUserName = '';
-  String? loggedUserEmail = '';
+  // User? loggedUser;
   File? _pickedImage;
   String? url;
   bool imageUploadLoading = false;
-  void getLoggedUserData() async {
-    try {
-      setState(() {
-        imageUploadLoading = true;
-      });
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        loggedUser = user;
-      }
-      loggedUserUid = loggedUser?.uid;
-
-      final loggedUserDoc =  await FirebaseFirestore.instance.collection('users').doc(loggedUserUid).get();
-      setState(() {
-        loggedUserImageUrl = loggedUserDoc.get('imageUrl');
-        loggedUserName = loggedUserDoc.get('name');
-        loggedUserEmail = loggedUserDoc.get('id');
-        imageUploadLoading = false;
-      });
-    } catch(e) {
-      print(e);
-    }
-  } // 현재 유저 정보 조회 및 데이터 불러오기
   void currentUserLogOut() async {
     await FirebaseAuth.instance.signOut();
-    _MyPageController.isLoginChangeState();
+    _MyPageController.isLogin.value = !_MyPageController.isLogin.value;
     Get.back();
   } // 로그아웃
   Future<void> deleteCurrentUser() async {
@@ -61,12 +34,12 @@ class _AccountPageState extends State<AccountPage> {
     final currentUserUid = currentUser!.uid;
     await FirebaseFirestore.instance.collection('users').doc(currentUserUid).delete();
 
-    final ref = FirebaseStorage.instance.ref().child('usersImages').child(loggedUserEmail! + '.jpg');
+    final ref = FirebaseStorage.instance.ref().child('usersImages').child(_MyPageController.loggedUserEmail.value + '.jpg');
     await ref.delete();
 
     await currentUser?.delete();
 
-    _MyPageController.isLoginChangeState();
+    _MyPageController.isLogin.value = !_MyPageController.isLogin.value;
     Get.back();
   } // 유저 삭제
   Future<void> updateCurrentUserName(String name) async {
@@ -74,6 +47,9 @@ class _AccountPageState extends State<AccountPage> {
     final currentUserUid = currentUser!.uid;
     await FirebaseFirestore.instance.collection('users').doc(currentUserUid).update({
       'name': name,
+    });
+    setState(() {
+      _MyPageController.loggedUserName.value = _TextEditingController.text;
     });
   } // 이름 변경
   Future<void> resetCurrentUserPassword(String email) async{
@@ -93,7 +69,7 @@ class _AccountPageState extends State<AccountPage> {
       imageUploadLoading = true;
     });
 
-    final ref = FirebaseStorage.instance.ref().child('usersImages').child(loggedUserEmail! + '.jpg');
+    final ref = FirebaseStorage.instance.ref().child('usersImages').child(_MyPageController.loggedUserEmail.value + '.jpg');
     await ref.putFile(_pickedImage!);
     url = await ref.getDownloadURL();
 
@@ -104,7 +80,7 @@ class _AccountPageState extends State<AccountPage> {
     });
 
     setState(() {
-      loggedUserImageUrl = url;
+      _MyPageController.loggedUserImageUrl.value = url!;
       imageUploadLoading = false;
     });
   } // 카메라로 사진 변경
@@ -121,7 +97,7 @@ class _AccountPageState extends State<AccountPage> {
       imageUploadLoading = true;
     });
 
-    final ref = FirebaseStorage.instance.ref().child('usersImages').child(loggedUserEmail! + '.jpg');
+    final ref = FirebaseStorage.instance.ref().child('usersImages').child(_MyPageController.loggedUserEmail.value + '.jpg');
     await ref.putFile(_pickedImage!);
     url = await ref.getDownloadURL();
 
@@ -132,16 +108,16 @@ class _AccountPageState extends State<AccountPage> {
     });
 
     setState(() {
-      loggedUserImageUrl = url;
+      _MyPageController.loggedUserImageUrl.value = url!;
       imageUploadLoading = false;
     });
   } // 갤러리로 사진 변경
 
-  @override
-  void initState() {
-    super.initState();
-    getLoggedUserData();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getLoggedUserData();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +127,7 @@ class _AccountPageState extends State<AccountPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        Get.off(() => MyPage());
+        Get.back();
         return false;
       },
       child: Scaffold(
@@ -180,7 +156,7 @@ class _AccountPageState extends State<AccountPage> {
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onPressed: () {
-                                Get.off(() => MyPage());
+                                Get.back();
                               },
                               icon: Image.asset('assets/button_image/back_button.png'),
                             ),
@@ -200,26 +176,22 @@ class _AccountPageState extends State<AccountPage> {
                       Center(
                         child: Stack(
                           children: [
-                            CircleAvatar(
+                            imageUploadLoading
+                                ? CircleAvatar(
+                                radius: 55,
+                                backgroundColor: Colors.white,
+                                child: CircularProgressIndicator(color: Color(0xfff42957))
+                            )
+                                : CircleAvatar(
                               radius: 55,
-                              backgroundColor: Color(0xfff42957),
-                              child: imageUploadLoading
-                                  ? CircleAvatar(
-                                    radius: 53,
-                                    backgroundColor: Colors.white,
-                                    child: CircularProgressIndicator(color: Color(0xfff42957))
-                                  )
-                                  : CircleAvatar(
-                                    radius: 53,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: NetworkImage(loggedUserImageUrl!),
-                                  )
+                              backgroundColor: Colors.white,
+                              backgroundImage: NetworkImage(_MyPageController.loggedUserImageUrl.value),
                             ),
                             Positioned(
                                 bottom: -5,
                                 right: -25,
                                 child: RawMaterialButton(
-                                    fillColor: Color(0xfff42957),
+                                    fillColor: Colors.black,
                                     child: Icon(Icons.photo_camera, size: 18, color: Colors.white),
                                     shape: CircleBorder(),
                                     onPressed: () {
@@ -305,7 +277,7 @@ class _AccountPageState extends State<AccountPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                loggedUserName!,
+                                _MyPageController.loggedUserName.value,
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16
@@ -313,7 +285,7 @@ class _AccountPageState extends State<AccountPage> {
                               ),
                               SizedBox(height: 3),
                               Text(
-                                loggedUserEmail!,
+                                _MyPageController.loggedUserEmail.value,
                                 style: TextStyle(
                                     color: Colors.black54
                                 ),
@@ -421,9 +393,6 @@ class _AccountPageState extends State<AccountPage> {
                                                   )
                                               );
                                             } else {
-                                              setState(() {
-                                                loggedUserName = _TextEditingController.text;
-                                              });
                                               updateCurrentUserName(_TextEditingController.text);
                                               Navigator.pop(context);
                                             }

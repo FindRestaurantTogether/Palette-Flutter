@@ -1,13 +1,13 @@
 import 'package:get/get.dart';
 
 class MyPageController extends GetxController{
-  bool isLogin = false;
-  bool get iL => isLogin;
 
-  void isLoginChangeState(){
-    isLogin = !isLogin;
-    update();
-  }
+  RxString loggedUserUid = ''.obs;
+  RxString loggedUserImageUrl = ''.obs;
+  RxString loggedUserName = ''.obs;
+  RxString loggedUserEmail = ''.obs;
+
+  RxBool isLogin = false.obs;
 
   bool alarmOn = true;
   bool get aO => alarmOn;

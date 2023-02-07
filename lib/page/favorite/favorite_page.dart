@@ -1060,7 +1060,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).address.indexOf('동') + 1)}',
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.indexOf('동') + 1)}',
                                                       style: TextStyle(
                                                         fontSize: 10,
                                                       ),
@@ -1168,7 +1168,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                             child: Row(
                                               children: [
                                                 Text(
-                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).address.indexOf('동') + 1)}',
+                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.indexOf('동') + 1)}',
                                                   style: TextStyle(
                                                     fontSize: 12,
                                                   ),
@@ -1185,7 +1185,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
-                                            image: AssetImage(_FavoriteListPageController.listRestaurant.elementAt(index).store_image),
+                                            image: AssetImage(_FavoriteListPageController.listRestaurant.elementAt(index).store_image[0]),
                                             fit: BoxFit.fill
                                         ),
                                       ),
@@ -1281,111 +1281,111 @@ class _FavoritePageState extends State<FavoritePage> {
               ) // Favorite == true인 음식점들 나열
             ] else ... [ // 폴더
               SizedBox(height: 15),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      SizedBox(width: 22),
-                      Container(
-                        width: width * 0.5,
-                        height: height * 0.04,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(50)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.05),
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.white,
-                            shape: StadiumBorder(),
-                            minimumSize: Size.zero,
-                            padding: EdgeInsets.zero,
-                          ),
-                          onPressed: () {},
-                          child: Row(
-                            children: [
-                              SizedBox(
-                                width: 40,
-                                height: 40,
-                                child: IconButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  onPressed: () {},
-                                  icon: Image.asset('assets/button_image/search_button.png'),
-                                ),
-                              ),
-                              SizedBox(
-                                width: width * 0.5 - 40,
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintStyle: TextStyle(
-                                      fontSize: 14,
-                                      color: Color(0xffb9b9b9),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ), // 검색창
-                  Row(
-                    children: [
-                      Container(
-                        width: width * 0.16,
-                        height: height * 0.04,
-                        child: DropdownButtonHideUnderline(
-                            child: DropdownButton2(
-                              isExpanded: true,
-                              items: DropdownList2
-                                  .map((item) => DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(
-                                    item,
-                                    style: TextStyle(
-                                      fontSize: 15,
-                                      color: Color(0xff787878),
-                                    ),
-                                  )
-                              )).toList(),
-                              value: DropdownSelected2,
-                              onChanged: (value) {
-                                setState(() {
-                                  DropdownSelected2 = value as String;
-                                });
-                              },
-                              icon: SizedBox(
-                                width: 12,
-                                height: 12,
-                                child: Image.asset('assets/button_image/down_button.png'),
-                              ),
-                              underline: Container(),
-                              buttonElevation: 0,
-                              dropdownWidth: width * 0.23,
-                              dropdownDecoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              itemHeight: 40,
-                              offset: Offset(-15, -1),
-                            )
-                        ),
-                      ),
-                      SizedBox(width: 23),
-                    ],
-                  ), // 필터
-                ],
-              ), // 폴더 필터
-              SizedBox(height: 10),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: [
+              //     Row(
+              //       children: [
+              //         SizedBox(width: 22),
+              //         Container(
+              //           width: width * 0.5,
+              //           height: height * 0.04,
+              //           decoration: BoxDecoration(
+              //             borderRadius: BorderRadius.all(Radius.circular(50)),
+              //             boxShadow: [
+              //               BoxShadow(
+              //                 color: Colors.black.withOpacity(0.05),
+              //                 spreadRadius: 2,
+              //                 blurRadius: 7,
+              //                 offset: Offset(0, 2),
+              //               ),
+              //             ],
+              //           ),
+              //           child: ElevatedButton(
+              //             style: ElevatedButton.styleFrom(
+              //               primary: Colors.white,
+              //               shape: StadiumBorder(),
+              //               minimumSize: Size.zero,
+              //               padding: EdgeInsets.zero,
+              //             ),
+              //             onPressed: () {},
+              //             child: Row(
+              //               children: [
+              //                 SizedBox(
+              //                   width: 40,
+              //                   height: 40,
+              //                   child: IconButton(
+              //                     splashColor: Colors.transparent,
+              //                     highlightColor: Colors.transparent,
+              //                     onPressed: () {},
+              //                     icon: Image.asset('assets/button_image/search_button.png'),
+              //                   ),
+              //                 ),
+              //                 SizedBox(
+              //                   width: width * 0.5 - 40,
+              //                   child: TextFormField(
+              //                     decoration: InputDecoration(
+              //                       border: InputBorder.none,
+              //                       hintStyle: TextStyle(
+              //                         fontSize: 14,
+              //                         color: Color(0xffb9b9b9),
+              //                       ),
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ],
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ), // 검색창
+              //     Row(
+              //       children: [
+              //         Container(
+              //           width: width * 0.16,
+              //           height: height * 0.04,
+              //           child: DropdownButtonHideUnderline(
+              //               child: DropdownButton2(
+              //                 isExpanded: true,
+              //                 items: DropdownList2
+              //                     .map((item) => DropdownMenuItem<String>(
+              //                     value: item,
+              //                     child: Text(
+              //                       item,
+              //                       style: TextStyle(
+              //                         fontSize: 15,
+              //                         color: Color(0xff787878),
+              //                       ),
+              //                     )
+              //                 )).toList(),
+              //                 value: DropdownSelected2,
+              //                 onChanged: (value) {
+              //                   setState(() {
+              //                     DropdownSelected2 = value as String;
+              //                   });
+              //                 },
+              //                 icon: SizedBox(
+              //                   width: 12,
+              //                   height: 12,
+              //                   child: Image.asset('assets/button_image/down_button.png'),
+              //                 ),
+              //                 underline: Container(),
+              //                 buttonElevation: 0,
+              //                 dropdownWidth: width * 0.23,
+              //                 dropdownDecoration: BoxDecoration(
+              //                   borderRadius: BorderRadius.circular(10),
+              //                 ),
+              //                 itemHeight: 40,
+              //                 offset: Offset(-15, -1),
+              //               )
+              //           ),
+              //         ),
+              //         SizedBox(width: 23),
+              //       ],
+              //     ), // 필터
+              //   ],
+              // ), // 폴더 필터
+              // SizedBox(height: 10),
               Expanded(
                   child: Stack(
                     children: [

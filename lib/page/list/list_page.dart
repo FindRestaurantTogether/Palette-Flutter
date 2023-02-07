@@ -44,7 +44,7 @@ class _ListPageState extends State<ListPage> {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          SizedBox(height: height * 0.076),
+          SizedBox(height: height * 0.075),
           Container(
               width: width * 0.87,
               height: height * 0.06,

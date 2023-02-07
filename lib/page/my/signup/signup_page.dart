@@ -33,9 +33,6 @@ class _SignupPageState extends State<SignupPage> {
       _GlobalKey.currentState!.save();
     }
   }
-  void authPersistence() async{
-    await FirebaseAuth.instance.setPersistence(Persistence.NONE);
-  } // 회원가입, 로그인시 사용자 영속
 
   File? _pickedImage;
   void pickImageFromCamera() async {
@@ -113,7 +110,6 @@ class _SignupPageState extends State<SignupPage> {
           signUpLoading = false;
         });
       }
-      authPersistence();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

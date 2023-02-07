@@ -89,10 +89,17 @@ class _MapPageState extends State<MapPage> {
                                 icon: Image.asset('assets/button_image/list_button.png'),
                               ),
                             ),
-                            SizedBox(
-                              child: Text(
-                                '나의 지도',
-                                style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                            GestureDetector(
+                              onTap: () {
+                                Get.to(() => SearchPage(_items));
+                              },
+                              child: Expanded(
+                                child: Center(
+                                  child: Text(
+                                    '나의 지도',
+                                    style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                                  ),
+                                ),
                               ),
                             ),
                             SizedBox(

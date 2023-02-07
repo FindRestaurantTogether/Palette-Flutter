@@ -26,7 +26,7 @@ class CustomMarker extends Marker {
       );
 
   Future<void> createImage(BuildContext context) async {
-    this.icon =  await OverlayImage.fromAssetImage(assetName: this.restaurant.markerImage, context: context);
+    this.icon =  await OverlayImage.fromAssetImage(assetName: this.restaurant.main_category, context: context);
   }
 
   void Function(Marker marker, Map<String, int> iconSize) setOnMarkerTab(void Function(Marker marker, Map<String, int> iconSize) callBack){

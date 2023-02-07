@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -33,6 +34,7 @@ class _LoginPageState extends State<LoginPage> {
     await FirebaseAuth.instance.setPersistence(Persistence.NONE);
   } // 회원가입, 로그인시 사용자 영속
 
+  User? loggedUser;
   bool signUpLoading = false;
   void signInButton() async {
     _tryValidation();
@@ -45,8 +47,14 @@ class _LoginPageState extends State<LoginPage> {
           password: password
       );
       if (user.user != null) {
+        loggedUser = user.user;
+        _MyPageController.loggedUserUid.value = loggedUser!.uid;
+        final loggedUserDoc =  await FirebaseFirestore.instance.collection('users').doc(_MyPageController.loggedUserUid.value).get();
         setState(() {
-          _MyPageController.isLoginChangeState();
+          _MyPageController.loggedUserImageUrl.value = loggedUserDoc.get('imageUrl');
+          _MyPageController.loggedUserName.value = loggedUserDoc.get('name');
+          _MyPageController.loggedUserEmail.value = loggedUserDoc.get('id');
+          _MyPageController.isLogin.value = !_MyPageController.isLogin.value;
         });
         Get.back();
       }

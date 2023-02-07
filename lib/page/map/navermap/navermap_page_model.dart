@@ -3,11 +3,13 @@ import 'package:myapp/page/map/navermap/navermap_page.dart';
 
 abstract class NaverMapPageModel {
   final String uid = '';
-  final String markerImage = ''; /// main_category
-  final String store_image = '';
+  final String main_category = '';
+  final List<String> store_image = [];
   final String store_name = '';
   final bool open = false;
   final Map<String, String> opening_hour = {};
+  final Map<String, String> opening_breaktime = {};
+  final Map<String, String> opening_lastorder = {};
   final String category = '';
   final double distance = 0.0;
   RxBool favorite = false as RxBool;
@@ -19,7 +21,7 @@ abstract class NaverMapPageModel {
   final double kakao_star = 0.0;
   final int kakao_cnt = 0;
   final List<String> service = [];
-  final String address = ''; /// road_address, jibun_address
+  final String jibun_address = '';
   final int call = 0;
   final LocationClass position = LocationClass(longitude: 0.0, latitude: 0.0);
   final Map<String,int> menu = {};
@@ -29,15 +31,19 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final String uid;
   @override
-  final String markerImage;
+  final String main_category;
   @override
-  final String store_image;
+  final List<String> store_image;
   @override
   final String store_name;
   @override
   final bool open;
   @override
-  Map<String, String> opening_hour;
+  final Map<String, String> opening_hour;
+  @override
+  final Map<String, String> opening_breaktime;
+  @override
+  final Map<String, String> opening_lastorder;
   @override
   final String category;
   @override
@@ -61,7 +67,7 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final List<String> service;
   @override
-  final String address;
+  final String jibun_address;
   @override
   final int call;
   @override
@@ -71,11 +77,13 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
 
   NaverMapPageRestaurant({
     required this.uid,
-    required this.markerImage,
+    required this.main_category,
     required this.store_image,
     required this.store_name,
     required this.open,
     required this.opening_hour,
+    required this.opening_breaktime,
+    required this.opening_lastorder,
     required this.category,
     required this.distance,
     favorite,
@@ -87,7 +95,7 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
     required this.kakao_star,
     required this.kakao_cnt,
     required this.service,
-    required this.address,
+    required this.jibun_address,
     required this.call,
     required this.position,
     required this.menu,

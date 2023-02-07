@@ -44,6 +44,12 @@ class _DetailPageState extends State<DetailPage> {
     final openDay = selectedRestaurant.opening_hour.keys.toList();
     final openHour = selectedRestaurant.opening_hour.values.toList();
 
+    final breaktimeDay = selectedRestaurant.opening_breaktime.keys.toList();
+    final breaktimeHour = selectedRestaurant.opening_breaktime.values.toList();
+
+    final lastorderDay = selectedRestaurant.opening_lastorder.keys.toList();
+    final lastorderHour = selectedRestaurant.opening_lastorder.values.toList();
+
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -80,7 +86,7 @@ class _DetailPageState extends State<DetailPage> {
                     height: height * 0.32,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(selectedRestaurant.store_image),
+                          image: AssetImage(selectedRestaurant.store_image[0]),
                           fit: BoxFit.fill
                       ),
                     ),
@@ -307,21 +313,80 @@ class _DetailPageState extends State<DetailPage> {
                                 ), // 영업시간
                                 moreOpenInformation
                                     ? Container(
+                                        width: width * 0.67,
+                                        padding: EdgeInsets.only(left: 22),
                                         child:  Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
-                                            SizedBox(height: 5),
-                                            for (var i=0; i<openDay.length ; i++) ... [
-                                              Row(
-                                                children: [
+                                            if (openDay.length != 0)
+                                              Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(height: 5),
+                                                Text(
+                                                    '영업시간',
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.bold
+                                                    )
+                                                ),
+                                                SizedBox(height: 3),
+                                                for (var i=0; i<openDay.length ; i++) ... [
                                                   Text(
-                                                    '        ${openDay[i]} : ${openHour[i]}',
+                                                    '${openDay[i]} : ${openHour[i]}',
                                                     style: TextStyle(
                                                       fontSize: 12,
                                                     ),
                                                   )
                                                 ],
-                                              )
-                                            ]
+                                              ],
+                                            ), // 영업시간
+                                            if (breaktimeDay.length != 0)
+                                              Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(height: 5),
+                                                Text(
+                                                    '브레이크타임',
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.bold
+                                                    )
+                                                ),
+                                                SizedBox(height: 3),
+                                                for (var i=0; i<breaktimeDay.length ; i++) ... [
+                                                  Text(
+                                                    '${breaktimeDay[i]} : ${breaktimeHour[i]}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                  )
+                                                ],
+                                              ],
+                                            ), // 브레이크타임
+                                            if (lastorderDay.length != 0)
+                                              Column(
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(height: 5),
+                                                Text(
+                                                    '라스트오더',
+                                                    style: TextStyle(
+                                                        fontSize: 11,
+                                                        fontWeight: FontWeight.bold
+                                                    )
+                                                ),
+                                                SizedBox(height: 3),
+                                                for (var i=0; i<lastorderDay.length ; i++) ... [
+                                                  Text(
+                                                    '${lastorderDay[i]} : ${lastorderHour[i]}',
+                                                    style: TextStyle(
+                                                      fontSize: 12,
+                                                    ),
+                                                  )
+                                                ]
+                                              ],
+                                            ), // 라스트 오더
                                           ],
                                         ),
                                     )
@@ -338,7 +403,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                          '${selectedRestaurant.address}',
+                                          '${selectedRestaurant.jibun_address}',
                                           style: TextStyle(fontSize: 12)
                                       ),
                                     ],
@@ -458,7 +523,7 @@ class _DetailPageState extends State<DetailPage> {
                                                             children: [
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  KakaoMapUtils.OpenKakaoMap('${selectedRestaurant.address}');
+                                                                  KakaoMapUtils.OpenKakaoMap('${selectedRestaurant.jibun_address}');
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -478,7 +543,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  GoogleMapUtils.OpenGoogleMap('${selectedRestaurant.address}');
+                                                                  GoogleMapUtils.OpenGoogleMap('${selectedRestaurant.jibun_address}');
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -498,7 +563,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  NaverMapUtils.OpenNaverMap('${selectedRestaurant.address}');
+                                                                  NaverMapUtils.OpenNaverMap('${selectedRestaurant.jibun_address}');
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
