@@ -423,33 +423,62 @@ class _FolderPageState extends State<FolderPage> {
                                                     SizedBox(
                                                       width: 3,
                                                     ),
-                                                    _selectedRestaurants.elementAt(index).open
-                                                        ? Container(
-                                                      height: 20,
-                                                      child: Align(
-                                                        alignment: Alignment.topCenter,
-                                                        child: Container(
-                                                          width: 5,
-                                                          height: 5,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.cyan.shade300,
-                                                              shape: BoxShape.circle),
+                                                    if (_selectedRestaurants.elementAt(index).open == 'open')
+                                                      Container(
+                                                        height: 20,
+                                                        child: Align(
+                                                          alignment: Alignment.topCenter,
+                                                          child: Container(
+                                                            width: 5,
+                                                            height: 5,
+                                                            decoration: BoxDecoration(
+                                                                color: Color(0xff57dde0),
+                                                                shape: BoxShape.circle),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    )
-                                                        : Container(
-                                                      height: 20,
-                                                      child: Align(
-                                                        alignment: Alignment.topCenter,
-                                                        child: Container(
-                                                          width: 5,
-                                                          height: 5,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors.red.shade300,
-                                                              shape: BoxShape.circle),
+                                                      )
+                                                    else if (_selectedRestaurants.elementAt(index).open == 'close')
+                                                      Container(
+                                                        height: 20,
+                                                        child: Align(
+                                                          alignment: Alignment.topCenter,
+                                                          child: Container(
+                                                            width: 5,
+                                                            height: 5,
+                                                            decoration: BoxDecoration(
+                                                                color: Color(0xfff42957),
+                                                                shape: BoxShape.circle),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
+                                                      )
+                                                    else if (_selectedRestaurants.elementAt(index).open == 'breaktime')
+                                                      Container(
+                                                          height: 20,
+                                                          child: Align(
+                                                            alignment: Alignment.topCenter,
+                                                            child: Container(
+                                                              width: 5,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.yellow,
+                                                                  shape: BoxShape.circle),
+                                                            ),
+                                                          ),
+                                                        )
+                                                    else if (_selectedRestaurants.elementAt(index).open == 'null')
+                                                      Container(
+                                                            height: 20,
+                                                            child: Align(
+                                                              alignment: Alignment.topCenter,
+                                                              child: Container(
+                                                                width: 5,
+                                                                height: 5,
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors.white,
+                                                                    shape: BoxShape.circle),
+                                                              ),
+                                                            ),
+                                                          ),
                                                     Container(
                                                       height: 24,
                                                       child: Column(
@@ -531,33 +560,62 @@ class _FolderPageState extends State<FolderPage> {
                                                 SizedBox(
                                                   width: 3,
                                                 ),
-                                                _selectedRestaurants.elementAt(index).open
-                                                    ? Container(
-                                                  height: 20,
-                                                  child: Align(
-                                                    alignment: Alignment.topCenter,
-                                                    child: Container(
-                                                      width: 5,
-                                                      height: 5,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.cyan.shade300,
-                                                          shape: BoxShape.circle),
+                                                if (_selectedRestaurants.elementAt(index).open == 'open')
+                                                  Container(
+                                                    height: 20,
+                                                    child: Align(
+                                                      alignment: Alignment.topCenter,
+                                                      child: Container(
+                                                        width: 5,
+                                                        height: 5,
+                                                        decoration: BoxDecoration(
+                                                            color: Color(0xff57dde0),
+                                                            shape: BoxShape.circle),
+                                                      ),
                                                     ),
-                                                  ),
-                                                )
-                                                    : Container(
-                                                  height: 20,
-                                                  child: Align(
-                                                    alignment: Alignment.topCenter,
-                                                    child: Container(
-                                                      width: 5,
-                                                      height: 5,
-                                                      decoration: BoxDecoration(
-                                                          color: Colors.red.shade300,
-                                                          shape: BoxShape.circle),
+                                                  )
+                                                else if (_selectedRestaurants.elementAt(index).open == 'close')
+                                                  Container(
+                                                    height: 20,
+                                                    child: Align(
+                                                      alignment: Alignment.topCenter,
+                                                      child: Container(
+                                                        width: 5,
+                                                        height: 5,
+                                                        decoration: BoxDecoration(
+                                                            color: Color(0xfff42957),
+                                                            shape: BoxShape.circle),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
+                                                  )
+                                                else if (_selectedRestaurants.elementAt(index).open == 'breaktime')
+                                                  Container(
+                                                      height: 20,
+                                                      child: Align(
+                                                        alignment: Alignment.topCenter,
+                                                        child: Container(
+                                                          width: 5,
+                                                          height: 5,
+                                                          decoration: BoxDecoration(
+                                                              color: Colors.yellow,
+                                                              shape: BoxShape.circle),
+                                                        ),
+                                                      ),
+                                                    )
+                                                else if (_selectedRestaurants.elementAt(index).open == 'null')
+                                                  Container(
+                                                        height: 20,
+                                                        child: Align(
+                                                          alignment: Alignment.topCenter,
+                                                          child: Container(
+                                                            width: 5,
+                                                            height: 5,
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.white,
+                                                                shape: BoxShape.circle),
+                                                          ),
+                                                        ),
+                                                      ),
                                                 Container(
                                                   height: 24,
                                                   child: Column(

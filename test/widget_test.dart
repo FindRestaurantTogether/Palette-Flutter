@@ -1,43 +1,24 @@
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:flutter/cupertino.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:screenshot/screenshot.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        textTheme: TextTheme(
-            headline6: TextStyle(
-              color: Colors.yellow,
-              // fontSize: 50,
-            )),
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Screenshot Demo Home Page'),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
+
   final String title;
 
   @override
@@ -45,99 +26,98 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //Create an instance of ScreenshotController
-  ScreenshotController screenshotController = ScreenshotController();
-
-  @override
-  void initState() {
-    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
-    super.initState();
-  }
+  final List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+  ];
+  List<String> selectedItems = [];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ElevatedButton(
+        child: DropdownButtonHideUnderline(
+          child: DropdownButton2(
+            isExpanded: true,
+            hint: Align(
+              alignment: AlignmentDirectional.center,
               child: Text(
-                'Capture An Invisible Widget',
+                'Select Items',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
-              onPressed: () {
-                var container = Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.center,
-                  children: [
-                    // 가게 이름 텍스트 테두리
-                    Positioned(
-                        bottom: -15,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text('가게 이름',
-                              style: TextStyle(
-                                fontSize: 20,
-                                foreground: Paint()
-                                  ..style = PaintingStyle.stroke
-                                  ..strokeWidth = 3
-                                  ..color = CupertinoColors.white,
-                              )),
-                        )),
-                    // 가게 이름 텍스트 안쪽
-                    Positioned(
-                        bottom: -15,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: Text('가게 이름',
-                              style: TextStyle(
-                                color: Color(0xfff42957),
-                                fontSize: 20,
-                              )),
-                        )),
-                    // 평점
-                    Positioned(
-                        bottom: -45,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Color(0xfff42957),
-                              borderRadius: BorderRadius.circular(20)),
-                          alignment: Alignment.center,
-                          padding: EdgeInsets.only(left: 10, right: 10),
-                          child: Text('★ 3.14',
-                              style: TextStyle(
-                                color: CupertinoColors.white,
-                                fontSize: 20,
-                              )),
-                        ))
-                  ],
-                );
-
-                screenshotController.captureFromWidget(
-                    InheritedTheme.captureAll(context, Material(child: container)),
-                    delay: Duration(seconds: 1)).then((capturedImage) async {
-                    final directory = (await getApplicationDocumentsDirectory ()).path;
-                    print(1);
-                    print(directory.toString());
-                    print(2);
-                    File('C:/Users/82105/Desktop/kimhakhyun_folder/palette/assets/screenshot_image').writeAsBytes(capturedImage);
-                    // final File newImage = await image.copy('$directory/image1.png');
-                  }
-                );
-              },
             ),
-          ],
+            items: items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                //disable default onTap to avoid closing menu when selecting an item
+                enabled: false,
+                child: StatefulBuilder(
+                  builder: (context, menuSetState) {
+                    final _isSelected = selectedItems.contains(item);
+                    return InkWell(
+                      onTap: () {
+                        _isSelected
+                            ? selectedItems.remove(item)
+                            : selectedItems.add(item);
+                        //This rebuilds the StatefulWidget to update the button's text
+                        setState(() {});
+                        //This rebuilds the dropdownMenu Widget to update the check mark
+                        menuSetState(() {});
+                      },
+                      child: Container(
+                        height: double.infinity,
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Row(
+                          children: [
+                            _isSelected
+                                ? const Icon(Icons.check_box_outlined)
+                                : const Icon(Icons.check_box_outline_blank),
+                            const SizedBox(width: 16),
+                            Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }).toList(),
+            //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
+            value: selectedItems.isEmpty ? null : selectedItems.last,
+            onChanged: (value) {},
+            buttonHeight: 40,
+            buttonWidth: 140,
+            itemHeight: 40,
+            itemPadding: EdgeInsets.zero,
+            selectedItemBuilder: (context) {
+              return items.map(
+                    (item) {
+                  return Container(
+                    alignment: AlignmentDirectional.center,
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      selectedItems.join(', '),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      maxLines: 1,
+                    ),
+                  );
+                },
+              ).toList();
+            },
+          ),
         ),
       ),
     );

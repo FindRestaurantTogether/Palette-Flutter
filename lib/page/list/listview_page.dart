@@ -33,10 +33,11 @@ class ListviewPage extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                              height: 25,
+                              height: 24,
                               child: Row(
                                 children: [
                                   Container(
+                                    height: 22,
                                     child: Text(
                                       '${_NaverMapPageController.restaurants[index].store_name}',
                                       style: TextStyle(
@@ -48,8 +49,36 @@ class ListviewPage extends StatelessWidget {
                                   SizedBox(
                                     width: 3,
                                   ),
-                                  _NaverMapPageController.restaurants[index].open
-                                      ? Container(
+                                  if (_NaverMapPageController.restaurants[index].open == 'open')
+                                    Container(
+                                      height: 20,
+                                      child: Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          width: 5,
+                                          height: 5,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xff57dde0),
+                                              shape: BoxShape.circle),
+                                        ),
+                                      ),
+                                    )
+                                  else if (_NaverMapPageController.restaurants[index].open == 'close')
+                                    Container(
+                                      height: 20,
+                                      child: Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          width: 5,
+                                          height: 5,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xfff42957),
+                                              shape: BoxShape.circle),
+                                        ),
+                                      ),
+                                    )
+                                  else if (_NaverMapPageController.restaurants[index].open == 'breaktime')
+                                    Container(
                                         height: 20,
                                         child: Align(
                                           alignment: Alignment.topCenter,
@@ -57,24 +86,25 @@ class ListviewPage extends StatelessWidget {
                                             width: 5,
                                             height: 5,
                                             decoration: BoxDecoration(
-                                                color: Color(0xff57dde0),
+                                                color: Colors.yellow,
                                                 shape: BoxShape.circle),
                                           ),
                                         ),
                                       )
-                                      : Container(
-                                        height: 20,
-                                        child: Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Container(
-                                            width: 5,
-                                            height: 5,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xfff62957),
-                                                shape: BoxShape.circle),
+                                  else if (_NaverMapPageController.restaurants[index].open == 'null')
+                                    Container(
+                                          height: 20,
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Container(
+                                              width: 5,
+                                              height: 5,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle),
+                                            ),
                                           ),
                                         ),
-                                      ),
                                   Container(
                                     height: 24,
                                     child: Column(
@@ -85,6 +115,7 @@ class ListviewPage extends StatelessWidget {
                                           style: TextStyle(
                                               color: Color(0xff838383), fontSize: 13),
                                         ),
+                                        SizedBox(height: 1)
                                       ],
                                     ),
                                   )

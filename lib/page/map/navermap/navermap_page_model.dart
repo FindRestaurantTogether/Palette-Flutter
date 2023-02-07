@@ -6,7 +6,7 @@ abstract class NaverMapPageModel {
   final String main_category = '';
   final List<String> store_image = [];
   final String store_name = '';
-  final bool open = false;
+  final String open = '';
   final Map<String, String> opening_hour = {};
   final Map<String, String> opening_breaktime = {};
   final Map<String, String> opening_lastorder = {};
@@ -37,7 +37,7 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final String store_name;
   @override
-  final bool open;
+  final String open;
   @override
   final Map<String, String> opening_hour;
   @override

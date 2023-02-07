@@ -98,7 +98,7 @@ flutter:
     - assets/marker_image/
     - assets/folder_image/
     - assets/onboarding_image/
-    - assets/splash_image/
+    - assets/logo_image/
     - assets/button_image/
     - assets/bottomnavigation_image/
     - assets/search_data/recent_data.json

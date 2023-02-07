@@ -154,7 +154,10 @@ class _MyPageState extends State<MyPage> {
                                 child: CircleAvatar(
                                   radius: 33,
                                   backgroundColor: Colors.white,
-                                  child: Image.asset('assets/folder_image/folder_palette.png'),
+                                  child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(300),
+                                      child: Image.asset('assets/logo_image/logo_image.png')
+                                  ),
                                 ),
                               ), // 원형 아바타
                               SizedBox(width: 20),

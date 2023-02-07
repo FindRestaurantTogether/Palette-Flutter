@@ -11,7 +11,7 @@ import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
 final List<String> DropdownList = ['최신순', '이름순', '거리순'];
-final List<String> DropdownList2 = ['최신순', '이름순'];
+// final List<String> DropdownList2 = ['최신순', '이름순'];
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class _FavoritePageState extends State<FavoritePage> {
   bool isList = true;
 
   String? DropdownSelected = DropdownList.first;
-  String? DropdownSelected2 = DropdownList2.first;
+  // String? DropdownSelected2 = DropdownList2.first;
 
   final _FavoriteListPageController = Get.put(FavoriteListPageController());
   final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
@@ -187,13 +187,13 @@ class _FavoritePageState extends State<FavoritePage> {
                         children: [
                           SizedBox(width: 20),
                           Container(
-                            width: width * 0.184,
-                            height: height * 0.04,
+                            width: 70,
+                            height: 28,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: Colors.black.withOpacity(0.1),
                                   spreadRadius: 2,
                                   blurRadius: 7,
                                   offset: Offset(0, 2),
@@ -216,18 +216,19 @@ class _FavoritePageState extends State<FavoritePage> {
                                 style: ElevatedButton.styleFrom(
                                   primary: regionSelected.contains(true) ? Color(0xfff42957) : Colors.white,
                                   shape: StadiumBorder(),
+                                  shadowColor: Colors.transparent
                                 )
                             ),
                           ),
                           SizedBox(width: 10),
                           Container(
-                            width: width * 0.26,
-                            height: height * 0.04,
+                            width: 90,
+                            height: 28,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.black.withOpacity(0.05),
+                                  color: Colors.black.withOpacity(0.1),
                                   spreadRadius: 2,
                                   blurRadius: 7,
                                   offset: Offset(0, 2),
@@ -237,13 +238,27 @@ class _FavoritePageState extends State<FavoritePage> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: Size.zero,
-                                  padding: EdgeInsets.only(left: 18, right: 15),
+                                  padding: EdgeInsets.only(left: 12, right: 15),
                                   primary: Colors.white,
+                                  shadowColor: Colors.transparent,
                                   shape: StadiumBorder(),
                                 ),
                                 onPressed: () {},
                                 child: DropdownButton2(
                                   isExpanded: true,
+                                  selectedItemBuilder: (BuildContext context) {
+                                    return DropdownList.map((String value) {
+                                      return Center(
+                                        child: Text(
+                                          DropdownSelected!,
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color:  Color(0xfff42957),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList();
+                                  },
                                   items: DropdownList.map((item) => DropdownMenuItem<String>(
                                       value: item,
                                       child: Text(
@@ -976,6 +991,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                   child: Row(
                                                     children: [
                                                       Container(
+                                                        height: 24,
                                                         child: Text(
                                                           '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
                                                           style: TextStyle(
@@ -986,33 +1002,62 @@ class _FavoritePageState extends State<FavoritePage> {
                                                       SizedBox(
                                                         width: 3,
                                                       ),
-                                                      _FavoriteListPageController.listRestaurant.elementAt(index).open
-                                                          ? Container(
-                                                        height: 20,
-                                                        child: Align(
-                                                          alignment: Alignment.topCenter,
-                                                          child: Container(
-                                                            width: 5,
-                                                            height: 5,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.cyan.shade300,
-                                                                shape: BoxShape.circle),
+                                                      if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'open')
+                                                        Container(
+                                                          height: 20,
+                                                          child: Align(
+                                                            alignment: Alignment.topCenter,
+                                                            child: Container(
+                                                              width: 5,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: Color(0xff57dde0),
+                                                                  shape: BoxShape.circle),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      )
-                                                          : Container(
-                                                        height: 20,
-                                                        child: Align(
-                                                          alignment: Alignment.topCenter,
-                                                          child: Container(
-                                                            width: 5,
-                                                            height: 5,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.red.shade300,
-                                                                shape: BoxShape.circle),
+                                                        )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'close')
+                                                        Container(
+                                                          height: 20,
+                                                          child: Align(
+                                                            alignment: Alignment.topCenter,
+                                                            child: Container(
+                                                              width: 5,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: Color(0xfff42957),
+                                                                  shape: BoxShape.circle),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ),
+                                                        )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'breaktime')
+                                                        Container(
+                                                            height: 20,
+                                                            child: Align(
+                                                              alignment: Alignment.topCenter,
+                                                              child: Container(
+                                                                width: 5,
+                                                                height: 5,
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors.yellow,
+                                                                    shape: BoxShape.circle),
+                                                              ),
+                                                            ),
+                                                          )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'null')
+                                                        Container(
+                                                              height: 20,
+                                                              child: Align(
+                                                                alignment: Alignment.topCenter,
+                                                                child: Container(
+                                                                  width: 5,
+                                                                  height: 5,
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors.white,
+                                                                      shape: BoxShape.circle),
+                                                                ),
+                                                              ),
+                                                            ),
                                                       Container(
                                                         height: 24,
                                                         child: Column(
@@ -1023,6 +1068,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               style: TextStyle(
                                                                   color: Colors.grey, fontSize: 11),
                                                             ),
+                                                            SizedBox(height: 4)
                                                           ],
                                                         ),
                                                       )
@@ -1040,14 +1086,14 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
-                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).naverRating}',
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).naver_star}',
                                                       style: TextStyle(
                                                           fontSize: 12,
                                                           fontWeight: FontWeight.bold),
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
-                                                      '(${_FavoriteListPageController.listRestaurant.elementAt(index).numberOfNaverRating}건)',
+                                                      '(${_FavoriteListPageController.listRestaurant.elementAt(index).naver_cnt}건)',
                                                       style: TextStyle(
                                                         fontSize: 10,
                                                       ),
@@ -1080,7 +1126,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                       child: Column(
                                         children: [
                                           Container(
-                                              height: 25,
+                                              height: 24,
                                               child: Row(
                                                 children: [
                                                   Container(
@@ -1094,33 +1140,62 @@ class _FavoritePageState extends State<FavoritePage> {
                                                   SizedBox(
                                                     width: 3,
                                                   ),
-                                                  _FavoriteListPageController.listRestaurant.elementAt(index).open
-                                                      ? Container(
-                                                    height: 20,
-                                                    child: Align(
-                                                      alignment: Alignment.topCenter,
-                                                      child: Container(
-                                                        width: 5,
-                                                        height: 5,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.cyan.shade300,
-                                                            shape: BoxShape.circle),
+                                                  if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'open')
+                                                    Container(
+                                                      height: 20,
+                                                      child: Align(
+                                                        alignment: Alignment.topCenter,
+                                                        child: Container(
+                                                          width: 5,
+                                                          height: 5,
+                                                          decoration: BoxDecoration(
+                                                              color: Color(0xff57dde0),
+                                                              shape: BoxShape.circle),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  )
-                                                      : Container(
-                                                    height: 20,
-                                                    child: Align(
-                                                      alignment: Alignment.topCenter,
-                                                      child: Container(
-                                                        width: 5,
-                                                        height: 5,
-                                                        decoration: BoxDecoration(
-                                                            color: Colors.red.shade300,
-                                                            shape: BoxShape.circle),
+                                                    )
+                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'close')
+                                                    Container(
+                                                      height: 20,
+                                                      child: Align(
+                                                        alignment: Alignment.topCenter,
+                                                        child: Container(
+                                                          width: 5,
+                                                          height: 5,
+                                                          decoration: BoxDecoration(
+                                                              color: Color(0xfff42957),
+                                                              shape: BoxShape.circle),
+                                                        ),
                                                       ),
-                                                    ),
-                                                  ),
+                                                    )
+                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'breaktime')
+                                                    Container(
+                                                        height: 20,
+                                                        child: Align(
+                                                          alignment: Alignment.topCenter,
+                                                          child: Container(
+                                                            width: 5,
+                                                            height: 5,
+                                                            decoration: BoxDecoration(
+                                                                color: Colors.yellow,
+                                                                shape: BoxShape.circle),
+                                                          ),
+                                                        ),
+                                                      )
+                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'null')
+                                                    Container(
+                                                          height: 20,
+                                                          child: Align(
+                                                            alignment: Alignment.topCenter,
+                                                            child: Container(
+                                                              width: 5,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors.white,
+                                                                  shape: BoxShape.circle),
+                                                            ),
+                                                          ),
+                                                        ),
                                                   Container(
                                                     height: 24,
                                                     child: Column(
@@ -1131,6 +1206,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                           style: TextStyle(
                                                               color: Colors.grey, fontSize: 13),
                                                         ),
+                                                        SizedBox(height: 2)
                                                       ],
                                                     ),
                                                   )
@@ -1280,7 +1356,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   )
               ) // Favorite == true인 음식점들 나열
             ] else ... [ // 폴더
-              SizedBox(height: 15),
+              SizedBox(height: 10), // 15
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
               //   children: [

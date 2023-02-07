@@ -28,7 +28,7 @@ class NaverMapPageController extends GetxController {
         main_category: 'assets/marker_image/alcohol_cocktail_5.0.png', // 음식점 마커 이미지
         store_image: ['assets/background_image/taroya.jpeg'], // 음식점 외부 이미지
         store_name: '타로야1', // 음식점 이름
-        open: true,
+        open: 'breaktime',
         opening_hour: {'월': '12:00 - 22:00', '화': '12:00 - 22:00', '수': '12:00 - 22:00', '목': '12:00 - 22:00','금': '12:00 - 23:00', '토': '12:00 - 23:00', '일': '12:00 - 22:00'}, // 음식점 영업 시간
         opening_breaktime: {'월': '11:30 - 21:30', '화': '11:30 - 21:30', '수': '11:30 - 21:30', '목': '11:30 - 21:30', '금': '11:30 - 21:30', '토': '11:30 - 21:30', '일': '11:30 - 21:30'},
         opening_lastorder: {'월': '10:00 - 새벽 05:00', '화': '10:00 - 새벽 05:00', '수': '10:00 - 새벽 05:00', '목': '10:00 - 새벽 05:00', '금': '10:00 - 새벽 05:00', '토': '10:00 - 새벽 05:00', '일': '10:00 - 새벽 05:00'},
@@ -52,7 +52,7 @@ class NaverMapPageController extends GetxController {
         main_category: 'assets/marker_image/alcohol_cocktail_5.0.png', // 음식점 마커 이미지
         store_image: ['assets/background_image/taroya.jpeg'], // 음식점 외부 이미지
         store_name: '타로야2', // 음식점 이름
-        open: true,
+        open: 'close',
         opening_hour: {'월': '12:00 - 22:00', '화': '12:00 - 22:00', '수': '12:00 - 22:00', '목': '12:00 - 22:00','금': '12:00 - 23:00', '토': '12:00 - 23:00', '일': '12:00 - 22:00'}, // 음식점 영업 시간
         opening_breaktime: {},
         opening_lastorder: {'월': '10:00 - 새벽 05:00', '화': '10:00 - 새벽 05:00', '수': '10:00 - 새벽 05:00', '목': '10:00 - 새벽 05:00', '금': '10:00 - 새벽 05:00', '토': '10:00 - 새벽 05:00', '일': '10:00 - 새벽 05:00'},

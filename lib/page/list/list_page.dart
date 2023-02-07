@@ -15,8 +15,8 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
   
-  String? DropdownSelected = DropdownList.first;
-  String? DropdownSelected2;
+  String DropdownSelected = DropdownList.first;
+  String DropdownSelected2 = '';
 
   bool Open = false;
   
@@ -117,13 +117,13 @@ class _ListPageState extends State<ListPage> {
                       children: [
                         SizedBox(width: 10),
                         Container(
-                          width: width * 0.255,
-                          height: height * 0.04,
+                          width: 90,
+                          height: 28,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 7,
                                 offset: Offset(0, 2),
@@ -133,13 +133,27 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size.zero,
-                                  padding: EdgeInsets.only(left: 18, right: 15),
+                                  padding: EdgeInsets.only(left: 12, right: 15),
                                   primary: Colors.white,
+                                  shadowColor: Colors.transparent,
                                   shape: StadiumBorder()
                               ),
                               onPressed: () {},
                               child: DropdownButton2(
                                 isExpanded: true,
+                                selectedItemBuilder: (BuildContext context) {
+                                  return DropdownList.map((String value) {
+                                    return Center(
+                                      child: Text(
+                                        DropdownSelected!,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:  Color(0xfff42957),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList();
+                                },
                                 items: DropdownList
                                     .map((item) => DropdownMenuItem<String>(
                                     value: item,
@@ -164,7 +178,7 @@ class _ListPageState extends State<ListPage> {
                                   child: Image.asset('assets/button_image/down_button.png'),
                                 ),
                                 buttonElevation: 0,
-                                dropdownWidth: width * 0.255,
+                                dropdownWidth: 90,
                                 dropdownDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -178,13 +192,13 @@ class _ListPageState extends State<ListPage> {
                     Row(
                       children: [
                         Container(
-                          width: width * 0.2,
-                          height: height * 0.04,
+                          width: 72,
+                          height: 28,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 7,
                                 offset: Offset(0, 2),
@@ -207,18 +221,19 @@ class _ListPageState extends State<ListPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Open ? Color(0xfff42957) : Colors.white,
                                 shape: StadiumBorder(),
+                                shadowColor: Colors.transparent,
                               )
                           ),
                         ),
                         SizedBox(width: 10),
                         Container(
-                          width: width * 0.21,
-                          height: height * 0.04,
+                          width: 108,
+                          height: 28,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.05),
+                                color: Colors.black.withOpacity(0.1),
                                 spreadRadius: 2,
                                 blurRadius: 7,
                                 offset: Offset(0, 2),
@@ -230,7 +245,8 @@ class _ListPageState extends State<ListPage> {
                                 minimumSize: Size.zero,
                                 padding: EdgeInsets.only(left: 18, right: 15),
                                 primary: Colors.white,
-                                shape: StadiumBorder()
+                                shape: StadiumBorder(),
+                                shadowColor: Colors.transparent,
                             ),
                             onPressed: () {},
                             child: DropdownButton2(
@@ -243,8 +259,20 @@ class _ListPageState extends State<ListPage> {
                                     color: Color(0xff787878),
                                   ),
                               ),
-                              items: DropdownList2
-                                  .map((item) => DropdownMenuItem<String>(
+                              selectedItemBuilder: (BuildContext context) {
+                                return DropdownList2.map((String value) {
+                                  return Center(
+                                    child: Text(
+                                      DropdownSelected2,
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color:  Color(0xfff42957),
+                                      ),
+                                    ),
+                                  );
+                                }).toList();
+                              },
+                              items: DropdownList2.map((String item) => DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(
                                     item,
@@ -254,7 +282,7 @@ class _ListPageState extends State<ListPage> {
                                     ),
                                   )
                               )).toList(),
-                              value: DropdownSelected2,
+                              value: DropdownSelected2 == '' ? null : DropdownSelected2,
                               onChanged: (value) {
                                 setState(() {
                                   DropdownSelected2 = value as String;
@@ -267,7 +295,7 @@ class _ListPageState extends State<ListPage> {
                                 child: Image.asset('assets/button_image/down_button.png'),
                               ),
                               buttonElevation: 0,
-                              dropdownWidth: width * 0.21,
+                              dropdownWidth: 108,
                               dropdownDecoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                               ),

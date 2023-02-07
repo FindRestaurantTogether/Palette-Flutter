@@ -167,7 +167,10 @@ class _SignupPageState extends State<SignupPage> {
                               ? null
                               : FileImage(_pickedImage!),
                           child: _pickedImage == null
-                              ? Image.asset('assets/folder_image/folder_palette.png')
+                              ? ClipRRect(
+                                borderRadius: BorderRadius.circular(300),
+                                child: Image.asset('assets/logo_image/logo_image.png')
+                              )
                               : null,
                         ),
                       ),

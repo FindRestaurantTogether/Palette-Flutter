@@ -23,6 +23,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
   final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
   final _FavoriteListPageController = Get.put(FavoriteListPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
+  // final _TextEditingController = TextEditingController();
 
   List<bool> folderIsChecked = List<bool>.filled(Get.put(FavoriteFolderPageController()).folderName.length, false);
 

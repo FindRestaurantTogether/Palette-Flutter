@@ -32,7 +32,7 @@ class _LoadingPageState extends State<LoadingPage> {
           ),
           child: Transform.scale(
             child: Image.asset(
-              'assets/splash_image/splash_image.png'
+              'assets/logo_image/logo_image.png'
             ),
             scale: 0.2,
           )

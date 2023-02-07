@@ -14,6 +14,8 @@ import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
+// 중심 좌표
+late LatLng centerPosition;
 // 우측 위 좌표
 late LatLng rightUpPosition;
 // 좌측 밑 좌표
@@ -52,8 +54,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
           final NaverMapPageModel selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
           setState(() async {
-            final controller = await naverMapCompleter.future;
-            await controller.moveCamera(CameraUpdate.scrollTo(marker.position));
+            final NaverMapController naverMapController = await naverMapCompleter.future;
+            await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
             if (_MapPageController.bS == false) {
               _MapPageController.ChangeState();
             }

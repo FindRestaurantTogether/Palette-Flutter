@@ -190,33 +190,62 @@ class _DetailPageState extends State<DetailPage> {
                                       SizedBox(
                                         width: 3,
                                       ),
-                                      selectedRestaurant.open
-                                          ? Container(
-                                        height: 32,
-                                        child: Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xff57dde0),
-                                                shape: BoxShape.circle),
+                                      if (selectedRestaurant.open == 'open')
+                                        Container(
+                                          height: 32,
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Container(
+                                              width: 8,
+                                              height: 8,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xff57dde0),
+                                                  shape: BoxShape.circle),
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                          : Container(
-                                        height: 32,
-                                        child: Align(
-                                          alignment: Alignment.topCenter,
-                                          child: Container(
-                                            width: 8,
-                                            height: 8,
-                                            decoration: BoxDecoration(
-                                                color: Color(0xfff42957),
-                                                shape: BoxShape.circle),
+                                        )
+                                      else if (selectedRestaurant.open == 'close')
+                                        Container(
+                                          height: 32,
+                                          child: Align(
+                                            alignment: Alignment.topCenter,
+                                            child: Container(
+                                              width: 8,
+                                              height: 8,
+                                              decoration: BoxDecoration(
+                                                  color: Color(0xfff42957),
+                                                  shape: BoxShape.circle),
+                                            ),
                                           ),
-                                        ),
-                                      ),
+                                        )
+                                      else if (selectedRestaurant.open == 'breaktime')
+                                        Container(
+                                            height: 32,
+                                            child: Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Container(
+                                                width: 8,
+                                                height: 8,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.yellow,
+                                                    shape: BoxShape.circle),
+                                              ),
+                                            ),
+                                          )
+                                      else if (selectedRestaurant.open == 'null')
+                                        Container(
+                                              height: 32,
+                                              child: Align(
+                                                alignment: Alignment.topCenter,
+                                                child: Container(
+                                                  width: 8,
+                                                  height: 8,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      shape: BoxShape.circle),
+                                                ),
+                                              ),
+                                            ),
                                     ],
                                   ),
                                 ), // 음식점 이름
@@ -287,14 +316,46 @@ class _DetailPageState extends State<DetailPage> {
                                         size: 16,
                                       ),
                                       SizedBox(width: 6), // 빈 공간
-                                      Text(
-                                        selectedRestaurant.open ? '영업중' : '영업종료',
-                                        style: TextStyle(
+                                      if (selectedRestaurant.open == 'open') ... [
+                                        Text(
+                                          '영업중',
+                                          style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontSize: 12,
                                             // color: selectedRestaurant.open ? Color(0xff57dde0) : Color(0xfff42957),
+                                          ),
+                                        ) // 영업시간
+                                      ]
+                                      else if (selectedRestaurant.open == 'close') ... [
+                                        Text(
+                                          '영업종료',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 12,
+                                            // color: selectedRestaurant.open ? Color(0xff57dde0) : Color(0xfff42957),
+                                          ),
                                         ),
-                                      ), // 영업시간
+                                      ]
+                                      else if (selectedRestaurant.open == 'breaktime') ... [
+                                          Text(
+                                            '브레이크타임',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              // color: selectedRestaurant.open ? Color(0xff57dde0) : Color(0xfff42957),
+                                            ),
+                                          ),
+                                      ]
+                                      else if (selectedRestaurant.open == 'null') ... [
+                                          Text(
+                                            '정보없음',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 12,
+                                              // color: selectedRestaurant.open ? Color(0xff57dde0) : Color(0xfff42957),
+                                            ),
+                                          ),
+                                      ],
                                       SizedBox(width: 0), // 빈 공간
                                       Container(
                                         width: 20,
@@ -310,87 +371,88 @@ class _DetailPageState extends State<DetailPage> {
                                       ), // 더 보기 버튼
                                     ],
                                   ),
-                                ), // 영업시간
-                                moreOpenInformation
-                                    ? Container(
-                                        width: width * 0.67,
-                                        padding: EdgeInsets.only(left: 22),
-                                        child:  Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            if (openDay.length != 0)
-                                              Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(height: 5),
-                                                Text(
-                                                    '영업시간',
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.bold
-                                                    )
-                                                ),
-                                                SizedBox(height: 3),
-                                                for (var i=0; i<openDay.length ; i++) ... [
+                                ),
+                                if (selectedRestaurant.open != 'null')// 영업시간
+                                  moreOpenInformation
+                                      ? Container(
+                                          width: width * 0.67,
+                                          padding: EdgeInsets.only(left: 22),
+                                          child:  Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              if (openDay.length != 0)
+                                                Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(height: 5),
                                                   Text(
-                                                    '${openDay[i]} : ${openHour[i]}',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  )
+                                                      '영업시간',
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.bold
+                                                      )
+                                                  ),
+                                                  SizedBox(height: 3),
+                                                  for (var i=0; i<openDay.length ; i++) ... [
+                                                    Text(
+                                                      '${openDay[i]} : ${openHour[i]}',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ],
-                                              ],
-                                            ), // 영업시간
-                                            if (breaktimeDay.length != 0)
-                                              Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(height: 5),
-                                                Text(
-                                                    '브레이크타임',
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.bold
-                                                    )
-                                                ),
-                                                SizedBox(height: 3),
-                                                for (var i=0; i<breaktimeDay.length ; i++) ... [
+                                              ), // 영업시간
+                                              if (breaktimeDay.length != 0)
+                                                Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(height: 5),
                                                   Text(
-                                                    '${breaktimeDay[i]} : ${breaktimeHour[i]}',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  )
+                                                      '브레이크타임',
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.bold
+                                                      )
+                                                  ),
+                                                  SizedBox(height: 3),
+                                                  for (var i=0; i<breaktimeDay.length ; i++) ... [
+                                                    Text(
+                                                      '${breaktimeDay[i]} : ${breaktimeHour[i]}',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ],
-                                              ],
-                                            ), // 브레이크타임
-                                            if (lastorderDay.length != 0)
-                                              Column(
-                                              crossAxisAlignment: CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(height: 5),
-                                                Text(
-                                                    '라스트오더',
-                                                    style: TextStyle(
-                                                        fontSize: 11,
-                                                        fontWeight: FontWeight.bold
-                                                    )
-                                                ),
-                                                SizedBox(height: 3),
-                                                for (var i=0; i<lastorderDay.length ; i++) ... [
+                                              ), // 브레이크타임
+                                              if (lastorderDay.length != 0)
+                                                Column(
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  SizedBox(height: 5),
                                                   Text(
-                                                    '${lastorderDay[i]} : ${lastorderHour[i]}',
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                    ),
-                                                  )
-                                                ]
-                                              ],
-                                            ), // 라스트 오더
-                                          ],
-                                        ),
-                                    )
-                                    : SizedBox(),
+                                                      '라스트오더',
+                                                      style: TextStyle(
+                                                          fontSize: 11,
+                                                          fontWeight: FontWeight.bold
+                                                      )
+                                                  ),
+                                                  SizedBox(height: 3),
+                                                  for (var i=0; i<lastorderDay.length ; i++) ... [
+                                                    Text(
+                                                      '${lastorderDay[i]} : ${lastorderHour[i]}',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ]
+                                                ],
+                                              ), // 라스트 오더
+                                            ],
+                                          ),
+                                      )
+                                      : SizedBox(),
                                 SizedBox(height: 6),
                                 Container(
                                   height: 15,
