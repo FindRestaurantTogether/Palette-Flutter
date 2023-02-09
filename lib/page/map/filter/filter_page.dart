@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 
 class FilterPage extends StatefulWidget {
@@ -12,6 +13,7 @@ class FilterPage extends StatefulWidget {
 class _FilterPageState extends State<FilterPage> {
 
   final _FilterPageController = Get.put(FilterPageController());
+  final _NaverMapPageController = Get.put(NaverMapPageController());
 
   List<String> FilterList = ["음식", "카페", "술집", "서비스", "분위기"];
   List<String> FilterListFood = ["한식", "양식", "중식", "일식", "아시안", "멕시칸", "기타"];
@@ -61,8 +63,8 @@ class _FilterPageState extends State<FilterPage> {
                           Controller.OuterSelected[index]
                               ?  Controller.FilterSelected[index]
                                 ? Container(
-                                  width: width * 0.184,
-                                  height: height * 0.04,
+                                  width: 65,
+                                  height: 30,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                     boxShadow: [
@@ -92,8 +94,8 @@ class _FilterPageState extends State<FilterPage> {
                                   ),
                                 )
                                 : Container(
-                                  width: width * 0.184,
-                                  height: height * 0.04,
+                                  width: 65,
+                                  height: 30,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                     boxShadow: [
@@ -124,8 +126,8 @@ class _FilterPageState extends State<FilterPage> {
                                 )
                               : Controller.FilterSelected[index]
                                 ? Container(
-                                  width: width * 0.184,
-                                  height: height * 0.04,
+                                  width: 65,
+                                  height: 30,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                     boxShadow: [
@@ -156,8 +158,8 @@ class _FilterPageState extends State<FilterPage> {
                                   ),
                                 )
                                 : Container(
-                                  width: width * 0.184,
-                                  height: height * 0.04,
+                                  width: 65,
+                                  height: 30,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.all(Radius.circular(50)),
                                     boxShadow: [
@@ -195,7 +197,7 @@ class _FilterPageState extends State<FilterPage> {
               ),
             ],
           ),
-          SizedBox(height: 3),
+          SizedBox(height: 2),
           // 음식, 카페, 술집, 서비스, 분위기 필터 밑에 뜨는거
           if (Controller.CurrentOuterIndex == 0) ... [FilterFood(Controller, width, height)],
           if (Controller.CurrentOuterIndex == 1) ... [FilterCafe(Controller, width, height)],
@@ -211,7 +213,6 @@ class _FilterPageState extends State<FilterPage> {
     return Center(
       child: Container(
         width: width * 0.872,
-        height: height * 0.17,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
@@ -224,7 +225,7 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 25, left: 22, right: 20),
         child: Column(
           children: [
             Container(
@@ -282,9 +283,7 @@ class _FilterPageState extends State<FilterPage> {
                                   Controller.ChangeOuterFoodSelected(i, false);
                                   Controller.FixOuterFoodSelected();
                                 });
-                                filter = read_all();
-                                Network network = Network(filter, '');
-                                var store = await network.getJsonData();
+                                await _NaverMapPageController.fetchRestaurantData(context, '');
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -305,9 +304,7 @@ class _FilterPageState extends State<FilterPage> {
                                   Controller.ChangeOuterFoodSelected(i, true);
                                   Controller.FixOuterFoodSelected();
                                 });
-                                filter = read_all();
-                                Network network = Network(filter, '');
-                                var store = await network.getJsonData();
+                                await  _NaverMapPageController.fetchRestaurantData(context, '');
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -336,9 +333,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -359,9 +354,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -401,9 +394,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -424,9 +415,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -453,9 +442,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, false);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -476,9 +463,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterFoodSelected(i, true);
                               Controller.FixOuterFoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListFood[i],
@@ -507,7 +492,6 @@ class _FilterPageState extends State<FilterPage> {
     return Center(
       child: Container(
         width: width * 0.872,
-        height: height * 0.13,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
@@ -520,7 +504,7 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 20),
+        padding: EdgeInsets.only(top: 16, bottom: 25, left: 22, right: 20),
         child: Column(
           children: [
             Container(
@@ -578,9 +562,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterCafeSelected(i, false);
                               Controller.FixOuterCafeSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -601,9 +583,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterCafeSelected(i, true);
                               Controller.FixOuterCafeSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -630,9 +610,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterCafeSelected(i, false);
                               Controller.FixOuterCafeSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -653,9 +631,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterCafeSelected(i, true);
                               Controller.FixOuterCafeSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -684,7 +660,6 @@ class _FilterPageState extends State<FilterPage> {
     return Center(
       child: Container(
         width: width * 0.872,
-        height: height * 0.17,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
@@ -697,7 +672,7 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
+        padding: EdgeInsets.only(top: 16, bottom: 25, left: 22, right: 22),
         child: Column(
           children: [
             Container(
@@ -755,9 +730,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -778,9 +751,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -807,9 +778,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -830,9 +799,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -870,9 +837,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, false);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -893,9 +858,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterAlcoholSelected(i, true);
                               Controller.FixOuterAlcoholSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -924,7 +887,6 @@ class _FilterPageState extends State<FilterPage> {
     return Center(
       child: Container(
         width: width * 0.872,
-        height: height * 0.25,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
@@ -937,7 +899,7 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
+        padding: EdgeInsets.only(top: 16, bottom: 25, left: 22, right: 22),
         child: Column(
           children: [
             Container(
@@ -995,9 +957,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1018,9 +978,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1047,9 +1005,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1070,9 +1026,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1099,9 +1053,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1122,9 +1074,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1162,9 +1112,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1185,9 +1133,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1214,9 +1160,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1237,9 +1181,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1277,9 +1219,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1300,9 +1240,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1329,9 +1267,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1352,9 +1288,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1392,9 +1326,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, false);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1415,9 +1347,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterServiceSelected(i, true);
                               Controller.FixOuterServiceSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListService[i],
@@ -1446,7 +1376,6 @@ class _FilterPageState extends State<FilterPage> {
     return Center(
       child: Container(
         width: width * 0.872,
-        height: height * 0.25,
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(15),
@@ -1459,7 +1388,7 @@ class _FilterPageState extends State<FilterPage> {
             ),
           ],
         ),
-        padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 22),
+        padding: EdgeInsets.only(top: 16, bottom: 25, left: 22, right: 22),
         child: Column(
           children: [
             Container(
@@ -1517,9 +1446,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1540,9 +1467,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1580,9 +1505,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1603,9 +1526,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1632,9 +1553,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1655,9 +1574,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1684,9 +1601,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1707,9 +1622,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1747,9 +1660,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1770,9 +1681,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1799,9 +1708,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1822,9 +1729,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1851,9 +1756,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1874,9 +1777,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1914,9 +1815,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, false);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1937,9 +1836,7 @@ class _FilterPageState extends State<FilterPage> {
                               Controller.ChangeOuterMoodSelected(i, true);
                               Controller.FixOuterMoodSelected();
                             });
-                            filter = read_all();
-                            Network network = Network(filter, '');
-                            var store = await network.getJsonData();
+                            await _NaverMapPageController.fetchRestaurantData(context, '');
                           },
                           child: Text(
                             FilterListMood[i],

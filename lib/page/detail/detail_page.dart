@@ -257,6 +257,7 @@ class _DetailPageState extends State<DetailPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
+                                SizedBox(width: 12),
                                 Icon(
                                   Icons.star,
                                   color: Color(0xfff42957),
@@ -555,7 +556,7 @@ class _DetailPageState extends State<DetailPage> {
                                           }
 
                                           if (ToggleSelected[0]) {
-                                            launch("tel://01012341234");
+                                            launch("tel://" + selectedRestaurant.call);
                                           } else if (ToggleSelected[1]) {
 
                                           } else if (ToggleSelected[2]) {
@@ -585,7 +586,7 @@ class _DetailPageState extends State<DetailPage> {
                                                             children: [
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  KakaoMapUtils.OpenKakaoMap('${selectedRestaurant.jibun_address}');
+                                                                  KakaoMapUtils.OpenKakaoMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -605,7 +606,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  GoogleMapUtils.OpenGoogleMap('${selectedRestaurant.jibun_address}');
+                                                                  GoogleMapUtils.OpenGoogleMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -625,7 +626,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  NaverMapUtils.OpenNaverMap('${selectedRestaurant.jibun_address}');
+                                                                  NaverMapUtils.OpenNaverMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(

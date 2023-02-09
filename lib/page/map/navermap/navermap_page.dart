@@ -11,7 +11,6 @@ import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
-import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 // 중심 좌표
@@ -41,7 +40,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
 
   @override
   void initState() {
-
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!this.mounted) return;
       // restaurants 데이터들로 CustomMarker 생성 후 markers에 저장
@@ -211,15 +209,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
                     height: 36,
                     child: ElevatedButton(
                         onPressed: () async {
-                          print("========================================");
-                          filter = read_all();
-                          Network network = Network(filter, '');
-                          var store = await network.getJsonData();
-                          print(store);
-                          print("========================================");
-                          print(store.length);
-                          print(store['1']['call']);
-                          print("========================================");
+                          await _NaverMapPageController.fetchRestaurantData(context, '');
                         }, // 이 지도에서 재검색 버튼
                         style: ElevatedButton.styleFrom(
                             shape: StadiumBorder(),

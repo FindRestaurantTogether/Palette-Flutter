@@ -40,7 +40,6 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
   void dispose() {
     _FavoriteListPageController.dispose();
     _FavoriteFolderPageController.dispose();
-    _NaverMapPageController.dispose();
     super.dispose();
   }
 
@@ -284,7 +283,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                   }
                 });
                 if (ToggleSelected[0]) {
-                  launch("tel://01012341234");
+                  launch("tel://" + selectedRestaurant.call);
                 } else if (ToggleSelected[1]) {
                   bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
 
@@ -331,7 +330,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        KakaoMapUtils.OpenKakaoMap('서울특별시 마포구 상수동 93-44번지');
+                                        KakaoMapUtils.OpenKakaoMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(
@@ -351,7 +350,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        GoogleMapUtils.OpenGoogleMap('서울특별시 마포구 상수동 93-44번지');
+                                        GoogleMapUtils.OpenGoogleMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(
@@ -371,7 +370,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        NaverMapUtils.OpenNaverMap('서울특별시 마포구 상수동 93-44번지');
+                                        NaverMapUtils.OpenNaverMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(

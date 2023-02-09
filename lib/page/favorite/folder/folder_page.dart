@@ -43,7 +43,6 @@ class _FolderPageState extends State<FolderPage> {
   void dispose() {
     _FolderPageController.dispose();
     _FavoriteFolderPageController.dispose();
-    _NaverMapPageController.dispose();
     _TextEditingController.dispose();
     super.dispose();
   }

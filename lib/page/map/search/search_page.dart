@@ -2,7 +2,8 @@ import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:myapp/page/map/navermap/utils.dart';
+import 'package:myapp/page/list/list_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 
 class SearchPage extends StatefulWidget {
 
@@ -14,19 +15,23 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+
+  final _NaverMapPageController = Get.put(NaverMapPageController());
   final _TextEditingController = TextEditingController(); // 택스트폼 컨트롤러
+  final _GlobalKey = GlobalKey<FormState>();
+  
   bool RecentSearch = true; // 최근 검색 focus?
 
   List _items;
   _SearchPageState(this._items);
+
+  bool searchByMyLocation = true;
 
   @override
   void dispose() {
     _TextEditingController.dispose();
     super.dispose();
   }
-
-  bool searchByMyLocation = false;
 
   @override
   Widget build(BuildContext context) {
@@ -52,19 +57,16 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(height: height * 0.075), // 공간 조금 만드는 박스
               Container(
                   width: width,
-                  height: height * 0.06,
                   padding: EdgeInsets.only(left: 20,right: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                   ),
-                  // padding: EdgeInsets.only(left: 10, right: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
                           Container(
-                            // color: Colors.red,
                             child: IconButton(
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
@@ -73,27 +75,31 @@ class _SearchPageState extends State<SearchPage> {
                               },
                               icon: Image.asset('assets/button_image/back_button.png', width: 10, height: 16, fit: BoxFit.fill),
                             ),
-                          ),
+                          ), // 뒤로가기 버튼
                           SizedBox(width: 6),
                           Container(
-                            // color: Colors.orange,
                             width: width * 0.87 - 120,
                             child: TextFormField(
                               textInputAction: TextInputAction.go,
-                              onFieldSubmitted: (value) async{
-                                setState(() async {
-                                  if(_items.length >=10){
-                                    _items.removeAt(0);
-                                  }
-                                  _items.add(value);
-
-                                  // 여기가 검색 클릭하는 곳인가??
-                                  // 근데 이거보다 naverpage에 보내서 한번에 처리하는게 좋을것 같은데!!!!
-                                  List filter = read_all();
-                                  Network network = Network(filter, value);
-                                  var store = await network.getJsonData();
-                                  print(store);
-                                });
+                              onFieldSubmitted: (value) async {
+                                if (value.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text('검색어를 입력해주세요.'),
+                                        backgroundColor: Color(0xfff42957),
+                                      )
+                                  );
+                                } else {
+                                  await _NaverMapPageController.fetchRestaurantData(context, value);
+                                  setState(() {
+                                    searchedWord = _TextEditingController.text;
+                                    if (_items.length >= 10) {
+                                      _items.removeAt(0);
+                                    }
+                                    _items.add(value);
+                                  });
+                                  await Get.off(ListPage());
+                                }
                               },
                               controller: _TextEditingController,
                               textAlign: TextAlign.start,
@@ -106,11 +112,10 @@ class _SearchPageState extends State<SearchPage> {
                                 ),
                               ),
                             ),
-                          ),
+                          ), // 검색창
                         ],
                       ),
                       Container(
-                        // color: Colors.yellow,
                         child: IconButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
@@ -119,8 +124,8 @@ class _SearchPageState extends State<SearchPage> {
                           },
                           icon: Image.asset(
                               'assets/button_image/close_button.png',
-                              width: 12,
-                              height: 13,
+                              width: 13,
+                              height: 14,
                               fit: BoxFit.fill
                           ),
                         ),
@@ -191,36 +196,53 @@ class _SearchPageState extends State<SearchPage> {
                             child: Container(
                               height: 60,
                               width: width,
-                              padding: EdgeInsets.only(left: 30,right: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: Icon(Icons.search,color: Colors.black,size: 20),
-                                        decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
-                                      ),
-                                      SizedBox(width: 16),
-                                      Text('${_items[i]}',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black45
+                              child: ElevatedButton(
+                                onPressed: () async {
+                                  await _NaverMapPageController.fetchRestaurantData(context, _items[i]);
+                                  setState(() {
+                                    searchedWord = _items[i];
+                                    if (_items.length >= 10) {
+                                      _items.removeAt(0);
+                                    }
+                                    _items.add(_items[i]);
+                                  });
+                                  Get.off(ListPage());
+                                },
+                                style: ElevatedButton.styleFrom(
+                                    padding: EdgeInsets.only(left: 30,right: 20),
+                                    elevation: 0,
+                                    primary: Colors.white
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          height: 30,
+                                          width: 30,
+                                          child: Icon(Icons.search,color: Color(0xffa0a0a0), size: 20),
+                                          decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  IconButton(
-                                      onPressed: (){
-                                        setState(() {
-                                          _items.removeAt(i);
-                                        });
-                                      },
-                                      icon: Icon(Icons.clear,color: Colors.black38,size: 20))
-                                ],
+                                        SizedBox(width: 16),
+                                        Text('${_items[i]}',
+                                          style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xffa0a0a0)
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    IconButton(
+                                        onPressed: (){
+                                          setState(() {
+                                            _items.removeAt(i);
+                                          });
+                                        },
+                                        icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20))
+                                  ],
+                                ),
                               ),
                             ),
                           ),

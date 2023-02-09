@@ -48,7 +48,6 @@ class _FavoritePageState extends State<FavoritePage> {
   void dispose() {
     _FavoriteListPageController.dispose();
     _FavoriteFolderPageController.dispose();
-    _NaverMapPageController.dispose();
     super.dispose();
   }
 
@@ -152,33 +151,35 @@ class _FavoritePageState extends State<FavoritePage> {
                           SizedBox(width: 17),
                           Container(
                               width: 110,
-                              height: 35,
-                              child:  Row(
-                                children: [
-                                  Container(
-                                    width: 30,
-                                    child: Checkbox(
-                                      value: listRestaurantAllChecked,
-                                      onChanged: (bool? value) {
-                                        setState(() {
-                                          listRestaurantAllChecked = !listRestaurantAllChecked;
-                                          if (listRestaurantAllChecked == true){
-                                            _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, true);
-                                          } else if (listRestaurantAllChecked == false) {
-                                            _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, false);
-                                          }
-                                        });
-                                      },
-                                      shape: CircleBorder(),
-                                      checkColor: Colors.white,
-                                      activeColor: Color(0xfff42957),
+                              height: 30,
+                              child:  Center(
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 30,
+                                      child: Checkbox(
+                                        value: listRestaurantAllChecked,
+                                        onChanged: (bool? value) {
+                                          setState(() {
+                                            listRestaurantAllChecked = !listRestaurantAllChecked;
+                                            if (listRestaurantAllChecked == true){
+                                              _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, true);
+                                            } else if (listRestaurantAllChecked == false) {
+                                              _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, false);
+                                            }
+                                          });
+                                        },
+                                        shape: CircleBorder(),
+                                        checkColor: Colors.white,
+                                        activeColor: Color(0xfff42957),
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    ' 전체 선택',
-                                    style: TextStyle(fontSize: 16, color: Color(0xff464646)),
-                                  ),
-                                ],
+                                    Text(
+                                      ' 전체 선택',
+                                      style: TextStyle(fontSize: 16, color: Color(0xff464646)),
+                                    ),
+                                  ],
+                                ),
                               )
                           ),
                         ],
@@ -188,7 +189,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           SizedBox(width: 20),
                           Container(
                             width: 70,
-                            height: 28,
+                            height: 30,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               boxShadow: [
@@ -223,7 +224,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           SizedBox(width: 10),
                           Container(
                             width: 90,
-                            height: 28,
+                            height: 30,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
                               boxShadow: [

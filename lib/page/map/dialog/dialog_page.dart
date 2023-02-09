@@ -18,7 +18,6 @@ class _DialogPageState extends State<DialogPage> {
   @override
   void dispose() {
     _DialogPageController.dispose();
-    _NaverMapPageController.dispose();
     super.dispose();
   }
 

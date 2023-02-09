@@ -2,9 +2,13 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/listview_page.dart';
+import 'package:myapp/page/map/filter/filter_page_controller.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 
 final List<String> DropdownList = ['거리순', '평점순', '리뷰순'];
 final List<String> DropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
+
+String searchedWord = '';
 
 class ListPage extends StatefulWidget {
   ListPage({Key? key}) : super(key: key);
@@ -14,19 +18,14 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  
+
+  final _NaverMapPageController = Get.put(NaverMapPageController());
+  final _FilterPageController = Get.put(FilterPageController());
+
   String DropdownSelected = DropdownList.first;
   String DropdownSelected2 = '';
 
   bool Open = false;
-  
-  final _TextEditingController = TextEditingController();
-
-  @override
-  void dispose() {
-    _TextEditingController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +46,7 @@ class _ListPageState extends State<ListPage> {
           SizedBox(height: height * 0.075),
           Container(
               width: width * 0.87,
-              height: height * 0.06,
+              height: 43,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
@@ -60,13 +59,13 @@ class _ListPageState extends State<ListPage> {
                     ),
                   ],
               ),
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: EdgeInsets.only(left: 12, right: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: 36,
-                    height: 36,
+                  Container(
+                    width: 37,
+                    padding: EdgeInsets.only(bottom: 1.2),
                     child: IconButton(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
@@ -77,28 +76,29 @@ class _ListPageState extends State<ListPage> {
                     ),
                   ),
                   Container(
-                    width: width * 0.87 - 100,
-                    child: TextFormField(
-                      controller: _TextEditingController,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: '장소, 주소, 음식 검색',
-                        hintStyle: TextStyle(
-                          fontSize: 16.4,
+                    width: width * 0.87 - 91,
+                    height: 43,
+                    child: Center(
+                      child: Text (
+                        searchedWord == '' ? '장소, 주소, 음식 검색' : searchedWord!,
+                        style: TextStyle(
+                          fontSize: 17,
                           color: Color(0xffb9b9b9),
                         ),
                       ),
-                    ),
+                    )
                   ),
                   SizedBox(
                     width: 30,
-                    height: 30,
                     child: IconButton(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      onPressed: () {
-                        _TextEditingController.clear();
+                      onPressed: () async {
+                        setState(() {
+                          searchedWord = '';
+                        });
+                        Get.back();
+                        await _NaverMapPageController.fetchRestaurantData(context, '');
                       },
                       icon: Image.asset('assets/button_image/close_button.png'),
                     ),
@@ -106,7 +106,7 @@ class _ListPageState extends State<ListPage> {
                 ],
               )
           ), // 검색창
-          SizedBox(height: height * 0.028),
+          SizedBox(height: 15),
           Center(
             child: Container(
                 width: width * 0.9,
@@ -118,7 +118,7 @@ class _ListPageState extends State<ListPage> {
                         SizedBox(width: 10),
                         Container(
                           width: 90,
-                          height: 28,
+                          height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
@@ -193,7 +193,7 @@ class _ListPageState extends State<ListPage> {
                       children: [
                         Container(
                           width: 72,
-                          height: 28,
+                          height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [
@@ -228,7 +228,7 @@ class _ListPageState extends State<ListPage> {
                         SizedBox(width: 10),
                         Container(
                           width: 108,
-                          height: 28,
+                          height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
                             boxShadow: [

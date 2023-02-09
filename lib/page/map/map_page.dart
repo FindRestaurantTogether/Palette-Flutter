@@ -60,8 +60,8 @@ class _MapPageState extends State<MapPage> {
                       SizedBox(width: width * 0.065),
                       Container(
                         width: width * 0.72,
-                        height: height * 0.06,
-                        padding: EdgeInsets.only(left: 10, right: 10),
+                        height: 43,
+                        padding: EdgeInsets.only(left: 12, right: 11),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(30),
@@ -78,8 +78,7 @@ class _MapPageState extends State<MapPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
-                              width: 32,
-                              height: 32,
+                              width: 35,
                               child: IconButton(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
@@ -89,22 +88,21 @@ class _MapPageState extends State<MapPage> {
                                 icon: Image.asset('assets/button_image/list_button.png'),
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.to(() => SearchPage(_items));
-                              },
-                              child: Expanded(
-                                child: Center(
-                                  child: Text(
-                                    '나의 지도',
-                                    style: TextStyle(color: Color(0xff787878), fontSize: 18),
-                                  ),
+                            Container(
+                              width: width * 0.72 - 91,
+                              child: TextButton(
+                                onPressed: () {
+                                  Get.to(() => SearchPage(_items));
+                                },
+                                child: Text(
+                                  searchedWord == '' ? '나의 지도' : searchedWord!,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(color: Color(0xff787878), fontSize: 18),
                                 ),
                               ),
                             ),
                             SizedBox(
-                              width: 30,
-                              height: 30,
+                              width: 33,
                               child: IconButton(
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
@@ -122,7 +120,7 @@ class _MapPageState extends State<MapPage> {
                   Row(
                     children: [
                       Container(
-                        height: height * 0.06,
+                        height: 43,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           boxShadow: [
@@ -155,7 +153,7 @@ class _MapPageState extends State<MapPage> {
                   ),
                 ],
               ), // 앱바
-              SizedBox(height: height * 0.003),
+              SizedBox(height: 2.5),
               FilterPage() // 필터
             ],
           ),

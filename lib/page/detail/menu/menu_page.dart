@@ -82,7 +82,7 @@ class MenuPage extends StatelessWidget {
                           Container(
                             child: Center(
                               child: Text(
-                                ' ${menuInfo[index][0].toInt()}원',
+                                ' ${menuInfo[index]}원',
                                 style: TextStyle(fontSize: 15, color: Color(0xfff42957), fontWeight: FontWeight.bold),
                               ),
                             ),

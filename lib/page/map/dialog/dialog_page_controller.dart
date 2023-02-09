@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 
 class DialogPageController extends GetxController{
-  static DialogPageController get to => Get.find();
 
   RxInt currentIndex = 0.obs;
 
