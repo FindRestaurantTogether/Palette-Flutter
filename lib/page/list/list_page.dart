@@ -2,13 +2,11 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/listview_page.dart';
-import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
+import 'package:myapp/page/map/search/search_page.dart';
 
 final List<String> DropdownList = ['거리순', '평점순', '리뷰순'];
 final List<String> DropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
-
-String searchedWord = '';
 
 class ListPage extends StatefulWidget {
   ListPage({Key? key}) : super(key: key);
