@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/detail/detail_page.dart';
-import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/bottomsheet/bottomsheet_page.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/map_page_controller.dart';
@@ -24,22 +23,21 @@ class NaverMapPageController extends GetxService {
   // 백에서 데이터 가져오기
   Future<void> fetchRestaurantData(context, value) async {
 
-    print(1);
     restaurants.value = [];
     markers.value = [];
 
-    print(2);
     if (_FilterPageController.FilterSelected.value.contains(true) || value != '') {
       // 이거는 가져왔다는 가정하에 데이터 추가한거
       List<NaverMapPageRestaurant> processedRestaurantData = [];
 
       List filter = read_all();
       Network network = Network(filter, value);
+      print(1);
       var RawRestaurantData = await network.getJsonData();
+      print(2);
       print('================================================================');
       print(RawRestaurantData);
       print('================================================================');
-      print(3);
       // 백에서 가져온 map 데이터
       RawRestaurantData = {
         0: {
@@ -60,7 +58,6 @@ class NaverMapPageController extends GetxService {
           'service': ['예약'],
           'menu': {'통삼겹살': 16000, '양념소갈비살': 18000, '차돌박이': 18000, '우삼겹': 15000, '통목살': 16000, '양념돼지갈비': 16000, '차돌박이쌈밥정식': 13000},
           'store_image': ['assets/background_image/taroya.jpeg'],
-          'distance': 1.5,
           'kakao_star': 4.3,
           'kakao_cnt': 24,
           'kakao_review_url': 'https://place.map.kakao.com/m/11101743#comment',
@@ -89,7 +86,6 @@ class NaverMapPageController extends GetxService {
           'service': ['예약'],
           'menu': {'통삼겹살': 16000, '양념소갈비살': 18000, '차돌박이': 18000, '우삼겹': 15000, '통목살': 16000, '양념돼지갈비': 16000, '차돌박이쌈밥정식': 13000},
           'store_image': ['assets/background_image/taroya.jpeg'],
-          'distance': 1.5,
           'kakao_star': 4.3,
           'kakao_cnt': 24,
           'kakao_review_url': 'https://place.map.kakao.com/m/11101743#comment',
@@ -101,9 +97,11 @@ class NaverMapPageController extends GetxService {
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
       };
-
+      print(3);
       // map 데이터 변형해서 리스트에 추가
       RawRestaurantData.values.forEach((res) {
+        print('uid');
+        print(res['uid']);
         processedRestaurantData.add(
             NaverMapPageRestaurant(
               uid: res['uid'], // 음식점 고유 번호
@@ -134,16 +132,16 @@ class NaverMapPageController extends GetxService {
             )
         );
       });
-
+      print(4);
       // restaurants 변수에 백에서 가져온 데이터 restaurants list에 넣기
       restaurants.assignAll(processedRestaurantData);
-
+      print(5);
       restaurants.forEach((NaverMapPageModel restaurant) async {
         CustomMarker customMarker = CustomMarker(
           restaurant: restaurant,
           position: restaurant.position,
         );
-        customMarker.createImage(context);
+        await customMarker.createImage(context);
         customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
           final NaverMapPageModel selectedRestaurant = restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
           final NaverMapController naverMapController = await naverMapCompleter.future;
@@ -173,7 +171,6 @@ class NaverMapPageController extends GetxService {
         });
         markers.add(customMarker);
       });
-      print(4);
     }
   }
 }

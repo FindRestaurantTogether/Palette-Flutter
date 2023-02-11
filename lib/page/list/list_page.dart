@@ -20,7 +20,6 @@ class ListPage extends StatefulWidget {
 class _ListPageState extends State<ListPage> {
 
   final _NaverMapPageController = Get.put(NaverMapPageController());
-  final _FilterPageController = Get.put(FilterPageController());
 
   String DropdownSelected = DropdownList.first;
   String DropdownSelected2 = '';

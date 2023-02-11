@@ -1,25 +1,92 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart' as naver;
 import 'package:http/http.dart' as http;
+import 'dart:math' show cos, sqrt, asin;
+import 'dart:math';
+
 
 class Network{
   var filter;
   var text;
+  var current_place;
   // var bottom_left;
   Network(this.filter, this.text);
 
   String url = 'http://34.64.35.77/api/search/map';
 
+  Future<dynamic> getJsonData() async {
+    // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
+    // &category=Food-Chinese-Etc&category=Food-Western-Etc&text=감자나라
+
+
+    // 위도경도 바뀌는 코드!!!!!!!!!!!!!!!!
+    // double rightUpLat;
+    // double rightUpLon;
+    // double leftDownLat;
+    // double leftDownLon;
+    //
+    // double max_lat = 37.715133;
+    // double max_lon = 127.269311;
+    // double min_lat = 37.413294;
+    // double min_lon = 126.734086;
+    // double lat_one_size =  filter[0].latitude - filter[2].latitude;
+    // double lon_one_size =  filter[0].longitude - filter[2].longitude;
+
+    // for(int size=1;size<=8;size++){
+    //   rightUpLat = min(filter[0].latitude+lat_one_size*size, max_lat);
+    //   rightUpLon = min(filter[0].longitude+lon_one_size*size,max_lon);
+    //   leftDownLat = max(filter[0].latitude-lat_one_size*size,min_lat);
+    //   leftDownLon = max(filter[0].longitude-lon_one_size*size,min_lon);
+    //   String url2 = 'http://34.64.35.77/api/search/map?top-right-lat=${rightUpLat}&top-right-lon=${rightUpLon}&bottom-left-lat=${leftDownLat}&bottom-left-lon=${leftDownLon}';
+    //   List<dynamic> category = filter[3];
+    //   if(category.length>0){
+    //     url2 = url2 + 'category=${category[0]}';
+    //     for(int i = 1;i<category.length;i++){
+    //       url2 = url2 + '&${category[i]}';
+    //     }
+    //   }
+    //   if(text != ''){
+    //     url2 = url2 + '&text=${text}';
+    //   }
+    //   print(url2);
+    //   http.Response response = await http.get(Uri.parse(url));
+    //   if (response.statusCode == 200) {
+    //     //String jsonData = response.body;
+    //     var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+    //     var store = parsingData;
+    //     if(store.length==15){
+    //       break;
+    //     }
+    // }
+
+    print(3);
+    http.Response response = await http.get(Uri.parse(url));
+    print(4);
+    if (response.statusCode == 200) {
+      //String jsonData = response.body;
+      var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+      var store = parsingData;
+      Map store_dict = change_data(store);
+      return store_dict;
+    }
+  }
+}
+
+Map change_data(store){
   Map<String,dynamic> store_dict = Map();
   Map<String,dynamic> menu = Map();
   Map<String,dynamic> hour = Map();
-  Map<String,dynamic> name = {
-    '해산물(게)': 'Food_Korean_Seafood_Crab',
+  Map<String,dynamic> name = {'해산물(게)': 'Food_Korean_Seafood_Crab',
     '해산물(문어)': 'Food_Korean_Seafood_Octopus',
     '해산물(생선)': 'Food_Korean_Seafood_Fish',
     '해산물(조개)': 'Food_Korean_Seafood_Seashell',
+    '한식' : 'Food_Korean',
+    '양식' : 'Food_Western',
+    '중식' : 'Food_Chinese',
+    '일식' : 'Food_Japanese',
     '분식': 'Food_Korean_Snack',
     '고기': 'Food_Korean_Meat',
     '전': 'Food_Korean_Jeon',
@@ -55,87 +122,62 @@ class Network{
     '호프': 'Alcohol_Hof',
     '이자카야': 'Alcohol_Izakaya',
     '와인': 'Alcohol_Wine',
-    '칵테일,양주': 'Alcohol_Cocktail'
-  };
+    '칵테일,양주': 'Alcohol_Cocktail'};
 
-  Future<dynamic> getJsonData() async {
-    // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
-    // &category=Food-Chinese-Etc&category=Food-Western-Etc&text=감자나라
-    String url2 = 'http://34.64.35.77/api/search/map?top-right-lat=${filter[0].latitude}&top-right-lon=${filter[0].longitude}&bottom-left-lat=${filter[1].latitude}&bottom-left-lon=${filter[1].longitude}';
-    List<dynamic> category = filter[2];
-    if(category.length>0){
-      url2 = url2 + 'category=${category[0]}';
-      for(int i = 1;i<category.length;i++){
-        url2 = url2 + '&${category[i]}';
+  for(int i=1;i<=store.length;i++){
+    try {
+      store["store$i"]["road_address"] = "서울 " + store["store$i"]["road_address"];
+    }
+    catch(e) {}
+    try {
+      store["store$i"]["latitude"] = double.parse(store["store$i"]["latitude"]);
+    }
+    catch(e) {}
+    try {
+      store["store$i"]["longitude"] = double.parse(store["store$i"]["longitude"]);
+    }
+    catch(e) {}
+    try {
+      store["store$i"]["call"] = store["store$i"]["call"].replaceAll(RegExp('[^0-9\\s]'), "");
+    }
+    catch(e) {}
+    try {
+      store["store$i"]['kakao_star'] = double.parse(store["store$i"]['kakao_star']);
+      store["store$i"]['kakao_cnt'] = int.parse(store["store$i"]['kakao_cnt']);
+    }
+    catch(e) {}
+    try {
+      store["store$i"]['naver_star'] = double.parse(store["store$i"]['naver_star']);
+      store["store$i"]['naver_cnt'] = int.parse(store["store$i"]['naver_cnt']);
+    }
+    catch(e) {}
+    try {
+      store["store$i"]['google_star'] = double.parse(store["store$i"]['google_star']);
+      store["store$i"]['google_cnt'] = int.parse(store["store$i"]['google_cnt']);
+    }
+    catch(e) {}
+    try{
+      for(int j=0;j<store["store$i"]['opening_hour'].length;j++){
+        hour.addAll(store["store$i"]['opening_hour'][j]);
       }
+      store["store$i"]['opening_hour'] = hour;
     }
-    if(text != ''){
-      url2 = url2 + '&text=${text}';
-    }
-    print(url2);
-
-    http.Response response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      //String jsonData = response.body;
-      var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-      var store = parsingData;
-      for(int i=1;i<=store.length;i++){
-        try {
-          store["store$i"]["road_address"] = "서울 " + store["store$i"]["road_address"];
-        }
-        catch(e) {}
-        try {
-          store["store$i"]["latitude"] = double.parse(store["store$i"]["latitude"]);
-        }
-        catch(e) {}
-        try {
-          store["store$i"]["longitude"] = double.parse(store["store$i"]["longitude"]);
-        }
-        catch(e) {}
-        try {
-          store["store$i"]["call"] = store["store$i"]["call"].replaceAll(RegExp('[^0-9\\s]'), "");
-        }
-        catch(e) {}
-        try {
-          store["store$i"]['kakao_star'] = double.parse(store["store$i"]['kakao_star']);
-          store["store$i"]['kakao_cnt'] = int.parse(store["store$i"]['kakao_cnt']);
-        }
-        catch(e) {}
-        try {
-          store["store$i"]['naver_star'] = double.parse(store["store$i"]['naver_star']);
-          store["store$i"]['naver_cnt'] = int.parse(store["store$i"]['naver_cnt']);
-        }
-        catch(e) {}
-        try {
-          store["store$i"]['google_star'] = double.parse(store["store$i"]['google_star']);
-          store["store$i"]['google_cnt'] = int.parse(store["store$i"]['google_cnt']);
-        }
-        catch(e) {}
-        try{
-          for(int j=0;j<store["store$i"]['opening_hour'].length;j++){
-            hour.addAll(store["store$i"]['opening_hour'][j]);
-          }
-          store["store$i"]['opening_hour'] = hour;
-        }
-        catch(e){}
-        try{
-          for(int j=0;j<store["store$i"]['menu'].length;j++){
-            menu.addAll(store["store$i"]['menu'][j]);
-          }
-          store["store$i"]['menu'] = menu;
-        }
-        catch(e){}
-        try {
-          store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
-        }
-        catch(e) {}
-        store_dict["$i"] = store["store$i"];
+    catch(e){}
+    try{
+      for(int j=0;j<store["store$i"]['menu'].length;j++){
+        menu.addAll(store["store$i"]['menu'][j]);
       }
-      return store_dict;
+      store["store$i"]['menu'] = menu;
     }
+    catch(e){}
+    try {
+      store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
+    }
+    catch(e) {}
+    store_dict["$i"] = store["store$i"];
   }
+  return store_dict;
 }
-
 
 
 
@@ -191,6 +233,9 @@ List read_all(){
   // print(naver.leftDownPosition);
   filter.add(naver.rightUpPosition);
   filter.add(naver.leftDownPosition);
+  // filter.add(naver.centerPosition);
+  filter.add(naver.rightUpPosition);
+
 
   // print('필터 정보');
   // 한식, 양식, 중식, 일식, 베트남, 멕시칸, 기타 선택 여부
@@ -233,4 +278,18 @@ List read_all(){
   print("================================================================");
   print(filter);
   return filter;
+}
+
+
+double get_distance(position, myPosition) {
+  // final Position myPosition = await Geolocator.getCurrentPosition();
+
+  var p = 0.017453292519943295;
+  var c = cos;
+  var lat1 = position.latitude;
+  var lon1 = position.longitude;
+  var lat2 = myPosition.latitude;
+  var lon2 = myPosition.longitude;
+  var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
+  return double.parse((12742 * asin(sqrt(a))).toStringAsFixed(2));
 }

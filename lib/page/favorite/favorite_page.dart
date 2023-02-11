@@ -71,7 +71,7 @@ class _FavoritePageState extends State<FavoritePage> {
         },
         child: Column(
           children: [
-            SizedBox(height: height * 0.08),
+            SizedBox(height: height * 0.08), // 빈 공간
             Container(
               child: Center(
                 child: Text(
@@ -152,41 +152,42 @@ class _FavoritePageState extends State<FavoritePage> {
                           Container(
                               width: 110,
                               height: 30,
-                              child:  Center(
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 30,
-                                      child: Checkbox(
-                                        value: listRestaurantAllChecked,
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            listRestaurantAllChecked = !listRestaurantAllChecked;
-                                            if (listRestaurantAllChecked == true){
-                                              _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, true);
-                                            } else if (listRestaurantAllChecked == false) {
-                                              _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, false);
-                                            }
-                                          });
-                                        },
-                                        shape: CircleBorder(),
-                                        checkColor: Colors.white,
-                                        activeColor: Color(0xfff42957),
-                                      ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 30,
+                                    child: Checkbox(
+                                      value: listRestaurantAllChecked,
+                                      onChanged: (bool? value) {
+                                        setState(() {
+                                          listRestaurantAllChecked = !listRestaurantAllChecked;
+                                          if (listRestaurantAllChecked == true){
+                                            _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, true);
+                                          } else if (listRestaurantAllChecked == false) {
+                                            _FavoriteListPageController.listRestaurantIsChecked = RxList.filled(_FavoriteListPageController.listRestaurant.length, false);
+                                          }
+                                        });
+                                      },
+                                      shape: CircleBorder(),
+                                      checkColor: Colors.white,
+                                      activeColor: Color(0xfff42957),
                                     ),
-                                    Text(
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(bottom: 1),
+                                    child: Text(
                                       ' 전체 선택',
                                       style: TextStyle(fontSize: 16, color: Color(0xff464646)),
                                     ),
-                                  ],
-                                ),
-                              )
+                                  ),
+                                ],
+                              ),
                           ),
                         ],
                       ) // 전체선택 check box
                           : Row(
                         children: [
-                          SizedBox(width: 20),
+                          SizedBox(width: 26),
                           Container(
                             width: 70,
                             height: 30,
@@ -949,14 +950,15 @@ class _FavoritePageState extends State<FavoritePage> {
                         padding: EdgeInsets.all(3),
                         itemCount: _FavoriteListPageController.listRestaurant.length,
                         itemBuilder: (context, index){
-                          return GestureDetector(
+                          return ExpandTapWidget(
                               onTap: () {
                                 if (_FavoriteListPageController.eS == false) {
                                   Get.to(() => DetailPage(), arguments: _FavoriteListPageController.listRestaurant.elementAt(index));
                                 }
                               },
+                              tapPadding: EdgeInsets.all(25),
                               child: Container(
-                                padding: EdgeInsets.only(left: 15, right: 20, top: 5, bottom: 5),
+                                padding: EdgeInsets.only(left: 10, right: _FavoriteListPageController.eS ? 17: 25, top: 10, bottom: 10),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -964,8 +966,9 @@ class _FavoritePageState extends State<FavoritePage> {
                                         ? Row(
                                       children: [
                                         Container(
-                                          height: 89,
-                                          width: 30,
+                                          height: 95,
+                                          width: 35,
+                                          padding: EdgeInsets.only(top: 1, left: 4),
                                           child: Align(
                                             alignment: Alignment.topCenter,
                                             child: Checkbox(
@@ -982,26 +985,25 @@ class _FavoritePageState extends State<FavoritePage> {
                                           ),
                                         ),
                                         Container(
-                                          padding: EdgeInsets.only(top: 19, left: 8),
-                                          width: 139,
-                                          height: 107,
+                                          padding: EdgeInsets.only(left: 3, right: 15, bottom: 10, top: 15),
                                           child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Container(
-                                                  height: 25,
                                                   child: Row(
                                                     children: [
                                                       Container(
-                                                        height: 24,
+                                                        height: 20,
                                                         child: Text(
                                                           '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
                                                           style: TextStyle(
-                                                              fontSize: 18,
+                                                              color: Color(0xff464646),
+                                                              fontSize: 16,
                                                               fontWeight: FontWeight.bold),
                                                         ),
                                                       ),
                                                       SizedBox(
-                                                        width: 3,
+                                                        width: 1,
                                                       ),
                                                       if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'open')
                                                         Container(
@@ -1060,16 +1062,17 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               ),
                                                             ),
                                                       Container(
-                                                        height: 24,
+                                                        height: 20,
+                                                        padding: EdgeInsets.only(bottom: 1),
                                                         child: Column(
                                                           mainAxisAlignment: MainAxisAlignment.end,
                                                           children: [
                                                             Text(
                                                               '  ${_FavoriteListPageController.listRestaurant.elementAt(index).category}',
                                                               style: TextStyle(
-                                                                  color: Colors.grey, fontSize: 11),
+                                                                  color: Color(0xff838383), fontSize: 10),
                                                             ),
-                                                            SizedBox(height: 4)
+                                                            SizedBox(height: 1)
                                                           ],
                                                         ),
                                                       )
@@ -1083,20 +1086,23 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     Icon(
                                                       Icons.star,
                                                       color: Color(0xfff42957),
-                                                      size: 13,
+                                                      size: 14,
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
                                                       '${_FavoriteListPageController.listRestaurant.elementAt(index).naver_star}',
                                                       style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight: FontWeight.bold),
+                                                          fontSize: 13,
+                                                          fontWeight: FontWeight.bold,
+                                                          color: Color(0xff464646)
+                                                      ),
                                                     ),
                                                     SizedBox(width: 3),
                                                     Text(
                                                       '(${_FavoriteListPageController.listRestaurant.elementAt(index).naver_cnt}건)',
                                                       style: TextStyle(
-                                                        fontSize: 10,
+                                                          fontSize: 11,
+                                                          color: Color(0xff464646)
                                                       ),
                                                     )
                                                   ],
@@ -1109,7 +1115,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                     Text(
                                                       '${_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.indexOf('동') + 1)}',
                                                       style: TextStyle(
-                                                        fontSize: 10,
+                                                          fontSize: 12,
+                                                          color: Color(0xff464646)
                                                       ),
                                                     )
                                                   ],
@@ -1121,70 +1128,28 @@ class _FavoritePageState extends State<FavoritePage> {
                                       ],
                                     )
                                         : Container(
-                                      padding: EdgeInsets.only(top: 19, left: 11),
-                                      width: 165,
-                                      height: 107,
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              height: 24,
-                                              child: Row(
-                                                children: [
-                                                  Container(
-                                                    child: Text(
-                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight: FontWeight.bold),
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 3,
-                                                  ),
-                                                  if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'open')
-                                                    Container(
-                                                      height: 20,
-                                                      child: Align(
-                                                        alignment: Alignment.topCenter,
-                                                        child: Container(
-                                                          width: 5,
-                                                          height: 5,
-                                                          decoration: BoxDecoration(
-                                                              color: Color(0xff57dde0),
-                                                              shape: BoxShape.circle),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'close')
-                                                    Container(
-                                                      height: 20,
-                                                      child: Align(
-                                                        alignment: Alignment.topCenter,
-                                                        child: Container(
-                                                          width: 5,
-                                                          height: 5,
-                                                          decoration: BoxDecoration(
-                                                              color: Color(0xfff42957),
-                                                              shape: BoxShape.circle),
-                                                        ),
-                                                      ),
-                                                    )
-                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'breaktime')
-                                                    Container(
+                                          padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 15),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
                                                         height: 20,
-                                                        child: Align(
-                                                          alignment: Alignment.topCenter,
-                                                          child: Container(
-                                                            width: 5,
-                                                            height: 5,
-                                                            decoration: BoxDecoration(
-                                                                color: Colors.yellow,
-                                                                shape: BoxShape.circle),
-                                                          ),
+                                                        child: Text(
+                                                          '${_FavoriteListPageController.listRestaurant.elementAt(index).store_name}',
+                                                          style: TextStyle(
+                                                              color: Color(0xff464646),
+                                                              fontSize: 16,
+                                                              fontWeight: FontWeight.bold),
                                                         ),
-                                                      )
-                                                  else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'null')
-                                                    Container(
+                                                      ),
+                                                      SizedBox(
+                                                        width: 1,
+                                                      ),
+                                                      if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'open')
+                                                        Container(
                                                           height: 20,
                                                           child: Align(
                                                             alignment: Alignment.topCenter,
@@ -1192,73 +1157,116 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               width: 5,
                                                               height: 5,
                                                               decoration: BoxDecoration(
-                                                                  color: Colors.white,
+                                                                  color: Color(0xff57dde0),
                                                                   shape: BoxShape.circle),
                                                             ),
                                                           ),
+                                                        )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'close')
+                                                        Container(
+                                                          height: 20,
+                                                          child: Align(
+                                                            alignment: Alignment.topCenter,
+                                                            child: Container(
+                                                              width: 5,
+                                                              height: 5,
+                                                              decoration: BoxDecoration(
+                                                                  color: Color(0xfff42957),
+                                                                  shape: BoxShape.circle),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'breaktime')
+                                                        Container(
+                                                            height: 20,
+                                                            child: Align(
+                                                              alignment: Alignment.topCenter,
+                                                              child: Container(
+                                                                width: 5,
+                                                                height: 5,
+                                                                decoration: BoxDecoration(
+                                                                    color: Colors.yellow,
+                                                                    shape: BoxShape.circle),
+                                                              ),
+                                                            ),
+                                                          )
+                                                      else if (_FavoriteListPageController.listRestaurant.elementAt(index).open == 'null')
+                                                        Container(
+                                                              height: 20,
+                                                              child: Align(
+                                                                alignment: Alignment.topCenter,
+                                                                child: Container(
+                                                                  width: 5,
+                                                                  height: 5,
+                                                                  decoration: BoxDecoration(
+                                                                      color: Colors.white,
+                                                                      shape: BoxShape.circle),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                      Container(
+                                                        height: 20,
+                                                        padding: EdgeInsets.only(bottom: 1),
+                                                        child: Column(
+                                                          mainAxisAlignment: MainAxisAlignment.end,
+                                                          children: [
+                                                            Text(
+                                                              '  ${_FavoriteListPageController.listRestaurant.elementAt(index).category}',
+                                                              style: TextStyle(
+                                                                  color: Color(0xff838383), fontSize: 10),
+                                                            ),
+                                                            SizedBox(height: 1)
+                                                          ],
                                                         ),
-                                                  Container(
-                                                    height: 24,
-                                                    child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                          '  ${_FavoriteListPageController.listRestaurant.elementAt(index).category}',
-                                                          style: TextStyle(
-                                                              color: Colors.grey, fontSize: 13),
-                                                        ),
-                                                        SizedBox(height: 2)
-                                                      ],
-                                                    ),
+                                                      )
+                                                    ],
                                                   )
-                                                ],
-                                              )
-                                          ), // 음식점 이름
-                                          Container(
-                                            height: 30,
-                                            child: Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.star,
-                                                  color: Color(0xfff42957),
-                                                  size: 15,
+                                              ), // 음식점 이름
+                                              Container(
+                                                height: 30,
+                                                child: Row(
+                                                  children: [
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Color(0xfff42957),
+                                                      size: 15,
+                                                    ),
+                                                    SizedBox(width: 3),
+                                                    Text(
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).naver_star}',
+                                                      style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.bold),
+                                                    ),
+                                                    SizedBox(width: 3),
+                                                    Text(
+                                                      '(${_FavoriteListPageController.listRestaurant.elementAt(index).naver_cnt}건)',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                                SizedBox(width: 3),
-                                                Text(
-                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).naver_star}',
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.bold),
+                                              ),// 별점
+                                              Container(
+                                                height: 20,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      '${_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.indexOf('동') + 1)}',
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                      ),
+                                                    )
+                                                  ],
                                                 ),
-                                                SizedBox(width: 3),
-                                                Text(
-                                                  '(${_FavoriteListPageController.listRestaurant.elementAt(index).naver_cnt}건)',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),// 별점
-                                          Container(
-                                            height: 20,
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  '${_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.substring(0,_FavoriteListPageController.listRestaurant.elementAt(index).jibun_address.indexOf('동') + 1)}',
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ), // 주소
-                                        ],
-                                      ),
-                                    ),
+                                              ), // 주소
+                                            ],
+                                          ),
+                                        ),
                                     Container(
-                                      width: 150,
-                                      height: 95,
+                                      width: 120,
+                                      height: 80,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
                                         image: DecorationImage(
@@ -1487,10 +1495,10 @@ class _FavoritePageState extends State<FavoritePage> {
                                         ),
                                         Container(
                                           width: width * 0.3,
-                                          height: height * 0.11,
+                                          height: 75,
                                           decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(10),
-                                              color: Colors.black12
+                                            borderRadius: BorderRadius.circular(10),
+                                            color: Colors.black12
                                           ),
                                           child: Center(
                                             child: SizedBox(

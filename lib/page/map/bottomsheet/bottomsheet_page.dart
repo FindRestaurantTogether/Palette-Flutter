@@ -52,7 +52,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 25, left: 35, right: 35),
+      padding: EdgeInsets.only(top: 20, bottom: 20, left: 35, right: 35),
       width: width,
       height: 205,
       decoration: BoxDecoration(
@@ -66,8 +66,12 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                width: width * 0.65,
-                height: 24,
+                padding: EdgeInsets.only(bottom: 6),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: Colors.black12),
+                  ),
+                ),
                 child: Row(
                   children: [
                     Container(
@@ -110,7 +114,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                         ),
                       )
                     else if (selectedRestaurant.open == 'breaktime')
-                      Container(
+                        Container(
                           height: 20,
                           child: Align(
                             alignment: Alignment.topCenter,
@@ -123,8 +127,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                             ),
                           ),
                         )
-                    else if (selectedRestaurant.open == 'null')
-                      Container(
+                      else if (selectedRestaurant.open == 'null')
+                          Container(
                             height: 20,
                             child: Align(
                               alignment: Alignment.topCenter,
@@ -136,7 +140,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                     shape: BoxShape.circle),
                               ),
                             ),
-                        ),
+                          ),
                     SizedBox(
                       width: 6,
                     ),
@@ -187,16 +191,10 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     icon: Image.asset('assets/button_image/unfavorite_button.png'),
                   );
                 }),
-              ),
+              ), // 즐겨찾기
             ],
           ), // 음식점 이름 & 즐겨찾기
           SizedBox(height: 5),
-          Container(
-              height:1,
-              width: 190,
-              alignment: Alignment.centerLeft,
-              color:Colors.black12
-          ), // 밑줄
           SizedBox(height: 8),
           Container(
             height: 20,

@@ -2,15 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:myapp/page/detail/detail_page.dart';
-import 'package:myapp/page/map/bottomsheet/bottomsheet_page.dart';
-import 'package:myapp/page/map/dialog/dialog_page.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 // 중심 좌표
@@ -37,52 +31,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
   // 사용자가 움직여서 카메라가 움직였나 확인하기 위해
   bool cameraChange = false;
   var filter = new List.empty(growable: true);
-
-  @override
-  void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!this.mounted) return;
-      // restaurants 데이터들로 CustomMarker 생성 후 markers에 저장
-      _NaverMapPageController.restaurants.forEach((NaverMapPageModel restaurant) async {
-        CustomMarker customMarker = CustomMarker(
-          restaurant: restaurant,
-          position: restaurant.position,
-        );
-        customMarker.createImage(context);
-        customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) {
-          final NaverMapPageModel selectedRestaurant = _NaverMapPageController.restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
-          setState(() async {
-            final NaverMapController naverMapController = await naverMapCompleter.future;
-            await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
-            if (_MapPageController.bS == false) {
-              _MapPageController.ChangeState();
-            }
-            showBottomSheet(
-              context: context,
-              builder: (context) => GestureDetector(
-                  onTap: () {
-                    Get.to(DetailPage(), arguments: selectedRestaurant);
-                  },
-                  onVerticalDragUpdate: (details) {
-                    int sensitivity = 3;
-                    if (details.delta.dy < -sensitivity) {
-                      Get.to(DetailPage(), arguments: selectedRestaurant);
-                    }
-                    if (details.delta.dy > sensitivity) {
-                      _MapPageController.ChangeState();
-                      Get.back();
-                    }
-                  },
-                  child: BottomsheetPage(selectedRestaurant: selectedRestaurant)
-              ),
-            );
-          });
-        });
-        _NaverMapPageController.markers.add(customMarker);
-      });
-    });
-    super.initState();
-  }
 
   // @override
   // void dispose() {
@@ -125,46 +73,46 @@ class _NaverMapPageState extends State<NaverMapPage> {
                     bottom: _MapPageController.bS ? 230 : 30,
                     child: Column(
                       children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 2,
-                                blurRadius: 6,
-                                offset: Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                          child: FloatingActionButton(
-                            heroTag: null,
-                            child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: Image.asset('assets/button_image/current_page_button.png')
-                            ),
-                            backgroundColor: Colors.white,
-                            onPressed: () {
-                              showMaterialModalBottomSheet(
-                                  isDismissible: true,
-                                  barrierColor: Colors.black54,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(30),
-                                    ),
-                                  ),
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return DialogPage();
-                                  }
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 15),
+                        // Container(
+                        //   width: 46,
+                        //   height: 46,
+                        //   decoration: BoxDecoration(
+                        //     shape: BoxShape.circle,
+                        //     boxShadow: [
+                        //       BoxShadow(
+                        //         color: Colors.black.withOpacity(0.1),
+                        //         spreadRadius: 2,
+                        //         blurRadius: 6,
+                        //         offset: Offset(0, 0),
+                        //       ),
+                        //     ],
+                        //   ),
+                        //   child: FloatingActionButton(
+                        //     heroTag: null,
+                        //     child: SizedBox(
+                        //         width: 25,
+                        //         height: 25,
+                        //         child: Image.asset('assets/button_image/current_page_button.png')
+                        //     ),
+                        //     backgroundColor: Colors.white,
+                        //     onPressed: () {
+                        //       showMaterialModalBottomSheet(
+                        //           isDismissible: true,
+                        //           barrierColor: Colors.black54,
+                        //           shape: RoundedRectangleBorder(
+                        //             borderRadius: BorderRadius.vertical(
+                        //               top: Radius.circular(30),
+                        //             ),
+                        //           ),
+                        //           context: context,
+                        //           builder: (BuildContext context) {
+                        //             return DialogPage();
+                        //           }
+                        //       );
+                        //     },
+                        //   ),
+                        // ),
+                        // SizedBox(height: 15),
                         Container(
                           width: 46,
                           height: 46,
@@ -189,8 +137,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
                             backgroundColor: Colors.white,
                             onPressed: () async {
                               final naverMapController = await naverMapCompleter.future;
-                              final Position position = await Geolocator.getCurrentPosition();
-                              CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude));
+                              final Position currentPosition = await Geolocator.getCurrentPosition();
+                              CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
                               naverMapController.moveCamera(cameraUpdate);
                             },
                           ),
@@ -243,8 +191,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
     // 위치정보 허락 받고 허락 받으면 맵 생성시 현 위치로 위치 옮겨주기
     LocationService locationService = LocationService();
     if (await locationService.canGetCurrentLocation()){
-      final Position position = await Geolocator.getCurrentPosition();
-      naverMapController.moveCamera(CameraUpdate.scrollTo(LatLng(position.latitude, position.longitude)));
+      final Position currentPosition = await Geolocator.getCurrentPosition();
+      naverMapController.moveCamera(CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude)));
     }
 
     LatLngBounds bound = await naverMapController.getVisibleRegion();
@@ -264,7 +212,9 @@ class _NaverMapPageState extends State<NaverMapPage> {
 
     NaverMapController naverMapController = await naverMapCompleter.future;
     LatLngBounds bound = await naverMapController.getVisibleRegion();
+    CameraPosition position = await naverMapController.getCameraPosition();
     setState(() {
+      centerPosition = position.target;
       rightUpPosition = bound.northeast;
       leftDownPosition = bound.southwest;
     });

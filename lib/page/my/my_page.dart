@@ -48,6 +48,7 @@ class _MyPageState extends State<MyPage> {
         extendBodyBehindAppBar: true,
         body: Column(
           children: [
+            SizedBox(height: height * 0.08), // 빈 공간
             Obx(() {
               return _MyPageController.isLogin.value
                   ? Container(
@@ -55,7 +56,6 @@ class _MyPageState extends State<MyPage> {
                 decoration: BoxDecoration(color: Colors.white),
                 child: Column(
                   children: [
-                    SizedBox(height: 45),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -127,7 +127,6 @@ class _MyPageState extends State<MyPage> {
                 decoration: BoxDecoration(color: Colors.white),
                 child: Column(
                   children: [
-                    SizedBox(height: 45),
                     Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
@@ -198,8 +197,7 @@ class _MyPageState extends State<MyPage> {
                       SizedBox(height: 5),
                       Container(
                         width: width * 0.87,
-                        height: height * 0.21,
-                        padding: EdgeInsets.all(17),
+                        padding: EdgeInsets.only(left: 17, right: 17, top: 12, bottom: 17),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -244,9 +242,9 @@ class _MyPageState extends State<MyPage> {
                                 )
                               ],
                             ), // 이벤트 아이콘과 텍스트
-                            SizedBox(height: 7),
+                            SizedBox(height: 8),
                             Container(
-                                height: height * 0.11,
+                                height: 110,
                                 decoration: BoxDecoration(
                                   color: Color(0xffd9d9d9),
                                   borderRadius: BorderRadius.circular(10),
@@ -275,7 +273,7 @@ class _MyPageState extends State<MyPage> {
                         },
                         child: Container(
                           width: width * 0.87,
-                          height: height * 0.055,
+                          height: 40,
                           padding: EdgeInsets.only(top: 10, bottom: 10, left: 17),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -313,7 +311,7 @@ class _MyPageState extends State<MyPage> {
                         },
                         child: Container(
                           width: width * 0.87,
-                          height: height * 0.055,
+                          height: 40,
                           padding: EdgeInsets.only(top: 10,bottom: 10,left: 17),
                           decoration: BoxDecoration(
                             color: Colors.white,
@@ -350,7 +348,7 @@ class _MyPageState extends State<MyPage> {
                         },
                         child: Container(
                           width: width * 0.87,
-                          height: height * 0.055,
+                          height: 40,
                           padding: EdgeInsets.only(top: 10,bottom: 10,left: 17),
                           decoration: BoxDecoration(
                             color: Colors.white,
