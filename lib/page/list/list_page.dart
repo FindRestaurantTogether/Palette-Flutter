@@ -2,8 +2,10 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/listview_page.dart';
+import 'package:myapp/page/map/map_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/search/search_page.dart';
+import 'package:myapp/page/map/search/search_page_controller.dart';
 
 final List<String> DropdownList = ['거리순', '평점순', '리뷰순'];
 final List<String> DropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
@@ -17,6 +19,7 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
 
+  final _SearchPageController = Get.put(SearchPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
   String DropdownSelected = DropdownList.first;
@@ -72,19 +75,21 @@ class _ListPageState extends State<ListPage> {
                       icon: Image.asset('assets/button_image/map_button.png'),
                     ),
                   ),
-                  Container(
-                    width: width * 0.87 - 91,
-                    height: 43,
-                    child: Center(
-                      child: Text (
-                        searchedWord == '' ? '장소, 주소, 음식 검색' : searchedWord!,
-                        style: TextStyle(
-                          fontSize: 17,
-                          color: Color(0xffb9b9b9),
-                        ),
-                      ),
-                    )
-                  ),
+                  Obx(() {
+                    return  Container(
+                        width: width * 0.87 - 91,
+                        height: 43,
+                        child: Center(
+                          child: Text (
+                            _SearchPageController.searchedWord.value == '' ? '장소, 주소, 음식 검색' : _SearchPageController.searchedWord.value,
+                            style: TextStyle(
+                              fontSize: 17,
+                              color: Color(0xffb9b9b9),
+                            ),
+                          ),
+                        )
+                    );
+                  }),
                   SizedBox(
                     width: 30,
                     child: IconButton(
@@ -92,7 +97,7 @@ class _ListPageState extends State<ListPage> {
                       highlightColor: Colors.transparent,
                       onPressed: () async {
                         setState(() {
-                          searchedWord = '';
+                          _SearchPageController.searchedWord.value = '';
                         });
                         Get.back();
                         await _NaverMapPageController.fetchRestaurantData(context, '');

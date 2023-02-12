@@ -32,12 +32,11 @@ class NaverMapPageController extends GetxService {
 
       List filter = read_all();
       Network network = Network(filter, value);
-      print(1);
       var RawRestaurantData = await network.getJsonData();
-      print(2);
       print('================================================================');
       print(RawRestaurantData);
       print('================================================================');
+
       // 백에서 가져온 map 데이터
       RawRestaurantData = {
         0: {
@@ -97,45 +96,43 @@ class NaverMapPageController extends GetxService {
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
       };
-      print(3);
+
       // map 데이터 변형해서 리스트에 추가
       RawRestaurantData.values.forEach((res) {
-        print('uid');
-        print(res['uid']);
         processedRestaurantData.add(
             NaverMapPageRestaurant(
-              uid: res['uid'], // 음식점 고유 번호
-              store_name: res['store_name'], // 음식점 이름
-              jibun_address: res['jibun_address'], // 음식점 주소
-              position: LocationClass(latitude: res['latitude'], longitude: res['longitude']),
-              call: res['call'], // 음식점 전화번호
-              category: res['category'], // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
-              main_category: res['main_category'], // 음식점 마커 이미지
-              open: res['open'],
-              opening_hour: res['opening_hour'], // 음식점 영업 시간
-              opening_breaktime: res['opening_breaktime'],
-              opening_lastorder: res['opening_lastorder'],
-              theme: res['theme'], // 음식점 분위기
-              service: res['service'], // 음식점 서비스
-              menu: res['menu'], // 음식점 메뉴
-              store_image: res['store_image'], // 음식점 외부 이미지
-              distance: res['distance'], // 음식점의 현 위치와의 거리
-              naver_star: res['naver_star'], // 음식점 네이버 평점
-              naver_cnt: res['naver_cnt'], // 음식점 네이버 리뷰 개수
-              naver_review_url: res['naver_review_url'],
-              google_star: res['google_star'], // 음식점 구글 평점
-              google_cnt: res['google_cnt'], // 음식점 구글 리뷰 개수
-              google_review_url: res['google_review_url'],
-              kakao_star: res['kakao_star'], // 음식점 카카오 평점
-              kakao_cnt: res['kakao_cnt'], // 음식점 카카오 리뷰 개수
-              kakao_review_url: res['kakao_review_url'],
+              uid: res['uid'] as String, // 음식점 고유 번호
+              store_name: res['store_name'] as String, // 음식점 이름
+              jibun_address: res['jibun_address'] as String, // 음식점 주소
+              position: LocationClass(latitude: res['latitude'] as double, longitude: res['longitude'] as double),
+              call: res['call'] as String, // 음식점 전화번호
+              category: res['category'] as String, // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
+              main_category: res['main_category'] as String, // 음식점 마커 이미지
+              open: res['open'] as String,
+              opening_hour: res['opening_hour'] as Map<String, String>, // 음식점 영업 시간
+              opening_breaktime: res['opening_breaktime'] as Map<String, String>,
+              opening_lastorder: res['opening_lastorder'] as Map<String, String>,
+              theme: res['theme'] as List<String>, // 음식점 분위기
+              service: res['service'] as List<String>, // 음식점 서비스
+              menu: res['menu']  as Map<String, int>, // 음식점 메뉴
+              store_image: res['store_image'] as List<String>, // 음식점 외부 이미지
+              distance: res['distance'] as double, // 음식점의 현 위치와의 거리
+              naver_star: res['naver_star'] as double, // 음식점 네이버 평점
+              naver_cnt: res['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
+              naver_review_url: res['naver_review_url'] as String,
+              google_star: res['google_star'] as double, // 음식점 구글 평점
+              google_cnt: res['google_cnt'] as int, // 음식점 구글 리뷰 개수
+              google_review_url: res['google_review_url'] as String,
+              kakao_star: res['kakao_star'] as double, // 음식점 카카오 평점
+              kakao_cnt: res['kakao_cnt'] as int, // 음식점 카카오 리뷰 개수
+              kakao_review_url: res['kakao_review_url'] as String,
             )
         );
       });
-      print(4);
+
       // restaurants 변수에 백에서 가져온 데이터 restaurants list에 넣기
       restaurants.assignAll(processedRestaurantData);
-      print(5);
+
       restaurants.forEach((NaverMapPageModel restaurant) async {
         CustomMarker customMarker = CustomMarker(
           restaurant: restaurant,

@@ -6,9 +6,8 @@ import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:myapp/page/map/search/search_page_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
-
-String searchedWord = '';
 
 class SearchPage extends StatefulWidget {
 
@@ -21,6 +20,7 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
 
+  final _SearchPageController = Get.put(SearchPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
   final _TextEditingController = TextEditingController(); // 택스트폼 컨트롤러
   
@@ -95,20 +95,16 @@ class _SearchPageState extends State<SearchPage> {
                                   );
                                 } else {
                                   if (searchByMyLocation == true) {
-                                    print(1);
                                     final naverMapController = await naverMapCompleter.future;
-                                    print(2);
                                     final currentPosition = await Geolocator.getCurrentPosition();
-                                    print(3);
                                     CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
-                                    print(4);
                                     naverMapController.moveCamera(cameraUpdate);
                                   }
-                                  print(11);
+
                                   await _NaverMapPageController.fetchRestaurantData(context, value);
-                                  print(22);
+
                                   setState(() {
-                                    searchedWord = _TextEditingController.text;
+                                    _SearchPageController.searchedWord.value = _TextEditingController.text;
                                     if (_items.length >= 10) {
                                       _items.removeAt(0);
                                     }
@@ -216,7 +212,7 @@ class _SearchPageState extends State<SearchPage> {
                                 onPressed: () async {
                                   await _NaverMapPageController.fetchRestaurantData(context, _items[i]);
                                   setState(() {
-                                    searchedWord = _items[i];
+                                    _SearchPageController.searchedWord.value = _items[i];
                                     if (_items.length >= 10) {
                                       _items.removeAt(0);
                                     }

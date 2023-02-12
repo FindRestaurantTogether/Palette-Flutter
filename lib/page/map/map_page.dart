@@ -7,6 +7,7 @@ import 'package:myapp/page/map/filter/filter_page.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/search/search_page.dart';
+import 'package:myapp/page/map/search/search_page_controller.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key? key}) : super(key: key);
@@ -16,6 +17,8 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+
+  final _SearchPageController = Get.put(SearchPageController());
 
   List _items = [];
 
@@ -88,19 +91,21 @@ class _MapPageState extends State<MapPage> {
                                 icon: Image.asset('assets/button_image/list_button.png'),
                               ),
                             ),
-                            Container(
-                              width: width * 0.72 - 91,
-                              child: TextButton(
-                                onPressed: () {
-                                  Get.to(() => SearchPage(_items));
-                                },
-                                child: Text(
-                                  searchedWord == '' ? '나의 지도' : searchedWord!,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                            Obx(() {
+                              return Container(
+                                width: width * 0.72 - 91,
+                                child: TextButton(
+                                  onPressed: () {
+                                    Get.to(() => SearchPage(_items));
+                                  },
+                                  child: Text(
+                                    _SearchPageController.searchedWord.value == '' ? '나의 지도' : _SearchPageController.searchedWord.value,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                                  ),
                                 ),
-                              ),
-                            ),
+                              );
+                            }),
                             SizedBox(
                               width: 33,
                               child: IconButton(

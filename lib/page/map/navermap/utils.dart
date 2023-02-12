@@ -62,9 +62,8 @@ class Network{
     //     }
     // }
 
-    print(3);
     http.Response response = await http.get(Uri.parse(url));
-    print(4);
+
     if (response.statusCode == 200) {
       //String jsonData = response.body;
       var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
