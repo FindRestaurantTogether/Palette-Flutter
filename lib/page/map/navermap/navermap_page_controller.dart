@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/map/bottomsheet/bottomsheet_page.dart';
@@ -30,15 +31,15 @@ class NaverMapPageController extends GetxService {
       // 이거는 가져왔다는 가정하에 데이터 추가한거
       List<NaverMapPageRestaurant> processedRestaurantData = [];
 
-      List filter = read_all();
-      Network network = Network(filter, value);
-      var RawRestaurantData = await network.getJsonData();
+      // List filter = read_all();
+      // Network network = Network(filter, value);
+      // var RawRestaurantData = await network.getJsonData();
       print('================================================================');
-      print(RawRestaurantData);
+      // print(RawRestaurantData);
       print('================================================================');
 
       // 백에서 가져온 map 데이터
-      RawRestaurantData = {
+      var RawRestaurantData = {
         0: {
           'uid': '17',
           'store_name': '서촌 백년화로',
@@ -97,6 +98,8 @@ class NaverMapPageController extends GetxService {
         },
       };
 
+      final Position currentPosition = await Geolocator.getCurrentPosition();
+
       // map 데이터 변형해서 리스트에 추가
       RawRestaurantData.values.forEach((res) {
         processedRestaurantData.add(
@@ -116,7 +119,7 @@ class NaverMapPageController extends GetxService {
               service: res['service'] as List<String>, // 음식점 서비스
               menu: res['menu']  as Map<String, int>, // 음식점 메뉴
               store_image: res['store_image'] as List<String>, // 음식점 외부 이미지
-              distance: res['distance'] as double, // 음식점의 현 위치와의 거리
+              distance: get_distance(LatLng(res['latitude'] as double, res['longitude'] as double), LatLng(currentPosition.latitude, currentPosition.longitude)), // 음식점의 현 위치와의 거리
               naver_star: res['naver_star'] as double, // 음식점 네이버 평점
               naver_cnt: res['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
               naver_review_url: res['naver_review_url'] as String,

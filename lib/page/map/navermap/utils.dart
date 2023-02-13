@@ -290,5 +290,5 @@ double get_distance(position, myPosition) {
   var lat2 = myPosition.latitude;
   var lon2 = myPosition.longitude;
   var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
-  return double.parse((12742 * asin(sqrt(a))).toStringAsFixed(2));
+  return double.parse((12742 * asin(sqrt(a))).toStringAsFixed(1));
 }

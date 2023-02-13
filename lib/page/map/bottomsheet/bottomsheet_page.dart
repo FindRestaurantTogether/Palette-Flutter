@@ -52,9 +52,9 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     double height = MediaQuery.of(context).size.height;
 
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 20, left: 35, right: 35),
+      padding: EdgeInsets.only(top: 22, bottom: 22, left: 28, right: 28),
       width: width,
-      height: 205,
+      height: 212,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.white,
@@ -194,8 +194,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ), // 즐겨찾기
             ],
           ), // 음식점 이름 & 즐겨찾기
-          SizedBox(height: 5),
-          SizedBox(height: 8),
+          SizedBox(height: 13),
           Container(
             height: 20,
             child: Row(
@@ -268,7 +267,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
             ],
           ), // 서비스
-          SizedBox(height: 15),
+          SizedBox(height: 18),
           Container(
             height: 35,
             child: ToggleButtons(
@@ -400,7 +399,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               children: [
               Container(
-                  width: (width - 72) * 0.33,
+                  width: (width - 57) * 0.33,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -412,7 +411,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     ],
                   )),
               Container(
-                  width: (width - 72) * 0.33,
+                  width: (width - 57) * 0.33,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -424,7 +423,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     ],
                   )),
               Container(
-                width: (width - 72) * 0.33,
+                width: (width - 57) * 0.33,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
