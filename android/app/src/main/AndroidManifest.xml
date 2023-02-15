@@ -29,7 +29,7 @@
         </intent>
     </queries>
     <application
-        android:label="palette"
+        android:label="파레트(FiReTo)"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">

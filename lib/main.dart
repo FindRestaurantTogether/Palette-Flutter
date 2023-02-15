@@ -19,7 +19,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(RecentSearchModelAdapter());
   await Hive.openBox<RecentSearchModel>('recentsearch');
-  await Hive.openBox<RecentSearchModel>('favorite');
+
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(

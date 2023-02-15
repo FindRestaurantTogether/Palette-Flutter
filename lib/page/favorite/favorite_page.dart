@@ -3,7 +3,6 @@ import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
@@ -49,7 +48,6 @@ class _FavoritePageState extends State<FavoritePage> {
   void dispose() {
     _FavoriteListPageController.dispose();
     _FavoriteFolderPageController.dispose();
-    Hive.box('favorite').close();
     super.dispose();
   }
 

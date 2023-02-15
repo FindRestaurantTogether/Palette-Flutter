@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:870327208124:android:f6e29c179eadd36ad6a8b9",
         "android_client_info": {
-          "package_name": "com.FiReTo.palette"
+          "package_name": "com.example.myapp"
         }
       },
       "oauth_client": [

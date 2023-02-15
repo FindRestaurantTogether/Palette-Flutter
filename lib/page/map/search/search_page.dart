@@ -109,9 +109,7 @@ class _SearchPageState extends State<SearchPage> {
                                   if (recentSearchs.length > 10) {
                                     recentSearchs[9].delete();
                                   }
-
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
-
                                   Get.off(ListPage());
                                 }
                               },
@@ -199,6 +197,7 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ), // 내 위치 중심 / 지도 중심
+              SizedBox(height: 3),
               ValueListenableBuilder(
                   valueListenable: Hive.box<RecentSearchModel>('recentsearch').listenable(),
                   builder: (context, Box<RecentSearchModel> box, _) {
@@ -218,6 +217,8 @@ class _SearchPageState extends State<SearchPage> {
                                   await _NaverMapPageController.fetchRestaurantData(context, recentSearch.recentSearchWord);
                                   _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
 
+                                  final recentSearchBox = Hive.box<RecentSearchModel>('recentsearch');
+                                  recentSearchBox.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
                                   if (recentSearchs.length > 10) {
                                     recentSearchs[9].delete();
                                   }
