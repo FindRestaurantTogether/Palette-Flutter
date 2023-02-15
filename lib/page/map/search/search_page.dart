@@ -109,7 +109,9 @@ class _SearchPageState extends State<SearchPage> {
                                   if (recentSearchs.length > 10) {
                                     recentSearchs[9].delete();
                                   }
+
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
+
                                   Get.off(ListPage());
                                 }
                               },
