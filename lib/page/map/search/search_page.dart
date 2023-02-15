@@ -2,20 +2,21 @@ import 'package:expand_tap_area/expand_tap_area.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:myapp/page/map/search/recentsearch_model.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SearchPage extends StatefulWidget {
 
-  List _items;
-  SearchPage(this._items);
+  SearchPage({Key? key}) : super(key: key);
 
   @override
-  State<SearchPage> createState() => _SearchPageState(_items);
+  State<SearchPage> createState() => _SearchPageState();
 }
 
 class _SearchPageState extends State<SearchPage> {
@@ -26,14 +27,12 @@ class _SearchPageState extends State<SearchPage> {
   
   bool RecentSearch = true; // 최근 검색 focus?
 
-  List _items;
-  _SearchPageState(this._items);
-
   bool searchByMyLocation = true;
 
   @override
   void dispose() {
     _TextEditingController.dispose();
+    Hive.box('recentsearch').close();
     super.dispose();
   }
 
@@ -84,6 +83,7 @@ class _SearchPageState extends State<SearchPage> {
                           Container(
                             width: width * 0.87 - 120,
                             child: TextFormField(
+                              autofocus: true,
                               textInputAction: TextInputAction.go,
                               onFieldSubmitted: (value) async {
                                 if (value.isEmpty) {
@@ -103,14 +103,14 @@ class _SearchPageState extends State<SearchPage> {
 
                                   await _NaverMapPageController.fetchRestaurantData(context, value);
 
-                                  setState(() {
-                                    _SearchPageController.searchedWord.value = _TextEditingController.text;
-                                    if (_items.length >= 10) {
-                                      _items.removeAt(0);
-                                    }
-                                    _items.add(value);
-                                  });
-                                  await Get.off(ListPage());
+                                  final recentSearchBox = Hive.box<RecentSearchModel>('recentsearch');
+                                  recentSearchBox.add(RecentSearchModel(recentSearchWord: _TextEditingController.text));
+                                  final recentSearchs = List.from(recentSearchBox.values.toList().cast<RecentSearchModel>().reversed);
+                                  if (recentSearchs.length > 10) {
+                                    recentSearchs[9].delete();
+                                  }
+                                  _SearchPageController.searchedWord.value = _TextEditingController.text;
+                                  Get.off(ListPage());
                                 }
                               },
                               controller: _TextEditingController,
@@ -197,27 +197,29 @@ class _SearchPageState extends State<SearchPage> {
                   ),
                 ],
               ), // 내 위치 중심 / 지도 중심
-              Expanded(
-                child: ListView (
-                  padding: EdgeInsets.zero,
-                  children: [
-                    for(int i=_items.length-1; i>=0; i--) ...[
-                      Row(
-                        children: [
-                          Expanded(
+              ValueListenableBuilder(
+                  valueListenable: Hive.box<RecentSearchModel>('recentsearch').listenable(),
+                  builder: (context, Box<RecentSearchModel> box, _) {
+                    final recentSearchs = List.from(box.values.toList().cast<RecentSearchModel>().reversed);
+                    return Expanded(
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        itemCount: recentSearchs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final recentSearch = recentSearchs[index];
+                          return Expanded(
                             child: Container(
-                              height: 60,
+                              height: 50,
                               width: width,
                               child: ElevatedButton(
                                 onPressed: () async {
-                                  await _NaverMapPageController.fetchRestaurantData(context, _items[i]);
-                                  setState(() {
-                                    _SearchPageController.searchedWord.value = _items[i];
-                                    if (_items.length >= 10) {
-                                      _items.removeAt(0);
-                                    }
-                                    _items.add(_items[i]);
-                                  });
+                                  await _NaverMapPageController.fetchRestaurantData(context, recentSearch.recentSearchWord);
+                                  _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
+
+                                  if (recentSearchs.length > 10) {
+                                    recentSearchs[9].delete();
+                                  }
+
                                   Get.off(ListPage());
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -237,7 +239,8 @@ class _SearchPageState extends State<SearchPage> {
                                           decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
                                         ),
                                         SizedBox(width: 16),
-                                        Text('${_items[i]}',
+                                        Text(
+                                          recentSearch.recentSearchWord,
                                           style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
@@ -248,25 +251,20 @@ class _SearchPageState extends State<SearchPage> {
                                     ),
                                     IconButton(
                                         onPressed: (){
-                                          setState(() {
-                                            _items.removeAt(i);
-                                          });
+                                          recentSearch.delete();
                                         },
-                                        icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20))
+                                        icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20)
+                                    )
                                   ],
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) => Divider(height: 1),
                       ),
-                      Container(
-                        height: 1,
-                        color: Colors.grey[300],
-                      )
-                    ]
-                  ],
-                ),
+                    );
+                  }
               )
             ],
           ),

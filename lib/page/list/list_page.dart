@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/listview_page.dart';
-import 'package:myapp/page/map/map_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
@@ -80,11 +82,20 @@ class _ListPageState extends State<ListPage> {
                         width: width * 0.87 - 91,
                         height: 43,
                         child: Center(
-                          child: Text (
-                            _SearchPageController.searchedWord.value == '' ? '장소, 주소, 음식 검색' : _SearchPageController.searchedWord.value,
-                            style: TextStyle(
-                              fontSize: 17,
-                              color: Color(0xffb9b9b9),
+                          child: TextButton(
+                            onPressed: () {
+                              Get.off(SearchPage());
+                            },
+                            style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(Colors.transparent),
+                            ),
+                            child: Text (
+                              _SearchPageController.searchedWord.value == '' ? '장소, 주소, 음식 검색' : _SearchPageController.searchedWord.value,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Color(0xffb9b9b9),
+                              ),
                             ),
                           ),
                         )
@@ -96,11 +107,11 @@ class _ListPageState extends State<ListPage> {
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onPressed: () async {
-                        setState(() {
-                          _SearchPageController.searchedWord.value = '';
-                        });
+                        _SearchPageController.searchedWord.value = '';
                         Get.back();
-                        await _NaverMapPageController.fetchRestaurantData(context, '');
+                        Future.delayed(Duration(milliseconds: 500), () async {
+                          await _NaverMapPageController.fetchRestaurantData(context, '');
+                        });
                       },
                       icon: Image.asset('assets/button_image/close_button.png'),
                     ),
@@ -150,7 +161,7 @@ class _ListPageState extends State<ListPage> {
                                         DropdownSelected!,
                                         style: TextStyle(
                                           fontSize: 15,
-                                          color:  Color(0xfff42957),
+                                          color: Color(0xfff42957),
                                         ),
                                       ),
                                     );
@@ -318,7 +329,7 @@ class _ListPageState extends State<ListPage> {
             height: 4,
             color: Color(0xffeeeeee),
           ), // 회색 바
-          Expanded(child: ListviewPage())
+          ListviewPage()
         ],
       ),
     );

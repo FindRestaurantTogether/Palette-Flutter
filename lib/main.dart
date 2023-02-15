@@ -6,13 +6,20 @@ import 'package:myapp/page/loading/loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:myapp/page/map/search/recentsearch_model.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await FirebaseAppCheck.instance.activate(
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
+
+  await Hive.initFlutter();
+  Hive.registerAdapter(RecentSearchModelAdapter());
+  await Hive.openBox<RecentSearchModel>('recentsearch');
+
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(

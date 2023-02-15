@@ -20,22 +20,6 @@ class _MapPageState extends State<MapPage> {
 
   final _SearchPageController = Get.put(SearchPageController());
 
-  List _items = [];
-
-  Future<void> getData() async {
-    final String jsonString = await rootBundle.loadString('assets/search_data/recent_data.json');
-    final jsonResponse = await json.decode(jsonString);
-    setState(() {
-      _items = jsonResponse["data"];
-    });
-  }
-
-  @override
-  void initState() {
-    getData();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
 
@@ -96,12 +80,15 @@ class _MapPageState extends State<MapPage> {
                                 width: width * 0.72 - 91,
                                 child: TextButton(
                                   onPressed: () {
-                                    Get.to(() => SearchPage(_items));
+                                    Get.to(() => SearchPage());
                                   },
+                                  style: ButtonStyle(
+                                    overlayColor: MaterialStateProperty.all(Colors.transparent),
+                                  ),
                                   child: Text(
                                     _SearchPageController.searchedWord.value == '' ? '나의 지도' : _SearchPageController.searchedWord.value,
                                     overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Color(0xff787878), fontSize: 18),
+                                    style: TextStyle(color: _SearchPageController.searchedWord.value == '' ? Color(0xff787878) : Color(0xfff42957), fontSize: 18),
                                   ),
                                 ),
                               );
@@ -112,7 +99,7 @@ class _MapPageState extends State<MapPage> {
                                 splashColor: Colors.transparent,
                                 highlightColor: Colors.transparent,
                                 onPressed: () {
-                                  Get.to(() => SearchPage(_items));
+                                  Get.to(() => SearchPage());
                                 },
                                 icon: Image.asset('assets/button_image/search_button.png'),
                               ),

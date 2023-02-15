@@ -32,35 +32,41 @@ class TabPage extends StatelessWidget {
                     MyPage(),
                   ],
                 ),
-                bottomNavigationBar: BottomNavigationBar(
-                    // showSelectedLabels: false,
-                    // showUnselectedLabels: false,
-                    type: BottomNavigationBarType.fixed,
-                    backgroundColor: Colors.white,
-                    selectedItemColor: Color(0xfff42957),
-                    selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                    unselectedLabelStyle: TextStyle(fontSize: 10),
-                    unselectedItemColor: Colors.grey,
-                    onTap: _TabPageController.ChangeTab,
-                    currentIndex: _TabPageController.CurrentTab.value,
-                    items: [
-                      BottomNavigationBarItem(
-                        label: '홈',
-                        icon: Icon(Icons.home_outlined),
-                      ),
-                      BottomNavigationBarItem(
-                        label: '즐겨찾기',
-                        icon: Icon(Icons.bookmark_border),
-                      ),
-                      // BottomNavigationBarItem(
-                      //   label: '그룹',
-                      //   icon: Icon(Icons.add_alarm),
-                      // ),
-                      BottomNavigationBarItem(
-                        label: '마이페이지',
-                        icon: Icon(Icons.person_outline),
-                      ),
-                    ]),
+                bottomNavigationBar: Theme(
+                  data: ThemeData(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                  ),
+                  child: BottomNavigationBar(
+                      // showSelectedLabels: false,
+                      // showUnselectedLabels: false,
+                      type: BottomNavigationBarType.fixed,
+                      backgroundColor: Colors.white,
+                      selectedItemColor: Color(0xfff42957),
+                      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                      unselectedLabelStyle: TextStyle(fontSize: 10),
+                      unselectedItemColor: Colors.grey,
+                      onTap: _TabPageController.ChangeTab,
+                      currentIndex: _TabPageController.CurrentTab.value,
+                      items: [
+                        BottomNavigationBarItem(
+                          label: '홈',
+                          icon: Icon(Icons.home_outlined),
+                        ),
+                        BottomNavigationBarItem(
+                          label: '즐겨찾기',
+                          icon: Icon(Icons.bookmark_border),
+                        ),
+                        // BottomNavigationBarItem(
+                        //   label: '그룹',
+                        //   icon: Icon(Icons.add_alarm),
+                        // ),
+                        BottomNavigationBarItem(
+                          label: '마이페이지',
+                          icon: Icon(Icons.person_outline),
+                        ),
+                      ]),
+                ),
               )),
     );
   }

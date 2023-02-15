@@ -10,7 +10,7 @@ import 'package:myapp/page/favorite/folder/folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
-final List<String> DropdownList = ['최신순', '이름순', '거리순'];
+final List<String> DropdownList = ['최신순', '이름순'];
 // final List<String> DropdownList2 = ['최신순', '이름순'];
 
 class FavoritePage extends StatefulWidget {
@@ -419,7 +419,7 @@ class _FavoritePageState extends State<FavoritePage> {
                     SizedBox(height: 7),
                     Center(
                       child: Container(
-                        width: width - 37,
+                        width: width - 50,
                         height: height * 0.254,
                         decoration: BoxDecoration(
                           color: Colors.white.withOpacity(0.9),
@@ -1582,7 +1582,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                           ),
                                                                           Padding(
                                                                             padding: EdgeInsets.only(left: 4, right: 4),
-                                                                            child: TextField(
+                                                                            child: TextFormField(
+                                                                              autofocus: true,
                                                                               controller: _TextEditingController,
                                                                               maxLength: 20,
                                                                               decoration: InputDecoration(
