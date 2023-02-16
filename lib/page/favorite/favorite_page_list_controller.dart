@@ -2,9 +2,6 @@ import 'package:get/get.dart';
 
 class FavoriteListPageController extends GetxController {
 
-  RxList listRestaurant = [].obs;
-  RxList listRestaurantIsChecked = [].obs;
-
   // 지역 필터 열고 닫기
   bool openRegion = false;
   bool get oR => openRegion;

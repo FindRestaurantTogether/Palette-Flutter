@@ -4,21 +4,37 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/favorite/favorite_page.dart';
 import 'package:myapp/page/map/map_page.dart';
+import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/my/my_page.dart';
 import 'package:myapp/page/tab/tab_page_controller.dart';
 import 'package:myapp/page/group/group_page.dart';
 import 'package:myapp/page/onboarding/onboarding.dart';
 
 // 바텀네비게이션바 기능 추가
-class TabPage extends StatelessWidget {
+class TabPage extends StatefulWidget {
   TabPage({Key? key}) : super(key: key);
+
+  @override
+  State<TabPage> createState() => _TabPageState();
+}
+
+class _TabPageState extends State<TabPage> {
+
   final _TabPageController = Get.put(TabPageController());
+  final _MapPageController = Get.put(MapPageController());
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        await _onBackPressed(context);
+        if (_MapPageController.bS == true) {
+          setState(() {
+            _MapPageController.ChangeState();
+            Get.back();
+          });
+        } else {
+          await _onBackPressed(context);
+        }
         return false;
       },
       child: GetX<TabPageController>(

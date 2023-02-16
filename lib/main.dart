@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
+import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/loading/loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +19,15 @@ void main() async {
 
   await Hive.initFlutter();
   Hive.registerAdapter(RecentSearchModelAdapter());
+  Hive.registerAdapter(FavoriteModelAdapter());
+  Hive.registerAdapter(RestaurantModelAdapter());
   await Hive.openBox<RecentSearchModel>('recentsearch');
+  await Hive.openBox<FavoriteModel>('favorite');
 
+  // Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
+  // recentSearchBox.clear();
+  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  // favoriteBox.clear();
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(

@@ -1,123 +1,90 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-void main() => runApp(MyApp());
+const favoritesBox = 'favorite_books';
+const List<String> books = [
+  'Harry Potter',
+  'To Kill a Mockingbird',
+  'The Hunger Games',
+  'The Giver',
+  'Brave New World',
+  'Unwind',
+  'World War Z',
+  'The Lord of the Rings',
+  'The Hobbit',
+  'Moby Dick',
+  'War and Peace',
+  'Crime and Punishment',
+  'The Adventures of Huckleberry Finn',
+  'Catch-22',
+  'The Sound and the Fury',
+  'The Grapes of Wrath',
+  'Heart of Darkness',
+];
 
-class MyApp extends StatelessWidget {
+void main() async {
+  await Hive.initFlutter();
+  await Hive.openBox<String>(favoritesBox);
+  runApp(MyApp());
+}
+
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Box<String>? favoriteBooksBox;
+
+  @override
+  void initState() {
+    super.initState();
+    favoriteBooksBox = Hive.box(favoritesBox);
+  }
+
+  Widget getIcon(int index) {
+    if (favoriteBooksBox!.containsKey(index)) {
+      return Icon(Icons.favorite, color: Colors.red);
+    }
+    return Icon(Icons.favorite_border);
+  }
+
+  void onFavoritePress(int index) {
+    if (favoriteBooksBox.containsKey(index)) {
+      favoriteBooksBox.delete(index);
+      return;
+    }
+    favoriteBooksBox.put(index, books[index]);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Favorite Books with Hive',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-  ];
-  List<String> selectedItems = [];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: DropdownButtonHideUnderline(
-          child: DropdownButton2(
-            isExpanded: true,
-            hint: Align(
-              alignment: AlignmentDirectional.center,
-              child: Text(
-                'Select Items',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Theme.of(context).hintColor,
-                ),
-              ),
-            ),
-            items: items.map((item) {
-              return DropdownMenuItem<String>(
-                value: item,
-                //disable default onTap to avoid closing menu when selecting an item
-                enabled: false,
-                child: StatefulBuilder(
-                  builder: (context, menuSetState) {
-                    final _isSelected = selectedItems.contains(item);
-                    return InkWell(
-                      onTap: () {
-                        _isSelected
-                            ? selectedItems.remove(item)
-                            : selectedItems.add(item);
-                        //This rebuilds the StatefulWidget to update the button's text
-                        setState(() {});
-                        //This rebuilds the dropdownMenu Widget to update the check mark
-                        menuSetState(() {});
-                      },
-                      child: Container(
-                        height: double.infinity,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        child: Row(
-                          children: [
-                            _isSelected
-                                ? const Icon(Icons.check_box_outlined)
-                                : const Icon(Icons.check_box_outline_blank),
-                            const SizedBox(width: 16),
-                            Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }).toList(),
-            //Use last selected item as the current value so if we've limited menu height, it scroll to last item.
-            value: selectedItems.isEmpty ? null : selectedItems.last,
-            onChanged: (value) {},
-            buttonHeight: 40,
-            buttonWidth: 140,
-            itemHeight: 40,
-            itemPadding: EdgeInsets.zero,
-            selectedItemBuilder: (context) {
-              return items.map(
-                    (item) {
-                  return Container(
-                    alignment: AlignmentDirectional.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Text(
-                      selectedItems.join(', '),
-                      style: const TextStyle(
-                        fontSize: 14,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      maxLines: 1,
-                    ),
-                  );
-                },
-              ).toList();
-            },
-          ),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Favorite Books w/ Hive"),
+        ),
+        body: ValueListenableBuilder(
+          valueListenable: favoriteBooksBox.listenable(),
+          builder: (context, Box<String> box, _) {
+            return ListView.builder(
+              itemCount: books.length,
+              itemBuilder: (context, listIndex) {
+                return ListTile(
+                  title: Text(books[listIndex]),
+                  trailing: IconButton(
+                    icon: getIcon(listIndex),
+                    onPressed: () => onFavoritePress(listIndex),
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );

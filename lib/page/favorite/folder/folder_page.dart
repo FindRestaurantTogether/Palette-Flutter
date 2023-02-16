@@ -1,9 +1,13 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:expand_tap_area/expand_tap_area.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/detail/detail_page.dart';
+import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
+import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/folder_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
@@ -20,31 +24,28 @@ class FolderPage extends StatefulWidget {
 class _FolderPageState extends State<FolderPage> {
 
   final _FolderPageController = Get.put(FolderPageController());
-  final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
-  final _NaverMapPageController = Get.put(NaverMapPageController());
+  final _FavoriteListPageController = Get.put(FavoriteListPageController());
   final _TextEditingController = TextEditingController();
 
   bool isList = true;
 
   String? DropdownSelected = DropdownList.first;
 
-  bool allChecked = false;
-  late List<bool> isChecked;
+  bool switchSelected = false;
+  List<String> regionList = ["내 주변", "강남/서초", "강동/송파", "동작/관악/금천", "마포/은평/서대문", "성동/광진/중랑/동대문", "성북/강북/도봉/노원", "영등포/구로/강서/양천", "용산/종로/중구"];
+  List<bool> regionSelected = [false, false, false, false, false, false, false, false, false];
 
   final selectedFolderIndex = Get.arguments;
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    isChecked = List<bool>.filled(_NaverMapPageController.restaurants.where((NaverMapPageModel restaurant) => restaurant.favorite == true).length, false);
-  }
+  bool favoriteFolderRestaurantAllChecked = false;
+  List<bool> favoriteFolderRestaurantIsChecked = List<bool>.filled(50, false);
 
   @override
   void dispose() {
-    _FolderPageController.dispose();
-    _FavoriteFolderPageController.dispose();
-    _TextEditingController.dispose();
+    // _FolderPageController.dispose();
+    // _FavoriteFolderPageController.dispose();
+    // _TextEditingController.dispose();
+    Hive.box('favorite').close();
     super.dispose();
   }
 
@@ -54,7 +55,8 @@ class _FolderPageState extends State<FolderPage> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    var _selectedRestaurants = _FavoriteFolderPageController.folderRestaurant[selectedFolderIndex];
+    Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+    FavoriteModel favoriteFolder = favoriteBox.values.toList().cast<FavoriteModel>()[selectedFolderIndex];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -100,7 +102,7 @@ class _FolderPageState extends State<FolderPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '${_FavoriteFolderPageController.folderName[selectedFolderIndex]}',
+                          favoriteFolder.favoriteFolderName,
                           style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -131,16 +133,14 @@ class _FolderPageState extends State<FolderPage> {
                                     Container(
                                       width: 30,
                                       child: Checkbox(
-                                        value: allChecked,
+                                        value: favoriteFolderRestaurantAllChecked,
                                         onChanged: (bool? value) {
                                           setState(() {
-                                            print(allChecked);
-                                            allChecked = !allChecked;
-                                            print(allChecked);
-                                            if (allChecked == true){
-                                              isChecked = List<bool>.filled(_selectedRestaurants.length, true);
-                                            } else if (allChecked == false) {
-                                              isChecked = List<bool>.filled(_selectedRestaurants.length, false);
+                                            favoriteFolderRestaurantAllChecked = !favoriteFolderRestaurantAllChecked;
+                                            if (favoriteFolderRestaurantAllChecked == true){
+                                              favoriteFolderRestaurantIsChecked = List<bool>.filled(favoriteFolder.favoriteFolderRestaurantList.length, true);
+                                            } else if (favoriteFolderRestaurantAllChecked == false) {
+                                              favoriteFolderRestaurantIsChecked = List<bool>.filled(favoriteFolder.favoriteFolderRestaurantList.length, false);
                                             }
                                           });
                                         },
@@ -179,7 +179,11 @@ class _FolderPageState extends State<FolderPage> {
                             ],
                           ),
                           child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  _FavoriteListPageController.openRegionChangeState();
+                                });
+                              },
                               child: Text(
                                 '지역',
                                 style: TextStyle(
@@ -213,6 +217,19 @@ class _FolderPageState extends State<FolderPage> {
                               onPressed: () {},
                               child: DropdownButton2(
                                 isExpanded: true,
+                                selectedItemBuilder: (BuildContext context) {
+                                  return DropdownList.map((String value) {
+                                    return Center(
+                                      child: Text(
+                                        DropdownSelected!,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          color:  Color(0xfff42957),
+                                        ),
+                                      ),
+                                    );
+                                  }).toList();
+                                },
                                 items: DropdownList
                                     .map((item) => DropdownMenuItem<String>(
                                     value: item,
@@ -231,13 +248,17 @@ class _FolderPageState extends State<FolderPage> {
                                   });
                                 },
                                 underline: Container(),
-                                buttonElevation: 0,
-                                dropdownWidth: 78,
+                                icon: SizedBox(
+                                  width: 12,
+                                  height: 12,
+                                  child: Image.asset('assets/button_image/down_button.png'),
+                                ),
+                                dropdownWidth: width * 0.26,
                                 dropdownDecoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 itemHeight: 40,
-                                offset: Offset(-15, -1),
+                                offset: Offset(-15, -3),
                               )
                           ),
                         ),
@@ -306,8 +327,8 @@ class _FolderPageState extends State<FolderPage> {
                                   setState(() {
                                     _FolderPageController.editShareChangeState();
                                     _FolderPageController.checkEditChangeState();
-                                    isChecked = List<bool>.filled(_selectedRestaurants.length, false);
-                                    allChecked = false;
+                                    favoriteFolderRestaurantIsChecked = List<bool>.filled(favoriteFolder.favoriteFolderRestaurantList.length, false);
+                                    favoriteFolderRestaurantAllChecked = false;
                                   });
                                 },
                                 child: Container(
@@ -326,8 +347,8 @@ class _FolderPageState extends State<FolderPage> {
                                   setState(() {
                                     _FolderPageController.editShareChangeState();
                                     _FolderPageController.checkShareChangeState();
-                                    List<bool>.filled(_selectedRestaurants.length, false);
-                                    allChecked = false;
+                                    favoriteFolderRestaurantIsChecked = List<bool>.filled(favoriteFolder.favoriteFolderRestaurantList.length, false);
+                                    favoriteFolderRestaurantAllChecked = false;
                                   });
                                 },
                                 child: Container(
@@ -363,30 +384,559 @@ class _FolderPageState extends State<FolderPage> {
                   ],
                 ),
                 SizedBox(height: 2),
+                if (_FavoriteListPageController.oR == true) ... [
+                  SizedBox(height: 7),
+                  Center(
+                    child: Container(
+                      width: width - 50,
+                      height: height * 0.254,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.15),
+                            spreadRadius: 2,
+                            blurRadius: 10,
+                            offset: Offset(0, -1),
+                          ),
+                        ],
+                      ),
+                      padding: EdgeInsets.only(top: 16, bottom: 16, left: 22, right: 20),
+                      child: Column(
+                        children: [
+                          Container(
+                            height: height * 0.03,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  ' 지역',
+                                  style: TextStyle(color: Color(0xff787878), fontSize: 13, fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      ' 전체 ',
+                                      style: TextStyle(color: Color(0xff787878), fontSize: 12),
+                                    ), // 전체 텍스트
+                                    Container(
+                                      width: width * 0.082,
+                                      child: Transform.scale(
+                                        scale: 0.5,
+                                        child: CupertinoSwitch(
+                                            activeColor: Color(0xfff42957),
+                                            value: switchSelected, // SwitchSelected 값에 따라
+                                            onChanged: (value) {
+                                              setState(() {
+                                                switchSelected = value; // SwitchSelected 값 바꿔주기
+
+                                                if (switchSelected == true)
+                                                  for (int i = 0; i < regionSelected.length; i++)
+                                                    regionSelected[i] = true;
+                                                if (switchSelected == false)
+                                                  for (int i = 0; i < regionSelected.length; i++)
+                                                    regionSelected[i] = false; // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                              });
+                                            }),
+                                      ),
+                                    ) // 스위치 버튼
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ), // 지역과 전체
+                          SizedBox(
+                            height: height * 0.016,
+                          ), // 빈 공간
+                          Container(
+                            height: height * 0.03,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 0; i < 1; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 64,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 64,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 내 주변
+                                for (int i = 1; i < 2; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 72,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 72,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 강남/서초
+                                for (int i = 2; i < 3; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 72,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 72,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ] // 강동/송파
+                              ],
+                            ),
+                          ), // 첫째줄 필터
+                          SizedBox(
+                            height: height * 0.01,
+                          ), // 빈 공간
+                          Container(
+                            height: height * 0.03,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 3; i < 4; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 100,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 100,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 동작/관악/금천
+                                for (int i = 4; i < 5; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 112,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 112,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 마포/은평/서대문
+                              ],
+                            ),
+                          ), // 둘째줄 필터
+                          SizedBox(
+                            height: height * 0.01,
+                          ), // 빈 공간
+                          Container(
+                            height: height * 0.03,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 5; i < 6; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 136,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 136,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 성동/광진/중랑/동대문
+                                for (int i = 6; i < 7; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 126,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 126,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 성북/강북/도봉/노원
+                              ],
+                            ),
+                          ), // 세번째줄 필터
+                          SizedBox(
+                            height: height * 0.01,
+                          ), // 빈 공간
+                          Container(
+                            height: height * 0.03,
+                            child: ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: [
+                                for (int i = 7; i < 8; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 136,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 136,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 영등포/구로/강서/양천
+                                for (int i = 8; i < 9; i++) ...[
+                                  regionSelected[i]
+                                      ? Container(
+                                    width: 100,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfff42957),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder())),
+                                  )
+                                      : Container(
+                                    width: 100,
+                                    child: OutlinedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            regionSelected[i] = !regionSelected[i];
+                                          });
+                                        },
+                                        child: Text(
+                                          regionList[i],
+                                          style: TextStyle(color: Color(0xfff42957), fontSize: 12),
+                                        ),
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Color(0xfffff6f8),
+                                            side: BorderSide(width: 1, color: Color(0xfff42957)),
+                                            minimumSize: Size.zero,
+                                            padding: EdgeInsets.zero,
+                                            shape: StadiumBorder()
+                                        )
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: width * 0.016,
+                                  ),
+                                ], // 용산/종로/중구
+                              ],
+                            ),
+                          ), // 네번째줄 필터
+                        ],
+                      ), // innerfilter 박스 내 내용물
+                    ),
+                  )
+                ],
               ],
             ), // 리스트 필터
             Expanded(
                 child: Stack(
                   children: [
-                    ListView.separated(
-                      physics: BouncingScrollPhysics(),
-                      padding: EdgeInsets.all(3),
-                      itemCount: _selectedRestaurants.length,
-                      itemBuilder: (context, index){
-                        return ExpandTapWidget(
-                            onTap: () {
-                              if (_FolderPageController.eS == false) {
-                                Get.to(() => DetailPage(), arguments: _selectedRestaurants.elementAt(index));
-                              }
-                            },
-                            tapPadding: EdgeInsets.all(25),
-                            child: Container(
-                              padding: EdgeInsets.only(left: 10, right: _FolderPageController.eS ? 17: 25, top: 10, bottom: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  _FolderPageController.eS
-                                      ? Row(
+                    ValueListenableBuilder(
+                      valueListenable: Hive.box<FavoriteModel>('favorite').listenable(),
+                      builder: (BuildContext context, Box<FavoriteModel> box, _) {
+                        return ListView.separated(
+                          physics: BouncingScrollPhysics(),
+                          padding: EdgeInsets.all(3),
+                          itemCount: favoriteFolder.favoriteFolderRestaurantList.length,
+                          itemBuilder: (BuildContext context, int index){
+                            RestaurantModel favoriteRestaurant = favoriteFolder.favoriteFolderRestaurantList[index];
+                            return ExpandTapWidget(
+                                onTap: () {
+                                  if (_FolderPageController.eS == false) {
+                                    Get.to(() => DetailPage(), arguments: favoriteRestaurant);
+                                  }
+                                },
+                                tapPadding: EdgeInsets.all(25),
+                                child: Container(
+                                  padding: EdgeInsets.only(left: 10, right: _FolderPageController.eS ? 17: 25, top: 10, bottom: 10),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _FolderPageController.eS
+                                          ? Row(
                                         children: [
                                           Container(
                                             height: 95,
@@ -395,10 +945,10 @@ class _FolderPageState extends State<FolderPage> {
                                             child: Align(
                                               alignment: Alignment.topCenter,
                                               child: Checkbox(
-                                                value: isChecked[index],
+                                                value: favoriteFolderRestaurantIsChecked[index],
                                                 onChanged: (bool? value) {
                                                   setState(() {
-                                                    isChecked[index] = !isChecked[index]!;
+                                                    favoriteFolderRestaurantIsChecked[index] = !favoriteFolderRestaurantIsChecked[index]!;
                                                   });
                                                 },
                                                 shape: CircleBorder(),
@@ -418,7 +968,7 @@ class _FolderPageState extends State<FolderPage> {
                                                         Container(
                                                           height: 20,
                                                           child: Text(
-                                                            '${_selectedRestaurants.elementAt(index).store_name}',
+                                                            favoriteRestaurant.store_name,
                                                             style: TextStyle(
                                                                 color: Color(0xff464646),
                                                                 fontSize: 16,
@@ -428,7 +978,7 @@ class _FolderPageState extends State<FolderPage> {
                                                         SizedBox(
                                                           width: 1,
                                                         ),
-                                                        if (_selectedRestaurants.elementAt(index).open == 'open')
+                                                        if (favoriteRestaurant.open == 'open')
                                                           Container(
                                                             height: 20,
                                                             child: Align(
@@ -442,7 +992,7 @@ class _FolderPageState extends State<FolderPage> {
                                                               ),
                                                             ),
                                                           )
-                                                        else if (_selectedRestaurants.elementAt(index).open == 'close')
+                                                        else if (favoriteRestaurant.open == 'close')
                                                           Container(
                                                             height: 20,
                                                             child: Align(
@@ -456,7 +1006,7 @@ class _FolderPageState extends State<FolderPage> {
                                                               ),
                                                             ),
                                                           )
-                                                        else if (_selectedRestaurants.elementAt(index).open == 'breaktime')
+                                                        else if (favoriteRestaurant.open == 'breaktime')
                                                             Container(
                                                               height: 20,
                                                               child: Align(
@@ -470,7 +1020,7 @@ class _FolderPageState extends State<FolderPage> {
                                                                 ),
                                                               ),
                                                             )
-                                                          else if (_selectedRestaurants.elementAt(index).open == 'null')
+                                                          else if (favoriteRestaurant.open == 'null')
                                                               Container(
                                                                 height: 20,
                                                                 child: Align(
@@ -491,7 +1041,7 @@ class _FolderPageState extends State<FolderPage> {
                                                             mainAxisAlignment: MainAxisAlignment.end,
                                                             children: [
                                                               Text(
-                                                                '  ${_selectedRestaurants.elementAt(index).category}',
+                                                                '  ${favoriteRestaurant.category}',
                                                                 style: TextStyle(
                                                                     color: Color(0xff838383), fontSize: 10),
                                                               ),
@@ -513,7 +1063,7 @@ class _FolderPageState extends State<FolderPage> {
                                                       ),
                                                       SizedBox(width: 3),
                                                       Text(
-                                                        '${_selectedRestaurants.elementAt(index).naver_star}',
+                                                        favoriteRestaurant.naver_star.toString(),
                                                         style: TextStyle(
                                                             fontSize: 13,
                                                             fontWeight: FontWeight.bold,
@@ -522,7 +1072,7 @@ class _FolderPageState extends State<FolderPage> {
                                                       ),
                                                       SizedBox(width: 3),
                                                       Text(
-                                                        '(${_selectedRestaurants.elementAt(index).naver_cnt}건)',
+                                                        '(${favoriteRestaurant.naver_cnt}건)',
                                                         style: TextStyle(
                                                             fontSize: 11,
                                                             color: Color(0xff464646)
@@ -536,7 +1086,7 @@ class _FolderPageState extends State<FolderPage> {
                                                   child: Row(
                                                     children: [
                                                       Text(
-                                                        '${_selectedRestaurants.elementAt(index).jibun_address.substring(0,_selectedRestaurants.elementAt(index).jibun_address.indexOf('동') + 1)}',
+                                                        '${favoriteRestaurant.jibun_address.substring(0,favoriteRestaurant.jibun_address.indexOf('동') + 1)}',
                                                         style: TextStyle(
                                                             fontSize: 12,
                                                             color: Color(0xff464646)
@@ -550,7 +1100,7 @@ class _FolderPageState extends State<FolderPage> {
                                           ),
                                         ],
                                       )
-                                      : Container(
+                                          : Container(
                                         padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 15),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -561,7 +1111,7 @@ class _FolderPageState extends State<FolderPage> {
                                                     Container(
                                                       height: 20,
                                                       child: Text(
-                                                        '${_selectedRestaurants.elementAt(index).store_name}',
+                                                        favoriteRestaurant.store_name,
                                                         style: TextStyle(
                                                             color: Color(0xff464646),
                                                             fontSize: 16,
@@ -571,7 +1121,7 @@ class _FolderPageState extends State<FolderPage> {
                                                     SizedBox(
                                                       width: 1,
                                                     ),
-                                                    if (_selectedRestaurants.elementAt(index).open == 'open')
+                                                    if (favoriteRestaurant.open == 'open')
                                                       Container(
                                                         height: 20,
                                                         child: Align(
@@ -585,7 +1135,7 @@ class _FolderPageState extends State<FolderPage> {
                                                           ),
                                                         ),
                                                       )
-                                                    else if (_selectedRestaurants.elementAt(index).open == 'close')
+                                                    else if (favoriteRestaurant.open == 'close')
                                                       Container(
                                                         height: 20,
                                                         child: Align(
@@ -599,8 +1149,8 @@ class _FolderPageState extends State<FolderPage> {
                                                           ),
                                                         ),
                                                       )
-                                                    else if (_selectedRestaurants.elementAt(index).open == 'breaktime')
-                                                      Container(
+                                                    else if (favoriteRestaurant.open == 'breaktime')
+                                                        Container(
                                                           height: 20,
                                                           child: Align(
                                                             alignment: Alignment.topCenter,
@@ -613,8 +1163,8 @@ class _FolderPageState extends State<FolderPage> {
                                                             ),
                                                           ),
                                                         )
-                                                    else if (_selectedRestaurants.elementAt(index).open == 'null')
-                                                      Container(
+                                                      else if (favoriteRestaurant.open == 'null')
+                                                          Container(
                                                             height: 20,
                                                             child: Align(
                                                               alignment: Alignment.topCenter,
@@ -634,7 +1184,7 @@ class _FolderPageState extends State<FolderPage> {
                                                         mainAxisAlignment: MainAxisAlignment.end,
                                                         children: [
                                                           Text(
-                                                            '  ${_selectedRestaurants.elementAt(index).category}',
+                                                            '  ${favoriteRestaurant.category}',
                                                             style: TextStyle(
                                                                 color: Color(0xff838383), fontSize: 10),
                                                           ),
@@ -656,7 +1206,7 @@ class _FolderPageState extends State<FolderPage> {
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '${_selectedRestaurants.elementAt(index).naver_star}',
+                                                    favoriteRestaurant.naver_star.toString(),
                                                     style: TextStyle(
                                                         fontSize: 13,
                                                         fontWeight: FontWeight.bold,
@@ -665,10 +1215,10 @@ class _FolderPageState extends State<FolderPage> {
                                                   ),
                                                   SizedBox(width: 3),
                                                   Text(
-                                                    '(${_selectedRestaurants.elementAt(index).naver_cnt}건)',
+                                                    '(${favoriteRestaurant.naver_cnt}건)',
                                                     style: TextStyle(
-                                                      fontSize: 11,
-                                                      color: Color(0xff464646)
+                                                        fontSize: 11,
+                                                        color: Color(0xff464646)
                                                     ),
                                                   )
                                                 ],
@@ -679,10 +1229,10 @@ class _FolderPageState extends State<FolderPage> {
                                               child: Row(
                                                 children: [
                                                   Text(
-                                                    '${_selectedRestaurants.elementAt(index).jibun_address.substring(0,_selectedRestaurants.elementAt(index).jibun_address.indexOf('동') + 1)}',
+                                                    '${favoriteRestaurant.jibun_address.substring(0,favoriteRestaurant.jibun_address.indexOf('동') + 1)}',
                                                     style: TextStyle(
-                                                      fontSize: 12,
-                                                      color: Color(0xff464646)
+                                                        fontSize: 12,
+                                                        color: Color(0xff464646)
                                                     ),
                                                   )
                                                 ],
@@ -691,24 +1241,26 @@ class _FolderPageState extends State<FolderPage> {
                                           ],
                                         ),
                                       ),
-                                  Container(
-                                    width: 120,
-                                    height: 80,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                          image: AssetImage(_NaverMapPageController.restaurants[index].store_image[0]),
-                                          fit: BoxFit.fill
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
+                                      Container(
+                                        width: 120,
+                                        height: 80,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                              image: AssetImage(favoriteRestaurant.store_image[0]),
+                                              fit: BoxFit.fill
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider();
+                          },
                         );
-                      },
-                      separatorBuilder: (context, index) {
-                        return Divider();
                       },
                     ),
                     if (_FolderPageController.cE == true) ... [
@@ -719,7 +1271,9 @@ class _FolderPageState extends State<FolderPage> {
                           width: 300,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+
+                            },
                             child: Text(
                               '삭제',
                               style: TextStyle(

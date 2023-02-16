@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -6,6 +5,7 @@ import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/filter/filter_page.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
 
@@ -19,6 +19,7 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
 
   final _SearchPageController = Get.put(SearchPageController());
+  final _NaverMapPageController = Get.put(NaverMapPageController());
 
   @override
   Widget build(BuildContext context) {
@@ -42,41 +43,41 @@ class _MapPageState extends State<MapPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      SizedBox(width: width * 0.065),
-                      Container(
-                        width: width * 0.72,
-                        height: 43,
-                        padding: EdgeInsets.only(left: 12, right: 11),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(30),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              spreadRadius: 2,
-                              blurRadius: 7,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 35,
-                              child: IconButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onPressed: () {
-                                  Get.to(() => ListPage());
-                                },
-                                icon: Image.asset('assets/button_image/list_button.png'),
+                  Obx(() {
+                    return Row(
+                      children: [
+                        SizedBox(width: width * 0.065),
+                        Container(
+                          width: width * 0.72,
+                          height: 43,
+                          padding: EdgeInsets.only(left: 12, right: 11),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(30),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.25),
+                                spreadRadius: 2,
+                                blurRadius: 7,
+                                offset: Offset(0, 2),
                               ),
-                            ),
-                            Obx(() {
-                              return Container(
+                            ],
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              SizedBox(
+                                width: 35,
+                                child: IconButton(
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onPressed: () {
+                                    Get.to(() => ListPage());
+                                  },
+                                  icon: Image.asset('assets/button_image/list_button.png'),
+                                ),
+                              ),
+                              Container(
                                 width: width * 0.72 - 91,
                                 child: TextButton(
                                   onPressed: () {
@@ -86,29 +87,46 @@ class _MapPageState extends State<MapPage> {
                                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                                   ),
                                   child: Text(
-                                    _SearchPageController.searchedWord.value == '' ? '나의 지도' : _SearchPageController.searchedWord.value,
+                                    _SearchPageController.searchedWord.value == ''
+                                        ? '나의 지도'
+                                        : _SearchPageController.searchedWord.value,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(color: _SearchPageController.searchedWord.value == '' ? Color(0xff787878) : Color(0xfff42957), fontSize: 18),
                                   ),
                                 ),
-                              );
-                            }),
-                            SizedBox(
-                              width: 33,
-                              child: IconButton(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onPressed: () {
-                                  Get.to(() => SearchPage());
-                                },
-                                icon: Image.asset('assets/button_image/search_button.png'),
                               ),
-                            ),
-                          ],
+                              _SearchPageController.searchedWord.value == ''
+                                  ? SizedBox(
+                                width: 33,
+                                child: IconButton(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onPressed: () {
+                                      Get.to(() => SearchPage());
+                                    },
+                                    icon: Image.asset('assets/button_image/search_button.png')
+                                ),
+                              )
+                                  : SizedBox(
+                                width: 31,
+                                child: IconButton(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onPressed: () {
+                                      _SearchPageController.searchedWord.value = '';
+                                      Future.delayed(Duration(milliseconds: 500), () async {
+                                        await _NaverMapPageController.fetchRestaurantData(context, '');
+                                      });
+                                    },
+                                    icon: Image.asset('assets/button_image/close_button.png')
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+                      ],
+                    );
+                  }),
                   Row(
                     children: [
                       Container(

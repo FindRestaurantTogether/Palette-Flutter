@@ -172,5 +172,6 @@ class NaverMapPageController extends GetxService {
         markers.add(customMarker);
       });
     }
+
   }
 }

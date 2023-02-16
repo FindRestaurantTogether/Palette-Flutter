@@ -103,11 +103,10 @@ class _SearchPageState extends State<SearchPage> {
 
                                   await _NaverMapPageController.fetchRestaurantData(context, value);
 
-                                  final recentSearchBox = Hive.box<RecentSearchModel>('recentsearch');
+                                  Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
                                   recentSearchBox.add(RecentSearchModel(recentSearchWord: _TextEditingController.text));
-                                  final recentSearchs = List.from(recentSearchBox.values.toList().cast<RecentSearchModel>().reversed);
-                                  if (recentSearchs.length > 10) {
-                                    recentSearchs[9].delete();
+                                  if (recentSearchBox.length > 10) {
+                                    recentSearchBox.deleteAt(0);
                                   }
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
                                   Get.off(ListPage());
@@ -200,66 +199,63 @@ class _SearchPageState extends State<SearchPage> {
               SizedBox(height: 3),
               ValueListenableBuilder(
                   valueListenable: Hive.box<RecentSearchModel>('recentsearch').listenable(),
-                  builder: (context, Box<RecentSearchModel> box, _) {
-                    final recentSearchs = List.from(box.values.toList().cast<RecentSearchModel>().reversed);
+                  builder: (BuildContext context, Box<RecentSearchModel> box, _) {
+                    List<RecentSearchModel> recentSearchs = List.from(box.values.toList().cast<RecentSearchModel>().reversed);
                     return Expanded(
                       child: ListView.separated(
                         padding: EdgeInsets.zero,
                         itemCount: recentSearchs.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final recentSearch = recentSearchs[index];
-                          return Expanded(
-                            child: Container(
-                              height: 50,
-                              width: width,
-                              child: ElevatedButton(
-                                onPressed: () async {
-                                  await _NaverMapPageController.fetchRestaurantData(context, recentSearch.recentSearchWord);
-                                  _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
+                          RecentSearchModel recentSearch = recentSearchs[index];
+                          return Container(
+                            height: 50,
+                            width: width,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                await _NaverMapPageController.fetchRestaurantData(context, recentSearch.recentSearchWord);
+                                _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
 
-                                  final recentSearchBox = Hive.box<RecentSearchModel>('recentsearch');
-                                  recentSearchBox.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
-                                  if (recentSearchs.length > 10) {
-                                    recentSearchs[9].delete();
-                                  }
+                                box.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
+                                if (recentSearchs.length > 10) {
+                                  recentSearchs[9].delete();
+                                }
 
-                                  Get.off(ListPage());
-                                },
-                                style: ElevatedButton.styleFrom(
-                                    padding: EdgeInsets.only(left: 30,right: 20),
-                                    elevation: 0,
-                                    primary: Colors.white
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          height: 30,
-                                          width: 30,
-                                          child: Icon(Icons.search,color: Color(0xffa0a0a0), size: 20),
-                                          decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
+                                Get.off(ListPage());
+                              },
+                              style: ElevatedButton.styleFrom(
+                                  padding: EdgeInsets.only(left: 30,right: 20),
+                                  elevation: 0,
+                                  primary: Colors.white
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Container(
+                                        height: 30,
+                                        width: 30,
+                                        child: Icon(Icons.search,color: Color(0xffa0a0a0), size: 20),
+                                        decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
+                                      ),
+                                      SizedBox(width: 16),
+                                      Text(
+                                        recentSearch.recentSearchWord,
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xffa0a0a0)
                                         ),
-                                        SizedBox(width: 16),
-                                        Text(
-                                          recentSearch.recentSearchWord,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xffa0a0a0)
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    IconButton(
-                                        onPressed: (){
-                                          recentSearch.delete();
-                                        },
-                                        icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20)
-                                    )
-                                  ],
-                                ),
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                      onPressed: (){
+                                        recentSearch.delete();
+                                      },
+                                      icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20)
+                                  )
+                                ],
                               ),
                             ),
                           );

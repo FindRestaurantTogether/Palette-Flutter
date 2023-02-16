@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
@@ -50,6 +52,9 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+    List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
 
     return Container(
       padding: EdgeInsets.only(top: 22, bottom: 22, left: 28, right: 28),
@@ -165,8 +170,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     onPressed: (){
                       setState(() {
                         _NaverMapPageController.restaurants[selectedIndex].favorite.toggle();
-                        _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
-                        _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
+                        // _FavoriteListPageController.listRestaurantIsChecked.removeAt(_FavoriteListPageController.listRestaurant.indexWhere((e) => e == selectedRestaurant));
+                        // _FavoriteListPageController.listRestaurant.remove(selectedRestaurant);
                         for (var i=0 ; i<_FavoriteFolderPageController.folderRestaurant.length ; i++) {
                           if (_FavoriteFolderPageController.folderRestaurant[i].contains(selectedRestaurant))
                             _FavoriteFolderPageController.folderRestaurant[i].remove(selectedRestaurant);

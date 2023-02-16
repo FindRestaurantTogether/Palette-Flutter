@@ -79,7 +79,7 @@ class _ListPageState extends State<ListPage> {
                   ),
                   Obx(() {
                     return  Container(
-                        width: width * 0.87 - 91,
+                        width: width * 0.87 - 92,
                         height: 43,
                         child: Center(
                           child: TextButton(
@@ -102,16 +102,17 @@ class _ListPageState extends State<ListPage> {
                     );
                   }),
                   SizedBox(
-                    width: 30,
+                    width: 31,
                     child: IconButton(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onPressed: () async {
                         _SearchPageController.searchedWord.value = '';
                         Get.back();
-                        Future.delayed(Duration(milliseconds: 500), () async {
-                          await _NaverMapPageController.fetchRestaurantData(context, '');
-                        });
+                        await _NaverMapPageController.fetchRestaurantData(context, '');
+                        // Future.delayed(Duration(milliseconds: 500), () async {
+                        //   await _NaverMapPageController.fetchRestaurantData(context, '');
+                        // });
                       },
                       icon: Image.asset('assets/button_image/close_button.png'),
                     ),
