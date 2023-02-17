@@ -6,11 +6,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
-import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/folder_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
 final List<String> DropdownList = ['최신순', '이름순', '거리순'];
 

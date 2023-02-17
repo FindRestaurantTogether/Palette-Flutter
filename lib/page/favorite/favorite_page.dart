@@ -6,11 +6,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
-import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
 import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
 import 'package:myapp/page/favorite/folder/folder_page.dart';
-import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
 final List<String> DropdownList = ['최신순', '이름순'];
 // final List<String> DropdownList2 = ['최신순', '이름순'];
@@ -30,7 +27,6 @@ class _FavoritePageState extends State<FavoritePage> {
   // String? DropdownSelected2 = DropdownList2.first;
 
   final _FavoriteListPageController = Get.put(FavoriteListPageController());
-  final _FavoriteFolderPageController = Get.put(FavoriteFolderPageController());
   
   final _TextEditingController = TextEditingController();
 
@@ -54,6 +50,8 @@ class _FavoritePageState extends State<FavoritePage> {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+
+    Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -1584,7 +1582,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                 controller: _TextEditingController,
                                                                                 maxLength: 20,
                                                                                 decoration: InputDecoration(
-                                                                                    hintText: _FavoriteFolderPageController.folderName[index],
+                                                                                    hintText: favoriteFolder.favoriteFolderName,
                                                                                     suffixIcon: IconButton(
                                                                                         onPressed: () {
                                                                                           _TextEditingController.clear();
@@ -1605,8 +1603,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                   height: 50,
                                                                                   child: ElevatedButton(
                                                                                     onPressed: () {
+                                                                                      favoriteFolder.delete();
                                                                                       Navigator.pop(context);
-                                                                                      _FavoriteFolderPageController.removeFolder(index);
                                                                                     },
                                                                                     child: Text(
                                                                                       '삭제',
@@ -1817,7 +1815,12 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 height: 50,
                                                 child: ElevatedButton(
                                                   onPressed: () {
-                                                    _FavoriteFolderPageController.addFolder(_TextEditingController.text);
+                                                    favoriteBox.add(
+                                                        FavoriteModel(
+                                                            favoriteFolderName: _TextEditingController.text,
+                                                            favoriteFolderRestaurantList: []
+                                                        )
+                                                    );
                                                     Navigator.pop(context);
                                                   },
                                                   child: Text(

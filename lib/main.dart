@@ -24,10 +24,10 @@ void main() async {
   await Hive.openBox<RecentSearchModel>('recentsearch');
   await Hive.openBox<FavoriteModel>('favorite');
 
-  // Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
-  // recentSearchBox.clear();
-  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-  // favoriteBox.clear();
+  Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
+  recentSearchBox.clear();
+  Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  favoriteBox.clear();
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(

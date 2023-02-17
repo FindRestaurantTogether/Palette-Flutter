@@ -12,7 +12,6 @@ abstract class NaverMapPageModel {
   final Map<String, String> opening_lastorder = {};
   final String category = '';
   final double distance = 0.0;
-  RxBool favorite = false as RxBool;
   final List<String> theme = [];
   final double naver_star = 0.0;
   final int naver_cnt = 0;
@@ -49,8 +48,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   final Map<String, String> opening_lastorder;
   @override
   final String category;
-  @override
-  RxBool favorite = false.obs;
   @override
   final double distance;
   @override
@@ -95,7 +92,6 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
     required this.opening_lastorder,
     required this.category,
     required this.distance,
-    favorite,
     required this.theme,
     required this.naver_star,
     required this.naver_cnt,

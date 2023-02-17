@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
-import 'package:myapp/page/favorite/favorite_page_folder_controller.dart';
-import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
 class SelectFolderPage extends StatefulWidget {
@@ -155,7 +152,6 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                                                     favoriteFolderRestaurantList: []
                                                 )
                                             );
-
                                             Navigator.pop(context);
                                           },
                                           child: Text(
