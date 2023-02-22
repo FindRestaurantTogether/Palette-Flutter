@@ -7,7 +7,7 @@ import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
 
-final List<String> listDropdownList = ['거리순', '평점순', '리뷰순'];
+final List<String> listDropdownList = ['평점순', '리뷰순', '거리순'];
 final List<String> listDropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
 
 class ListPage extends StatefulWidget {
@@ -107,7 +107,7 @@ class _ListPageState extends State<ListPage> {
                       onPressed: () async {
                         _SearchPageController.searchedWord.value = '';
                         Get.back();
-                        await _NaverMapPageController.fetchRestaurantData(context, '');
+                        await _NaverMapPageController.fetchRestaurantData(context);
                         // Future.delayed(Duration(milliseconds: 500), () async {
                         //   await _NaverMapPageController.fetchRestaurantData(context, '');
                         // });

@@ -9,12 +9,14 @@ import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
+import 'package:myapp/page/map/search/search_page_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class NaverMapPageController extends GetxService {
 
   final _MapPageController = Get.put(MapPageController());
   final _FilterPageController = Get.put(FilterPageController());
+  final _SearchPageController = Get.put(SearchPageController());
 
   // 백에서 가져온 데이터 저장 후 이후 다른 페이지에서 이 데이터들 사용
   var restaurants = <NaverMapPageRestaurant>[].obs;
@@ -26,7 +28,7 @@ class NaverMapPageController extends GetxService {
   RxBool getMoreRestaurantData = false.obs;
 
   // process 10개씩
-  Future<void> processRestaurantData(context, value) async {
+  Future<void> processRestaurantData(context) async {
 
       if (restaurants.length == 0) {
         final Position currentPosition = await Geolocator.getCurrentPosition();
@@ -247,12 +249,12 @@ class NaverMapPageController extends GetxService {
     }
 
   // fetch 30개 & process 10개
-  Future<void> fetchRestaurantData(context, value) async {
+  Future<void> fetchRestaurantData(context) async {
 
     restaurants.value = [];
     markers.value = [];
 
-    if (_FilterPageController.FilterSelected.value.contains(true) || value != '') {
+    if (_FilterPageController.FilterSelected.value.contains(true) || _SearchPageController.searchedWord.value != '') {
 
       // List filter = read_all();
       // Network network = Network(filter, value);
@@ -1105,8 +1107,18 @@ class NaverMapPageController extends GetxService {
         },
       };
 
-      processRestaurantData(context, value);
-      getMoreRestaurantData.value = true;
+      if (rawRestaurantData.length == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('만족하는 음식점이 없습니다. 필터와 검색 단어를 다시 확인해주세요.'),
+              backgroundColor: Color(0xfff42957),
+            )
+        );
+      }
+      else {
+        await processRestaurantData(context);
+        getMoreRestaurantData.value = true;
+      }
     }
   }
 }

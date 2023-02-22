@@ -240,7 +240,7 @@ class _ListviewPageState extends State<ListviewPage> {
       setState(() {
         dataLoading = true;
       });
-      _NaverMapPageController.processRestaurantData(context, _SearchPageController.searchedWord);
+      _NaverMapPageController.processRestaurantData(context);
       setState(() {
         dataLoading = false;
       });

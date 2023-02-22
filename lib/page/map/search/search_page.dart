@@ -98,17 +98,18 @@ class _SearchPageState extends State<SearchPage> {
                                     final naverMapController = await naverMapCompleter.future;
                                     final currentPosition = await Geolocator.getCurrentPosition();
                                     CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
-                                    naverMapController.moveCamera(cameraUpdate);
+                                    await naverMapController.moveCamera(cameraUpdate);
                                   }
-
-                                  await _NaverMapPageController.fetchRestaurantData(context, value);
 
                                   Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
                                   recentSearchBox.add(RecentSearchModel(recentSearchWord: _TextEditingController.text));
                                   if (recentSearchBox.length > 10) {
                                     recentSearchBox.deleteAt(0);
                                   }
+
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
+                                  await _NaverMapPageController.fetchRestaurantData(context);
+
                                   Get.off(ListPage());
                                 }
                               },
@@ -212,8 +213,8 @@ class _SearchPageState extends State<SearchPage> {
                             width: width,
                             child: ElevatedButton(
                               onPressed: () async {
-                                await _NaverMapPageController.fetchRestaurantData(context, recentSearch.recentSearchWord);
                                 _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
+                                await _NaverMapPageController.fetchRestaurantData(context);
 
                                 box.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
                                 if (recentSearchs.length > 10) {
@@ -267,7 +268,7 @@ class _SearchPageState extends State<SearchPage> {
               )
             ],
           ),
-        ),
+        )
       ),
     );
   }

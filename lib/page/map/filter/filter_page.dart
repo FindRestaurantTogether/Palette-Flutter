@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/utils.dart';
 
 class FilterPage extends StatefulWidget {
   @override
@@ -244,19 +243,17 @@ class _FilterPageState extends State<FilterPage> {
                         style: TextStyle(color: Color(0xff787878), fontSize: 12),
                       ), // 전체 텍스트
                       Container(
-                        // color: Colors.red,
                         width: width * 0.082,
                         child: Transform.scale(
                           scale: 0.5,
                           child: CupertinoSwitch(
                               activeColor: Color(0xfff42957),
                               value: Controller.SwitchSelected[0], // SwitchSelected 2번째 index 값에 따라
-                              onChanged: (value) {
-                                setState(() {
-                                  Controller.SwitchSelected[0] = value; // SwitchSelected 2번째 index 값 바꿔주기
-                                  Controller.FilterSelected[0] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
-                                  Controller.SwitchOuterFoodSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
-                                });
+                              onChanged: (value) async {
+                                Controller.SwitchSelected[0] = value; // SwitchSelected 2번째 index 값 바꿔주기
+                                Controller.FilterSelected[0] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
+                                Controller.SwitchOuterFoodSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }),
                         ),
                       ) // 스위치 버튼
@@ -279,11 +276,9 @@ class _FilterPageState extends State<FilterPage> {
                           width: 48,
                           child: OutlinedButton(
                               onPressed: () async {
-                                setState(() {
-                                  Controller.ChangeOuterFoodSelected(i, false);
-                                  Controller.FixOuterFoodSelected();
-                                });
-                                await _NaverMapPageController.fetchRestaurantData(context, '');
+                                Controller.ChangeOuterFoodSelected(i, false);
+                                Controller.FixOuterFoodSelected();
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -300,11 +295,9 @@ class _FilterPageState extends State<FilterPage> {
                           width: 48,
                           child: OutlinedButton(
                               onPressed: () async {
-                                setState(() {
-                                  Controller.ChangeOuterFoodSelected(i, true);
-                                  Controller.FixOuterFoodSelected();
-                                });
-                                await  _NaverMapPageController.fetchRestaurantData(context, '');
+                                Controller.ChangeOuterFoodSelected(i, true);
+                                Controller.FixOuterFoodSelected();
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }, // 필터가 눌렸음을 백에 알려줘야 함
                               child: Text(
                                 FilterListFood[i],
@@ -329,11 +322,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, false);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, false);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -350,11 +341,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, true);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, true);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -390,11 +379,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, false);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, false);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -411,11 +398,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, true);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, true);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -438,11 +423,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, false);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, false);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -459,11 +442,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterFoodSelected(i, true);
-                              Controller.FixOuterFoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterFoodSelected(i, true);
+                            Controller.FixOuterFoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListFood[i],
@@ -530,12 +511,11 @@ class _FilterPageState extends State<FilterPage> {
                           child: CupertinoSwitch(
                               activeColor: Color(0xfff42957),
                               value: Controller.SwitchSelected[1], // SwitchSelected 2번째 index 값에 따라
-                              onChanged: (value) {
-                                setState(() {
-                                  Controller.SwitchSelected[1] = value; // SwitchSelected 2번째 index 값 바꿔주기
-                                  Controller.FilterSelected[1] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
-                                  Controller.SwitchOuterCafeSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
-                                });
+                              onChanged: (value) async {
+                                Controller.SwitchSelected[1] = value; // SwitchSelected 2번째 index 값 바꿔주기
+                                Controller.FilterSelected[1] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
+                                Controller.SwitchOuterCafeSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }),
                         ),
                       ) // 스위치 버튼
@@ -558,11 +538,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 72,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterCafeSelected(i, false);
-                              Controller.FixOuterCafeSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterCafeSelected(i, false);
+                            Controller.FixOuterCafeSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -579,11 +557,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 74,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterCafeSelected(i, true);
-                              Controller.FixOuterCafeSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterCafeSelected(i, true);
+                            Controller.FixOuterCafeSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -606,11 +582,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterCafeSelected(i, false);
-                              Controller.FixOuterCafeSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterCafeSelected(i, false);
+                            Controller.FixOuterCafeSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -627,11 +601,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterCafeSelected(i, true);
-                              Controller.FixOuterCafeSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterCafeSelected(i, true);
+                            Controller.FixOuterCafeSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListCafe[i],
@@ -698,12 +670,11 @@ class _FilterPageState extends State<FilterPage> {
                           child: CupertinoSwitch(
                               activeColor: Color(0xfff42957),
                               value: Controller.SwitchSelected[2], // SwitchSelected 2번째 index 값에 따라
-                              onChanged: (value) {
-                                setState(() {
-                                  Controller.SwitchSelected[2] = value; // SwitchSelected 2번째 index 값 바꿔주기
-                                  Controller.FilterSelected[2] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
-                                  Controller.SwitchOuterAlcoholSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
-                                });
+                              onChanged: (value) async {
+                                Controller.SwitchSelected[2] = value; // SwitchSelected 2번째 index 값 바꿔주기
+                                Controller.FilterSelected[2] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
+                                Controller.SwitchOuterAlcoholSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }),
                         ),
                       ) // 스위치 버튼
@@ -726,11 +697,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, false);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, false);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -747,11 +716,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, true);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, true);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -774,11 +741,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, false);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, false);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -795,11 +760,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, true);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, true);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -833,11 +796,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 78,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, false);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, false);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -854,11 +815,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 78,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterAlcoholSelected(i, true);
-                              Controller.FixOuterAlcoholSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterAlcoholSelected(i, true);
+                            Controller.FixOuterAlcoholSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListAlcohol[i],
@@ -925,12 +884,11 @@ class _FilterPageState extends State<FilterPage> {
                           child: CupertinoSwitch(
                               activeColor: Color(0xfff42957),
                               value: Controller.SwitchSelected[3], // SwitchSelected 2번째 index 값에 따라
-                              onChanged: (value) {
-                                setState(() {
-                                  Controller.SwitchSelected[3] = value; // SwitchSelected 2번째 index 값 바꿔주기
-                                  Controller.FilterSelected[3] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
-                                  Controller.SwitchOuterServiceSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
-                                });
+                              onChanged: (value) async {
+                                Controller.SwitchSelected[3] = value; // SwitchSelected 2번째 index 값 바꿔주기
+                                Controller.FilterSelected[3] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
+                                Controller.SwitchOuterServiceSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }),
                         ),
                       ) // 스위치 버튼
@@ -953,11 +911,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -974,11 +930,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1001,11 +955,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 80,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1022,11 +974,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 74,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1049,11 +999,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: width * 0.13,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1070,11 +1018,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: width * 0.13,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1108,11 +1054,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 104,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1129,11 +1073,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 104,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1156,11 +1098,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1177,11 +1117,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1215,11 +1153,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1236,11 +1172,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1263,11 +1197,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1284,11 +1216,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1322,11 +1252,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 40,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, false);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, false);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1343,11 +1271,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 40,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterServiceSelected(i, true);
-                              Controller.FixOuterServiceSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterServiceSelected(i, true);
+                            Controller.FixOuterServiceSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListService[i],
@@ -1414,12 +1340,11 @@ class _FilterPageState extends State<FilterPage> {
                           child: CupertinoSwitch(
                               activeColor: Color(0xfff42957),
                               value: Controller.SwitchSelected[4], // SwitchSelected 2번째 index 값에 따라
-                              onChanged: (value) {
-                                setState(() {
-                                  Controller.SwitchSelected[4] = value; // SwitchSelected 2번째 index 값 바꿔주기
-                                  Controller.FilterSelected[4] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
-                                  Controller.SwitchOuterMoodSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
-                                });
+                              onChanged: (value) async {
+                                Controller.SwitchSelected[4] = value; // SwitchSelected 2번째 index 값 바꿔주기
+                                Controller.FilterSelected[4] = value; // FilterSelected 바꿔줘서 outerfilter 색 칠해주기
+                                Controller.SwitchOuterMoodSelected(); // SwitchOuterAlcoholSelected 함수를 통해 모두 선택 또는 선택해제하기
+                                await _NaverMapPageController.fetchRestaurantData(context);
                               }),
                         ),
                       ) // 스위치 버튼
@@ -1442,11 +1367,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1463,11 +1386,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1501,11 +1422,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1522,11 +1441,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 56,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1549,11 +1466,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1570,11 +1485,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1597,11 +1510,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1618,11 +1529,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1656,11 +1565,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1677,11 +1584,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 48,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1704,11 +1609,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1725,11 +1628,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 64,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1752,11 +1653,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 70,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1773,11 +1672,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 70,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1811,11 +1708,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 70,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, false);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, false);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],
@@ -1832,11 +1727,9 @@ class _FilterPageState extends State<FilterPage> {
                       width: 70,
                       child: OutlinedButton(
                           onPressed: () async {
-                            setState(() {
-                              Controller.ChangeOuterMoodSelected(i, true);
-                              Controller.FixOuterMoodSelected();
-                            });
-                            await _NaverMapPageController.fetchRestaurantData(context, '');
+                            Controller.ChangeOuterMoodSelected(i, true);
+                            Controller.FixOuterMoodSelected();
+                            await _NaverMapPageController.fetchRestaurantData(context);
                           },
                           child: Text(
                             FilterListMood[i],

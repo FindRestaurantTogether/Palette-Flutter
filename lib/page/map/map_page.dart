@@ -112,11 +112,9 @@ class _MapPageState extends State<MapPage> {
                                 child: IconButton(
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
-                                    onPressed: () {
+                                    onPressed: () async {
                                       _SearchPageController.searchedWord.value = '';
-                                      Future.delayed(Duration(milliseconds: 500), () async {
-                                        await _NaverMapPageController.fetchRestaurantData(context, '');
-                                      });
+                                      await _NaverMapPageController.fetchRestaurantData(context);
                                     },
                                     icon: Image.asset('assets/button_image/close_button.png')
                                 ),

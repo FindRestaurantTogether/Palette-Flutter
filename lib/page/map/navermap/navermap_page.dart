@@ -155,8 +155,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
                       child: ElevatedButton(
                           onPressed: () async {
                             _NaverMapPageController.getMoreRestaurantData.value
-                                ? await _NaverMapPageController.processRestaurantData(context, _SearchPageController.searchedWord)
-                                : await _NaverMapPageController.fetchRestaurantData(context, _SearchPageController.searchedWord);
+                                ? await _NaverMapPageController.processRestaurantData(context)
+                                : await _NaverMapPageController.fetchRestaurantData(context);
                           }, // 이 지도에서 재검색 버튼
                           style: ElevatedButton.styleFrom(
                               shape: StadiumBorder(),
