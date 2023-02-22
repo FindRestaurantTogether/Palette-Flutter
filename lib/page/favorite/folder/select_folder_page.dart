@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
+import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 
 class SelectFolderPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
   final NaverMapPageModel selectedRestaurant;
   _SelectFolderPageState({required this.selectedRestaurant});
 
+  final _FavoritePageController = Get.put(FavoritePageController());
   final _TextEditingController = TextEditingController();
 
   List<bool> favoriteFolderIsChecked = List<bool>.filled(50, false);
@@ -278,6 +280,8 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                   height: 40,
                   child: ElevatedButton(
                     onPressed: () {
+                      _FavoritePageController.favoriteRestaurantUids.add(selectedRestaurant.uid);
+
                       int selectedIndex = favoriteFolderIsChecked.indexWhere((e) => e == true);
                       FavoriteModel? selectedFavoriteFolder = favoriteBox.getAt(selectedIndex);
                       selectedFavoriteFolder!.favoriteFolderRestaurantList.add(

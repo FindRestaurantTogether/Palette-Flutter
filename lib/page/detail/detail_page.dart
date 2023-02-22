@@ -3,10 +3,8 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/detail/menu/menu_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
-import 'package:myapp/page/favorite/favorite_page_list_controller.dart';
+import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
-import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
@@ -18,6 +16,8 @@ class DetailPage extends StatefulWidget {
 
 class _DetailPageState extends State<DetailPage> {
 
+  final _FavoritePageController = Get.put(FavoritePageController());
+
   final selectedRestaurant = Get.arguments;
 
   late List<bool> ToggleSelected;
@@ -28,6 +28,13 @@ class _DetailPageState extends State<DetailPage> {
   void initState() {
     ToggleSelected = [false, false, false];
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // _FavoritePageController.dispose();
+    Hive.box('favorite').close();
+    super.dispose();
   }
 
   @override
@@ -47,15 +54,6 @@ class _DetailPageState extends State<DetailPage> {
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
-
-    Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-    List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
-    List<String> favoriteRestaurantUids = [];
-    for (int i=0 ; i<favoriteFolders.length ; i++) {
-      for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
-        favoriteRestaurantUids.add(favoriteFolders[i].favoriteFolderRestaurantList[j].uid);
-      }
-    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -136,31 +134,45 @@ class _DetailPageState extends State<DetailPage> {
                                     ), // 뒤로가기 버튼
                                     Row(
                                       children: [
-                                        SizedBox(
-                                          width: 17,
-                                          height: 21,
-                                          child: favoriteRestaurantUids.contains(selectedRestaurant.uid)
-                                              ? IconButton(
-                                            padding: EdgeInsets.all(0.0),
-                                            onPressed: (){},
-                                            icon: Image.asset('assets/button_image/favorite_button.png'),
-                                          )
-                                              : IconButton(
-                                            padding: EdgeInsets.all(0.0),
-                                            onPressed: () {
-                                              setState(() {
-                                                showDialog(
-                                                    context: context,
-                                                    barrierDismissible: false,
-                                                    builder: (BuildContext context) {
-                                                      return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                        Obx(() {
+                                          return SizedBox(
+                                              width: 17,
+                                              height: 21,
+                                              child: _FavoritePageController.favoriteRestaurantUids.contains(selectedRestaurant.uid)
+                                                  ? IconButton(
+                                                padding: EdgeInsets.all(0.0),
+                                                onPressed: (){
+                                                  _FavoritePageController.favoriteRestaurantUids.remove(selectedRestaurant.uid);
+
+                                                  Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+                                                  List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
+                                                  for (int i=0 ; i<favoriteFolders.length ; i++) {
+                                                    for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
+                                                      if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedRestaurant.uid) {
+                                                        favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
+                                                      }
                                                     }
-                                                );
-                                              });
-                                            },
-                                            icon: Image.asset('assets/button_image/unfavorite_button.png'),
-                                          )
-                                        ),
+                                                  }
+                                                },
+                                                icon: Image.asset('assets/button_image/favorite_button.png'),
+                                              )
+                                                  : IconButton(
+                                                padding: EdgeInsets.all(0.0),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    showDialog(
+                                                        context: context,
+                                                        barrierDismissible: false,
+                                                        builder: (BuildContext context) {
+                                                          return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                                        }
+                                                    );
+                                                  });
+                                                },
+                                                icon: Image.asset('assets/button_image/unfavorite_button.png'),
+                                              )
+                                          );
+                                        }),
                                         SizedBox(width: 6)
                                       ],
                                     ) // 즐겨찾기 버튼
@@ -249,11 +261,10 @@ class _DetailPageState extends State<DetailPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(width: 12),
                                 Icon(
                                   Icons.star,
                                   color: Color(0xfff42957),
-                                  size: 18,
+                                  size: 16,
                                 ),
                                 SizedBox(width: 2),
                                 Text(
@@ -266,11 +277,19 @@ class _DetailPageState extends State<DetailPage> {
                                   '|',
                                   style: TextStyle(fontSize: 15, color: Colors.black87),
                                 ),
-                                SizedBox(width: 7),
-                                Text(
-                                  '${selectedRestaurant.category}      ',
-                                  style: TextStyle(fontSize: 15),
-                                ),
+                                SizedBox(width: 6),
+                                for (int i = 0; i < selectedRestaurant.category.length; i++)
+                                  if (i == 0)
+                                    Text(
+                                      '${selectedRestaurant.category[i]}',
+                                      style: TextStyle(fontSize: 15),
+                                    )
+                                  else
+                                    Text(
+                                      ',${selectedRestaurant.category[i]}',
+                                      style: TextStyle(fontSize: 15),
+                                    ),
+                                SizedBox(width: 3),
                               ],
                             ),
                           ), // 별점, 중분류

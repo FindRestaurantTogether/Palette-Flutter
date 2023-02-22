@@ -1,6 +1,10 @@
 import 'package:get/get.dart';
 
-class FolderPageController extends GetxController {
+class FavoritePageController extends GetxController {
+
+  RxSet favoriteRestaurantUids = Set<String>().obs;
+
+  // 즐겨찾기 리스트 컨트롤러
 
   // 지역 필터 열고 닫기
   RxBool openRegion = false.obs;

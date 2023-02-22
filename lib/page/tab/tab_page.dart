@@ -27,11 +27,9 @@ class _TabPageState extends State<TabPage> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if (_MapPageController.bS == true) {
-          setState(() {
-            _MapPageController.ChangeState();
-            Get.back();
-          });
+        if (_MapPageController.bottomSheet.value == true) {
+          _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+          Get.back();
         } else {
           await _onBackPressed(context);
         }

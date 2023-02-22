@@ -1,4 +1,3 @@
-import 'package:get/get.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 
 abstract class NaverMapPageModel {
@@ -10,7 +9,7 @@ abstract class NaverMapPageModel {
   final Map<String, String> opening_hour = {};
   final Map<String, String> opening_breaktime = {};
   final Map<String, String> opening_lastorder = {};
-  final String category = '';
+  final List<String> category = [];
   final double distance = 0.0;
   final List<String> theme = [];
   final double naver_star = 0.0;
@@ -47,7 +46,7 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final Map<String, String> opening_lastorder;
   @override
-  final String category;
+  final List<String> category;
   @override
   final double distance;
   @override

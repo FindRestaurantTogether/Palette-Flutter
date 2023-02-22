@@ -36,7 +36,7 @@ class RestaurantModel extends HiveObject {
   final String call;
 
   @HiveField(6)
-  final String category;
+  final List<String> category;
 
   @HiveField(7)
   final String main_category;

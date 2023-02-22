@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,8 +7,8 @@ import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
 
-final List<String> DropdownList = ['거리순', '평점순', '리뷰순'];
-final List<String> DropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
+final List<String> listDropdownList = ['거리순', '평점순', '리뷰순'];
+final List<String> listDropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
 
 class ListPage extends StatefulWidget {
   ListPage({Key? key}) : super(key: key);
@@ -24,7 +22,7 @@ class _ListPageState extends State<ListPage> {
   final _SearchPageController = Get.put(SearchPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
-  String DropdownSelected = DropdownList.first;
+  String DropdownSelected = listDropdownList.first;
   String DropdownSelected2 = '';
 
   bool Open = false;
@@ -156,7 +154,7 @@ class _ListPageState extends State<ListPage> {
                               child: DropdownButton2(
                                 isExpanded: true,
                                 selectedItemBuilder: (BuildContext context) {
-                                  return DropdownList.map((String value) {
+                                  return listDropdownList.map((String value) {
                                     return Center(
                                       child: Text(
                                         DropdownSelected!,
@@ -168,7 +166,7 @@ class _ListPageState extends State<ListPage> {
                                     );
                                   }).toList();
                                 },
-                                items: DropdownList
+                                items: listDropdownList
                                     .map((item) => DropdownMenuItem<String>(
                                     value: item,
                                     child: Text(
@@ -274,7 +272,7 @@ class _ListPageState extends State<ListPage> {
                                   ),
                               ),
                               selectedItemBuilder: (BuildContext context) {
-                                return DropdownList2.map((String value) {
+                                return listDropdownList2.map((String value) {
                                   return Center(
                                     child: Text(
                                       DropdownSelected2,
@@ -286,7 +284,7 @@ class _ListPageState extends State<ListPage> {
                                   );
                                 }).toList();
                               },
-                              items: DropdownList2.map((String item) => DropdownMenuItem<String>(
+                              items: listDropdownList2.map((String item) => DropdownMenuItem<String>(
                                   value: item,
                                   child: Text(
                                     item,
@@ -330,7 +328,7 @@ class _ListPageState extends State<ListPage> {
             height: 4,
             color: Color(0xffeeeeee),
           ), // 회색 바
-          ListviewPage()
+          ListviewPage() // 음식점 리스트
         ],
       ),
     );

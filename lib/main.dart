@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
@@ -17,17 +16,30 @@ void main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
 
+
   await Hive.initFlutter();
+
   Hive.registerAdapter(RecentSearchModelAdapter());
   Hive.registerAdapter(FavoriteModelAdapter());
   Hive.registerAdapter(RestaurantModelAdapter());
   await Hive.openBox<RecentSearchModel>('recentsearch');
   await Hive.openBox<FavoriteModel>('favorite');
 
-  Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
-  recentSearchBox.clear();
-  Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-  favoriteBox.clear();
+  // Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
+  // recentSearchBox.clear();
+  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  // favoriteBox.clear();
+
+
+  // final _FavoritePageController = Get.put(FavoritePageController());
+  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  // List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
+  // for (int i=0; i<favoriteFolders.length; i++) {
+  //   for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length; j++) {
+  //     _FavoritePageController.favoriteRestaurantUids.add(favoriteFolders[i].favoriteFolderRestaurantList[j].uid);
+  //   }
+  // }
+
 
   WidgetsFlutterBinding.ensureInitialized();
   KakaoSdk.init(
@@ -48,15 +60,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        localizationsDelegates: [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: [
-          Locale('en', 'US'),
-          Locale('ko', 'KO'),
-        ],
         theme: ThemeData(
           fontFamily: 'SUIT-otf',
         ),
@@ -66,23 +69,15 @@ class MyApp extends StatelessWidget {
             child: child!,
           );
         },
-        home: MainPage()
+        home: LoadingPage()
     );
-  }
-}
-
-class MainPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return LoadingPage(); // 처음 앱 킬 때 로딩화면
   }
 }
 
 // 맨 아래 또는 맨 위로 갈 때 glow 생기는거 없애기
 class RemoveScrollGlow extends ScrollBehavior {
   @override
-  Widget buildOverscrollIndicator(
-      BuildContext context, Widget child, ScrollableDetails details) {
+  Widget buildOverscrollIndicator(BuildContext context, Widget child, ScrollableDetails details) {
     return child;
   }
 }

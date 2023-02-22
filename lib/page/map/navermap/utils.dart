@@ -15,7 +15,7 @@ class Network{
   // var bottom_left;
   Network(this.filter, this.text);
 
-  String url = 'http://34.64.35.77/api/search/map';
+  String url = 'http://34.64.166.110/api/testsearch';
 
   Future<dynamic> getJsonData() async {
     // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
@@ -76,107 +76,160 @@ class Network{
 
 Map change_data(store){
   Map<String,dynamic> store_dict = Map();
-  Map<String,dynamic> menu = Map();
-  Map<String,dynamic> hour = Map();
-  Map<String,dynamic> name = {'해산물(게)': 'Food_Korean_Seafood_Crab',
-    '해산물(문어)': 'Food_Korean_Seafood_Octopus',
-    '해산물(생선)': 'Food_Korean_Seafood_Fish',
-    '해산물(조개)': 'Food_Korean_Seafood_Seashell',
-    '한식' : 'Food_Korean',
-    '양식' : 'Food_Western',
-    '중식' : 'Food_Chinese',
-    '일식' : 'Food_Japanese',
-    '분식': 'Food_Korean_Snack',
-    '고기': 'Food_Korean_Meat',
-    '전': 'Food_Korean_Jeon',
-    '곱/대/막창': 'Food_Korean_Giblets',
-    '백반/죽/찌개': 'Food_Korean_Meal',
-    '국밥': 'Food_Korean_Gukbap',
-    '전골/탕/찜': 'Food_Korean_Stew',
-    '냉면/국수': 'Food_Korean_Noodles',
-    '기타(한식)': 'Food_Korean_Etc',
-    '피자': 'Food_Western_Pizza',
-    '샌드위치': 'Food_Western_Sandwich',
-    '햄버거': 'Food_Western_Hamburger',
-    '파스타': 'Food_Western_Pasta',
-    '스테이크': 'Food_Western_Steak',
-    '기타(양식)': 'Food_Western_Etc',
-    '마라/훠궈': 'Food_Chinese_Hotpot',
-    '딤섬': 'Food_Chinese_Dimsum',
-    '중국집': 'Food_Chinese_Restaurant',
-    '양꼬치': 'Food_Chinese_Lambskewers',
-    '기타(중식)': 'Food_Chinese_Etc',
-    '초밥/회': 'Food_Japanese_Sushi',
-    '돈까스': 'Food_Japanese_Porkcutlet',
-    '라멘': 'Food_Japanese_Ramen',
-    '우동/메밀': 'Food_Japanese_Udon',
-    '덮밥': 'Food_Japanese_Dnburi',
-    '기타(일식)': 'Food_Japanese_Etc',
-    '아시안': 'Food_Asian',
-    '멕시칸': 'Food_Mexican',
-    '기타': 'Food_ETC',
-    '프랜차이즈': 'Cafe_Franchise',
-    '개인': 'Cafe_Private',
-    '주점': 'Alcohol_Pub',
-    '호프': 'Alcohol_Hof',
-    '이자카야': 'Alcohol_Izakaya',
-    '와인': 'Alcohol_Wine',
-    '칵테일,양주': 'Alcohol_Cocktail'};
+  Map<String,dynamic> name = {
+    '해산물(게)': 'food_korean_seafood_crab',
+    '해산물(문어)': 'food_korean_seafood_octopus',
+    '해산물(생선)': 'food_korean_seafood_fish',
+    '해산물(조개)': 'food_korean_seafood_seashell',
+    '한식' : 'food_korean',
+    '양식' : 'food_western',
+    '중식' : 'food_chinese',
+    '일식' : 'food_japanese',
+    '분식': 'food_korean_snack',
+    '고기': 'food_korean_meat',
+    '전': 'food_korean_jeon',
+    '곱/대/막창': 'food_korean_giblets',
+    '백반/죽/찌개': 'food_korean_meal',
+    '국밥': 'food_korean_gukbap',
+    '전골/탕/찜': 'food_korean_stew',
+    '냉면/국수': 'food_korean_noodles',
+    '기타(한식)': 'food_korean_etc',
+    '피자': 'food_western_pizza',
+    '샌드위치': 'food_western_sandwich',
+    '햄버거': 'food_western_hamburger',
+    '파스타': 'food_western_pasta',
+    '스테이크': 'food_western_steak',
+    '기타(양식)': 'food_western_etc',
+    '마라/훠궈': 'food_chinese_hotpot',
+    '딤섬': 'food_chinese_dimsum',
+    '중국집': 'food_chinese_restaurant',
+    '양꼬치': 'food_chinese_lambskewers',
+    '기타(중식)': 'food_chinese_etc',
+    '초밥/회': 'food_japanese_sushi',
+    '돈까스': 'food_japanese_porkcutlet',
+    '라멘': 'food_japanese_ramen',
+    '우동/메밀': 'food_japanese_udon',
+    '덮밥': 'food_japanese_dnburi',
+    '기타(일식)': 'food_japanese_etc',
+    '아시안': 'food_asian',
+    '멕시칸': 'food_mexican',
+    '기타': 'food_etc',
+    '프랜차이즈': 'cafe_franchise',
+    '개인': 'cafe_private',
+    '주점': 'alcohol_pub',
+    '호프': 'alcohol_hof',
+    '이자카야': 'alcohol_izakaya',
+    '와인': 'alcohol_wine',
+    '칵테일,양주': 'alcohol_cocktail'
+  };
 
-  for(int i=1;i<=store.length;i++){
+  for(int i=0;i<store.length;i++){
+    Map<String,dynamic> menu = Map();
+    Map<String,dynamic> opening_hour = Map();
+    Map<String,dynamic> opening_breaktime = Map();
+    Map<String,dynamic> opening_lastorder = Map();
+    Map<String,dynamic> one_dict = Map();
+    one_dict['uid'] = store[i]['id'];
+    one_dict['store_name'] = store[i]['source']['name'];
+    one_dict["road_address"] = "서울 " + store[i]['source']["road_address"];
+    one_dict["jibun_address"] = "서울 " + store[i]['source']["jibun_address"];
+
     try {
-      store["store$i"]["road_address"] = "서울 " + store["store$i"]["road_address"];
+      one_dict["call"] = store[i]['source']["call"].replaceAll(RegExp('[^0-9\\s]'), "");
     }
     catch(e) {}
-    try {
-      store["store$i"]["latitude"] = double.parse(store["store$i"]["latitude"]);
-    }
-    catch(e) {}
-    try {
-      store["store$i"]["longitude"] = double.parse(store["store$i"]["longitude"]);
-    }
-    catch(e) {}
-    try {
-      store["store$i"]["call"] = store["store$i"]["call"].replaceAll(RegExp('[^0-9\\s]'), "");
-    }
-    catch(e) {}
-    try {
-      store["store$i"]['kakao_star'] = double.parse(store["store$i"]['kakao_star']);
-      store["store$i"]['kakao_cnt'] = int.parse(store["store$i"]['kakao_cnt']);
-    }
-    catch(e) {}
-    try {
-      store["store$i"]['naver_star'] = double.parse(store["store$i"]['naver_star']);
-      store["store$i"]['naver_cnt'] = int.parse(store["store$i"]['naver_cnt']);
-    }
-    catch(e) {}
-    try {
-      store["store$i"]['google_star'] = double.parse(store["store$i"]['google_star']);
-      store["store$i"]['google_cnt'] = int.parse(store["store$i"]['google_cnt']);
-    }
-    catch(e) {}
+
+    one_dict['main_category'] = name[store[i]['source']["main_category"]];
+    one_dict['category'] = store[i]['source']["category"].split('-');
+
+    // 시간
     try{
-      for(int j=0;j<store["store$i"]['opening_hour'].length;j++){
-        hour.addAll(store["store$i"]['opening_hour'][j]);
+      for(int j=0;j<store[i]['source']['opening_hour'].length;j++){
+        opening_hour.addAll(store[i]['source']['opening_hour'][j]);
       }
-      store["store$i"]['opening_hour'] = hour;
+      one_dict['opening_hour'] = opening_hour;
     }
     catch(e){}
     try{
-      for(int j=0;j<store["store$i"]['menu'].length;j++){
-        menu.addAll(store["store$i"]['menu'][j]);
+      for(int j=0;j<store[i]['source']['opening_breaktime'].length;j++){
+        opening_breaktime.addAll(store[i]['source']['opening_breaktime'][j]);
       }
-      store["store$i"]['menu'] = menu;
+      one_dict['opening_breaktime'] = opening_breaktime;
     }
     catch(e){}
+    try{
+      for(int j=0;j<store[i]['source']['opening_lastorder'].length;j++){
+        opening_lastorder.addAll(store[i]['source']['opening_lastorder'][j]);
+      }
+      one_dict['opening_lastorder'] = opening_lastorder;
+    }
+    catch(e){}
+
+
+    one_dict['theme'] = store[i]['source']["theme"].split('-');
+    one_dict['service'] = store[i]['source']["theme"].split('-');
+
+    // 메뉴
+    try{
+      for(int j=0;j<store[i]['source']['menu'].length;j++){
+        Map<String,String> one_menu = {};
+        one_menu[store[i]['source']['menu'][j].split(':')[0]] = store[i]['source']['menu'][j].split(':')[1];
+        menu.addAll(one_menu);
+      }
+      one_dict['menu'] = menu;
+    }
+    catch(e){}
+
+
     try {
-      store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
+      one_dict["latitude"] = double.parse(store[i]['source']['location']["lat"]);
+      one_dict["longitude"] = double.parse(store[i]['source']['location']["lon"]);
     }
     catch(e) {}
-    store_dict["$i"] = store["store$i"];
+
+    try{
+      one_dict['store_image'] = store[i]['source']['outer_image'];
+    }
+    catch(e) {}
+    List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
+    for(int j=0;j<site_info.length;j = j+2){
+      one_dict[site_info[j]] = double.parse(store[i]['source'][site_info[j]]);
+      one_dict[site_info[j+1]] = int.parse(store[i]['source'][site_info[j+1]]);
+    }
+    store_dict["$i"] = one_dict;
   }
   return store_dict;
 }
+
+
+
+
+
+
+//   // try{
+//   //   for(int j=0;j<store[i]['source']['opening_breaktime'].length;j++){
+//   //     opening_breaktime.addAll(store[i]['source']['opening_breaktime'][j]);
+//   //   }
+//   //   store[i]['source']['opening_breaktime'] = opening_breaktime;
+//   // }
+//   // catch(e){}
+//   // try{
+//   //   for(int j=0;j<store[i]['source']['opening_lastorder'].length;j++){
+//   //     opening_lastorder.addAll(store[i]['source']['opening_lastorder'][j]);
+//   //   }
+//   //   store[i]['source']['opening_lastorder'] = opening_lastorder;
+//   // }
+//   // catch(e){}
+
+//   // try {
+//   //   store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
+//   // }
+//   // catch(e) {}
+//
+//
+
+
+
 
 
 

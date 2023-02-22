@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
+import 'package:myapp/page/map/search/search_page_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 // 중심 좌표
@@ -27,9 +28,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
   final _MapPageController = Get.put(MapPageController());
   final _FilterPageController = Get.put(FilterPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
+  final _SearchPageController = Get.put(SearchPageController());
 
-  // 사용자가 움직여서 카메라가 움직였나 확인하기 위해
-  bool cameraChange = false;
   var filter = new List.empty(growable: true);
 
   // @override
@@ -48,138 +48,141 @@ class _NaverMapPageState extends State<NaverMapPage> {
 
     return WillPopScope(
       onWillPop: () async {
-        if (_MapPageController.bS == true) {
-          _MapPageController.ChangeState();
+        if (_MapPageController.bottomSheet.value == true) {
+          _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
           Get.back();
         } // 안드리이드 백 버튼 누르면 바텀시트 state 변경
         return false;
       },
       child: Scaffold(
-        body: Stack(
-          children: [
-            NaverMap(
-              onMapCreated: onMapCreated,
-              mapType: MapType.Basic,
-              initialCameraPosition: CameraPosition(target: LatLng(37.49369555120038, 127.01370530988898)),
-              onCameraChange: _onCameraChange,
-              // onCameraIdle: _onCameraIdle,
-              markers: _NaverMapPageController.markers,
-              onMapTap: _onMapTap,
-            ),
-            GetBuilder<MapPageController>(
-                builder: (_MapPageController) {
-                  return Positioned(
-                    right: 20,
-                    bottom: _MapPageController.bS ? 230 : 30,
-                    child: Column(
-                      children: [
-                        // Container(
-                        //   width: 46,
-                        //   height: 46,
-                        //   decoration: BoxDecoration(
-                        //     shape: BoxShape.circle,
-                        //     boxShadow: [
-                        //       BoxShadow(
-                        //         color: Colors.black.withOpacity(0.1),
-                        //         spreadRadius: 2,
-                        //         blurRadius: 6,
-                        //         offset: Offset(0, 0),
-                        //       ),
-                        //     ],
-                        //   ),
-                        //   child: FloatingActionButton(
-                        //     heroTag: null,
-                        //     child: SizedBox(
-                        //         width: 25,
-                        //         height: 25,
-                        //         child: Image.asset('assets/button_image/current_page_button.png')
-                        //     ),
-                        //     backgroundColor: Colors.white,
-                        //     onPressed: () {
-                        //       showMaterialModalBottomSheet(
-                        //           isDismissible: true,
-                        //           barrierColor: Colors.black54,
-                        //           shape: RoundedRectangleBorder(
-                        //             borderRadius: BorderRadius.vertical(
-                        //               top: Radius.circular(30),
-                        //             ),
-                        //           ),
-                        //           context: context,
-                        //           builder: (BuildContext context) {
-                        //             return DialogPage();
-                        //           }
-                        //       );
-                        //     },
-                        //   ),
-                        // ),
-                        // SizedBox(height: 15),
-                        Container(
-                          width: 46,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 2,
-                                blurRadius: 6,
-                                offset: Offset(0, 0),
-                              ),
-                            ],
-                          ),
-                          child: FloatingActionButton(
-                            heroTag: null,
-                            child: SizedBox(
-                                width: 25,
-                                height: 25,
-                                child: Image.asset('assets/button_image/current_position_button.png')
-                            ),
-                            backgroundColor: Colors.white,
-                            onPressed: () async {
-                              final naverMapController = await naverMapCompleter.future;
-                              final Position currentPosition = await Geolocator.getCurrentPosition();
-                              CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
-                              naverMapController.moveCamera(cameraUpdate);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-            ), // 우측 아래 동그라미 버튼 두개
-            if (cameraChange == true && _FilterPageController.FilterSelected.contains(true))
+        body: Obx(() {
+          return Stack(
+            children: [
+              NaverMap(
+                onMapCreated: onMapCreated,
+                mapType: MapType.Basic,
+                initialCameraPosition: CameraPosition(target: LatLng(37.49369555120038, 127.01370530988898)),
+                onCameraChange: _onCameraChange,
+                // onCameraIdle: _onCameraIdle,
+                markers: _NaverMapPageController.markers.value,
+                onMapTap: _onMapTap,
+              ),
               Positioned(
-                left: width * 0.5 - 95,
-                bottom: 68,
-                child: Container(
-                    width: 190,
-                    height: 36,
-                    child: ElevatedButton(
-                        onPressed: () async {
-                          await _NaverMapPageController.fetchRestaurantData(context, '');
-                        }, // 이 지도에서 재검색 버튼
-                        style: ElevatedButton.styleFrom(
-                            shape: StadiumBorder(),
-                            primary: Colors.grey.withOpacity(0.8)
+                right: 20,
+                bottom: _MapPageController.bottomSheet.value ? 230 : 30,
+                child: Column(
+                  children: [
+                    // Container(
+                    //   width: 46,
+                    //   height: 46,
+                    //   decoration: BoxDecoration(
+                    //     shape: BoxShape.circle,
+                    //     boxShadow: [
+                    //       BoxShadow(
+                    //         color: Colors.black.withOpacity(0.1),
+                    //         spreadRadius: 2,
+                    //         blurRadius: 6,
+                    //         offset: Offset(0, 0),
+                    //       ),
+                    //     ],
+                    //   ),
+                    //   child: FloatingActionButton(
+                    //     heroTag: null,
+                    //     child: SizedBox(
+                    //         width: 25,
+                    //         height: 25,
+                    //         child: Image.asset('assets/button_image/current_page_button.png')
+                    //     ),
+                    //     backgroundColor: Colors.white,
+                    //     onPressed: () {
+                    //       showMaterialModalBottomSheet(
+                    //           isDismissible: true,
+                    //           barrierColor: Colors.black54,
+                    //           shape: RoundedRectangleBorder(
+                    //             borderRadius: BorderRadius.vertical(
+                    //               top: Radius.circular(30),
+                    //             ),
+                    //           ),
+                    //           context: context,
+                    //           builder: (BuildContext context) {
+                    //             return DialogPage();
+                    //           }
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
+                    // SizedBox(height: 15),
+                    Container(
+                      width: 46,
+                      height: 46,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            spreadRadius: 2,
+                            blurRadius: 6,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                      child: FloatingActionButton(
+                        heroTag: null,
+                        child: SizedBox(
+                            width: 25,
+                            height: 25,
+                            child: Image.asset('assets/button_image/current_position_button.png')
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.refresh, color: Colors.white),
-                            Text(
-                              '  이 지도에서 재검색',
-                              style: TextStyle(
-                                  color: Colors.white
-                              ),
-                            )
-                          ],
-                        )
-                    )
+                        backgroundColor: Colors.white,
+                        onPressed: () async {
+                          final naverMapController = await naverMapCompleter.future;
+                          final Position currentPosition = await Geolocator.getCurrentPosition();
+                          CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
+                          naverMapController.moveCamera(cameraUpdate);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ) // 이 지도에서 재검색
-          ],
-        ),
+              ), // 우측 아래 동그라미 버튼 두개
+              if (_SearchPageController.searchedWord.value != '' || _FilterPageController.FilterSelected.contains(true))
+                Positioned(
+                  left: width * 0.5 - 95,
+                  bottom: 68,
+                  child: Container(
+                      width: 190,
+                      height: 36,
+                      child: ElevatedButton(
+                          onPressed: () async {
+                            _NaverMapPageController.getMoreRestaurantData.value
+                                ? await _NaverMapPageController.processRestaurantData(context, _SearchPageController.searchedWord)
+                                : await _NaverMapPageController.fetchRestaurantData(context, _SearchPageController.searchedWord);
+                          }, // 이 지도에서 재검색 버튼
+                          style: ElevatedButton.styleFrom(
+                              shape: StadiumBorder(),
+                              primary: Colors.grey.withOpacity(0.8)
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (_NaverMapPageController.getMoreRestaurantData.value == false)
+                                Icon(Icons.refresh, color: Colors.white),
+                              Text(
+                                _NaverMapPageController.getMoreRestaurantData.value
+                                    ? '음식점 결과 더보기'
+                                    : '  이 지도에서 재검색',
+                                style: TextStyle(
+                                    color: Colors.white
+                                ),
+                              )
+                            ],
+                          )
+                      )
+                  ),
+                )// 이 지도에서 재검색
+            ],
+          );
+        })
       ),
     );
   }
@@ -207,8 +210,8 @@ class _NaverMapPageState extends State<NaverMapPage> {
     //     '\n에니메이션 여부: $isAnimated'
     // );
 
-    if (cameraChange == false)
-      setState(() {cameraChange = true;});
+    if (_NaverMapPageController.getMoreRestaurantData.value == true)
+      _NaverMapPageController.getMoreRestaurantData.value = false;
 
     NaverMapController naverMapController = await naverMapCompleter.future;
     LatLngBounds bound = await naverMapController.getVisibleRegion();
@@ -229,18 +232,14 @@ class _NaverMapPageState extends State<NaverMapPage> {
   void _onMapTap(LatLng latLng) {
 
     // 바텀시트 상태 변경
-    if (_MapPageController.bS == false) {
+    if (_MapPageController.bottomSheet.value == false) {
       var currentIndex = _FilterPageController.CurrentOuterIndex.toInt();
-      setState(() {
-        _FilterPageController.ChangeOuterSelected(currentIndex, false);
-        _FilterPageController.ChangeCurrentOuterIndex(5);
-      });
+      _FilterPageController.ChangeOuterSelected(currentIndex, false);
+      _FilterPageController.ChangeCurrentOuterIndex(5);
     }
-    if (_MapPageController.bS == true) {
-      setState(() {
-        _MapPageController.ChangeState();
-        Get.back();
-      });
+    if (_MapPageController.bottomSheet.value == true) {
+      _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+      Get.back();
     }
   }
 }
