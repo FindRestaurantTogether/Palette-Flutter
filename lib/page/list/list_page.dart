@@ -10,6 +10,10 @@ import 'package:myapp/page/map/search/search_page_controller.dart';
 final List<String> listDropdownList = ['평점순', '리뷰순', '거리순'];
 final List<String> listDropdownList2 = ['3.0', '3.5', '4.0', '4.5'];
 
+String listDropdownSelected = listDropdownList.first;
+String listDropdownSelected2 = '';
+bool listOpen = false;
+
 class ListPage extends StatefulWidget {
   ListPage({Key? key}) : super(key: key);
 
@@ -21,11 +25,6 @@ class _ListPageState extends State<ListPage> {
 
   final _SearchPageController = Get.put(SearchPageController());
   final _NaverMapPageController = Get.put(NaverMapPageController());
-
-  String DropdownSelected = listDropdownList.first;
-  String DropdownSelected2 = '';
-
-  bool Open = false;
 
   @override
   Widget build(BuildContext context) {
@@ -157,7 +156,7 @@ class _ListPageState extends State<ListPage> {
                                   return listDropdownList.map((String value) {
                                     return Center(
                                       child: Text(
-                                        DropdownSelected!,
+                                        listDropdownSelected!,
                                         style: TextStyle(
                                           fontSize: 15,
                                           color: Color(0xfff42957),
@@ -177,10 +176,10 @@ class _ListPageState extends State<ListPage> {
                                       ),
                                     )
                                 )).toList(),
-                                value: DropdownSelected,
+                                value: listDropdownSelected,
                                 onChanged: (value) {
                                   setState(() {
-                                    DropdownSelected = value as String;
+                                    listDropdownSelected = value as String;
                                   });
                                 },
                                 underline: Container(),
@@ -220,18 +219,18 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                               onPressed: () {
                                 setState(() {
-                                  Open = !Open;
+                                  listOpen = !listOpen;
                                 });
                               },
                               child: Text(
                                 '영업중',
                                 style: TextStyle(
                                   fontSize: 15,
-                                  color: Open ? Colors.white : Color(0xff787878),
+                                  color: listOpen ? Colors.white : Color(0xff787878),
                                 ),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Open ? Color(0xfff42957) : Colors.white,
+                                backgroundColor: listOpen ? Color(0xfff42957) : Colors.white,
                                 shape: StadiumBorder(),
                                 shadowColor: Colors.transparent,
                               )
@@ -275,7 +274,7 @@ class _ListPageState extends State<ListPage> {
                                 return listDropdownList2.map((String value) {
                                   return Center(
                                     child: Text(
-                                      DropdownSelected2,
+                                      listDropdownSelected2,
                                       style: TextStyle(
                                         fontSize: 15,
                                         color:  Color(0xfff42957),
@@ -294,10 +293,10 @@ class _ListPageState extends State<ListPage> {
                                     ),
                                   )
                               )).toList(),
-                              value: DropdownSelected2 == '' ? null : DropdownSelected2,
+                              value: listDropdownSelected2 == '' ? null : listDropdownSelected2,
                               onChanged: (value) {
                                 setState(() {
-                                  DropdownSelected2 = value as String;
+                                  listDropdownSelected2 = value as String;
                                 });
                               },
                               underline: Container(),
@@ -328,7 +327,7 @@ class _ListPageState extends State<ListPage> {
             height: 4,
             color: Color(0xffeeeeee),
           ), // 회색 바
-          ListviewPage() // 음식점 리스트
+          ListviewPage(), // 음식점 리스트
         ],
       ),
     );

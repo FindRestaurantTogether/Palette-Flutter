@@ -9,6 +9,7 @@ import 'package:myapp/page/my/my_page.dart';
 import 'package:myapp/page/tab/tab_page_controller.dart';
 import 'package:myapp/page/group/group_page.dart';
 import 'package:myapp/page/onboarding/onboarding.dart';
+import 'package:fluttericon/elusive_icons.dart';
 
 // 바텀네비게이션바 기능 추가
 class TabPage extends StatefulWidget {
@@ -65,11 +66,17 @@ class _TabPageState extends State<TabPage> {
                       items: [
                         BottomNavigationBarItem(
                           label: '홈',
-                          icon: Icon(Icons.home_outlined),
+                          icon: ImageIcon(
+                            AssetImage("assets/bottomnavigation_image/home.png"),
+                            size: 23,
+                          ),
                         ),
                         BottomNavigationBarItem(
                           label: '즐겨찾기',
-                          icon: Icon(Icons.bookmark_border),
+                          icon: ImageIcon(
+                            AssetImage("assets/bottomnavigation_image/favorite.png"),
+                            size: 23,
+                          ),
                         ),
                         // BottomNavigationBarItem(
                         //   label: '그룹',
@@ -77,7 +84,10 @@ class _TabPageState extends State<TabPage> {
                         // ),
                         BottomNavigationBarItem(
                           label: '마이페이지',
-                          icon: Icon(Icons.person_outline),
+                          icon: ImageIcon(
+                            AssetImage("assets/bottomnavigation_image/mypage.png"),
+                            size: 23,
+                          ),
                         ),
                       ]),
                 ),

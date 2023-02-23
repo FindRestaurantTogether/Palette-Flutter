@@ -102,7 +102,6 @@ class NaverMapPageController extends GetxService {
       } else if (restaurants.length == 10) {
         final Position currentPosition = await Geolocator.getCurrentPosition();
         for (int i=10 ; i<20; i++) {
-          print(rawRestaurantData[i]['store_name']);
           restaurants.add(
               NaverMapPageRestaurant(
                 uid: rawRestaurantData[i]['uid'] as String, // 음식점 고유 번호
@@ -289,7 +288,7 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
+          'naver_star': 4.1,
           'naver_cnt': 24,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
@@ -317,8 +316,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 4.0,
+          'naver_cnt': 20,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         2: {
@@ -345,8 +344,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 4.5,
+          'naver_cnt': 18,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         3: {
@@ -373,8 +372,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 4.2,
+          'naver_cnt': 32,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         4: {
@@ -402,7 +401,7 @@ class NaverMapPageController extends GetxService {
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
           'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_cnt': 35,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         5: {
@@ -429,8 +428,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 5.0,
+          'naver_cnt': 42,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         6: {
@@ -458,7 +457,7 @@ class NaverMapPageController extends GetxService {
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
           'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_cnt': 31,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         7: {
@@ -485,8 +484,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 4.0,
+          'naver_cnt': 124,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         8: {
@@ -513,8 +512,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 3.8,
+          'naver_cnt': 70,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         9: {
@@ -541,8 +540,8 @@ class NaverMapPageController extends GetxService {
           'google_star': 4.3,
           'google_cnt': 24,
           'google_review_url': 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko',
-          'naver_star': 4.3,
-          'naver_cnt': 24,
+          'naver_star': 3.6,
+          'naver_cnt': 4,
           'naver_review_url': 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll'
         },
         10: {
