@@ -30,9 +30,6 @@ class _LoginPageState extends State<LoginPage> {
       _GlobalKey.currentState!.save();
     }
   }
-  void authPersistence() async{
-    await FirebaseAuth.instance.setPersistence(Persistence.NONE);
-  } // 회원가입, 로그인시 사용자 영속
 
   User? loggedUser;
   bool signUpLoading = false;
@@ -79,7 +76,6 @@ class _LoginPageState extends State<LoginPage> {
         signUpLoading = false;
       });
     }
-    authPersistence();
   }
 
   @override

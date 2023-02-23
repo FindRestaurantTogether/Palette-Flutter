@@ -414,6 +414,7 @@ class _SignupPageState extends State<SignupPage> {
                                     }
                                     return null;
                                   },
+                                  textInputAction: TextInputAction.next,
                                   decoration: InputDecoration(
                                     errorStyle: TextStyle(fontSize: 10, height: 0.5),
                                     enabledBorder: UnderlineInputBorder(

@@ -19,7 +19,6 @@ void main() async {
 
 
   await Hive.initFlutter();
-
   Hive.registerAdapter(RecentSearchModelAdapter());
   Hive.registerAdapter(FavoriteModelAdapter());
   Hive.registerAdapter(RestaurantModelAdapter());

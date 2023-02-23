@@ -8,64 +8,110 @@ import 'dart:math' show cos, sqrt, asin;
 import 'dart:math';
 
 
-class Network{
+class Network {
   var filter;
   var text;
   var current_place;
+
   // var bottom_left;
   Network(this.filter, this.text);
 
-  String url = 'http://34.64.166.110/api/testsearch';
+  // String url = 'http://34.64.166.110/api/testsearch?top_right_lat=37.4986&top_right_lon=127.0202&bottom_left_lat=37.4132&bottom_left_lon=126.734';
 
   Future<dynamic> getJsonData() async {
     // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
     // &category=Food-Chinese-Etc&category=Food-Western-Etc&text=감자나라
 
+    var store;
 
     // 위도경도 바뀌는 코드!!!!!!!!!!!!!!!!
-    // double rightUpLat;
-    // double rightUpLon;
-    // double leftDownLat;
-    // double leftDownLon;
-    //
-    // double max_lat = 37.715133;
-    // double max_lon = 127.269311;
-    // double min_lat = 37.413294;
-    // double min_lon = 126.734086;
-    // double lat_one_size =  filter[0].latitude - filter[2].latitude;
-    // double lon_one_size =  filter[0].longitude - filter[2].longitude;
+    double rightUpLat;
+    double rightUpLon;
+    double leftDownLat;
+    double leftDownLon;
 
-    // for(int size=1;size<=8;size++){
-    //   rightUpLat = min(filter[0].latitude+lat_one_size*size, max_lat);
-    //   rightUpLon = min(filter[0].longitude+lon_one_size*size,max_lon);
-    //   leftDownLat = max(filter[0].latitude-lat_one_size*size,min_lat);
-    //   leftDownLon = max(filter[0].longitude-lon_one_size*size,min_lon);
-    //   String url2 = 'http://34.64.35.77/api/search/map?top-right-lat=${rightUpLat}&top-right-lon=${rightUpLon}&bottom-left-lat=${leftDownLat}&bottom-left-lon=${leftDownLon}';
-    //   List<dynamic> category = filter[3];
-    //   if(category.length>0){
-    //     url2 = url2 + 'category=${category[0]}';
-    //     for(int i = 1;i<category.length;i++){
-    //       url2 = url2 + '&${category[i]}';
-    //     }
-    //   }
-    //   if(text != ''){
-    //     url2 = url2 + '&text=${text}';
-    //   }
-    //   print(url2);
-    //   http.Response response = await http.get(Uri.parse(url));
-    //   if (response.statusCode == 200) {
-    //     //String jsonData = response.body;
-    //     var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-    //     var store = parsingData;
-    //     if(store.length==15){
-    //       break;
-    //     }
-    // }
+    double max_lat = 37.7151;
+    double max_lon = 127.2693;
+    double min_lat = 37.4132;
+    double min_lon = 126.7340;
+    double lat_one_size = filter[0].latitude - filter[2].latitude;
+    double lon_one_size = filter[0].longitude - filter[2].longitude;
 
+    for (int size = 1; size <= 8; size++) {
+      rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) +
+          lat_one_size * size, max_lat);
+      rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) +
+          lon_one_size * size, max_lon);
+      leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) -
+          lat_one_size * size, min_lat);
+      leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) -
+          lon_one_size * size, min_lon);
+      String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+
+      // List<dynamic> category = filter[3];
+      // if(category.length>0){
+      //   url2 = url2 + 'category=${category[0]}';
+      //   for(int i = 1;i<category.length;i++){
+      //     url2 = url2 + '&${category[i]}';
+      //   }
+      // }
+      // if(text != ''){
+      //   url2 = url2 + '&text=${text}';
+      // }
+
+      print(url2);
+      http.Response response = await http.get(Uri.parse(url2));
+      if (response.statusCode == 200) {
+        //String jsonData = response.body;
+        var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+        store = parsingData;
+        print("길이 ${store.length}");
+        if (store.length == 30) {
+          break;
+        }
+      }
+    }
+    Map store_dict = change_data(store);
+    return store_dict;
+  }
+}
+
+// rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)), max_lat);
+// rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),max_lon);
+// leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)),min_lat);
+// leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),min_lon);
+// String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+//
+// http.Response response = await http.get(Uri.parse(url2));
+//
+// if (response.statusCode == 200) {
+//   //String jsonData = response.body;
+
+
+class open_Network {
+  var uid;
+  open_Network(this.uid);
+
+  Future<dynamic> getJsonData() async {
+    String url = 'http://34.64.166.110/api/isopeing?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
-
     if (response.statusCode == 200) {
-      //String jsonData = response.body;
+      return response.body;
+    }
+  }
+}
+
+
+
+
+class uid_Network {
+  var uid;
+  uid_Network(this.uid);
+
+  Future<dynamic> getJsonData() async {
+    String url = 'http://34.64.166.110/api/idsearch?store_id=${uid}';
+    http.Response response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
       var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
       var store = parsingData;
       Map store_dict = change_data(store);
@@ -74,54 +120,54 @@ class Network{
   }
 }
 
+
+
 Map change_data(store){
   Map<String,dynamic> store_dict = Map();
-  Map<String,dynamic> name = {
-    '해산물(게)': 'food_korean_seafood_crab',
-    '해산물(문어)': 'food_korean_seafood_octopus',
-    '해산물(생선)': 'food_korean_seafood_fish',
-    '해산물(조개)': 'food_korean_seafood_seashell',
-    '한식' : 'food_korean',
-    '양식' : 'food_western',
-    '중식' : 'food_chinese',
-    '일식' : 'food_japanese',
-    '분식': 'food_korean_snack',
-    '고기': 'food_korean_meat',
-    '전': 'food_korean_jeon',
-    '곱/대/막창': 'food_korean_giblets',
-    '백반/죽/찌개': 'food_korean_meal',
-    '국밥': 'food_korean_gukbap',
-    '전골/탕/찜': 'food_korean_stew',
-    '냉면/국수': 'food_korean_noodles',
-    '기타(한식)': 'food_korean_etc',
-    '피자': 'food_western_pizza',
-    '샌드위치': 'food_western_sandwich',
-    '햄버거': 'food_western_hamburger',
-    '파스타': 'food_western_pasta',
-    '스테이크': 'food_western_steak',
-    '기타(양식)': 'food_western_etc',
-    '마라/훠궈': 'food_chinese_hotpot',
-    '딤섬': 'food_chinese_dimsum',
-    '중국집': 'food_chinese_restaurant',
-    '양꼬치': 'food_chinese_lambskewers',
-    '기타(중식)': 'food_chinese_etc',
-    '초밥/회': 'food_japanese_sushi',
-    '돈까스': 'food_japanese_porkcutlet',
-    '라멘': 'food_japanese_ramen',
-    '우동/메밀': 'food_japanese_udon',
-    '덮밥': 'food_japanese_dnburi',
-    '기타(일식)': 'food_japanese_etc',
-    '아시안': 'food_asian',
-    '멕시칸': 'food_mexican',
-    '기타': 'food_etc',
-    '프랜차이즈': 'cafe_franchise',
-    '개인': 'cafe_private',
-    '주점': 'alcohol_pub',
-    '호프': 'alcohol_hof',
-    '이자카야': 'alcohol_izakaya',
-    '와인': 'alcohol_wine',
-    '칵테일,양주': 'alcohol_cocktail'
-  };
+  Map<String,dynamic> name = {'해산물(게)': 'Food_Korean_Seafood_Crab',
+    '해산물(문어)': 'Food_Korean_Seafood_Octopus',
+    '해산물(생선)': 'Food_Korean_Seafood_Fish',
+    '해산물(조개)': 'Food_Korean_Seafood_Seashell',
+    '한식' : 'Food_Korean',
+    '양식' : 'Food_Western',
+    '중식' : 'Food_Chinese',
+    '일식' : 'Food_Japanese',
+    '분식': 'Food_Korean_Snack',
+    '고기': 'Food_Korean_Meat',
+    '전': 'Food_Korean_Jeon',
+    '곱/대/막창': 'Food_Korean_Giblets',
+    '백반/죽/찌개': 'Food_Korean_Meal',
+    '국밥': 'Food_Korean_Gukbap',
+    '전골/탕/찜': 'Food_Korean_Stew',
+    '냉면/국수': 'Food_Korean_Noodles',
+    '기타(한식)': 'Food_Korean_Etc',
+    '피자': 'Food_Western_Pizza',
+    '샌드위치': 'Food_Western_Sandwich',
+    '햄버거': 'Food_Western_Hamburger',
+    '파스타': 'Food_Western_Pasta',
+    '스테이크': 'Food_Western_Steak',
+    '기타(양식)': 'Food_Western_Etc',
+    '마라/훠궈': 'Food_Chinese_Hotpot',
+    '딤섬': 'Food_Chinese_Dimsum',
+    '중국집': 'Food_Chinese_Restaurant',
+    '양꼬치': 'Food_Chinese_Lambskewers',
+    '기타(중식)': 'Food_Chinese_Etc',
+    '초밥/회': 'Food_Japanese_Sushi',
+    '돈까스': 'Food_Japanese_Porkcutlet',
+    '라멘': 'Food_Japanese_Ramen',
+    '우동/메밀': 'Food_Japanese_Udon',
+    '덮밥': 'Food_Japanese_Dnburi',
+    '기타(일식)': 'Food_Japanese_Etc',
+    '아시안': 'Food_Asian',
+    '멕시칸': 'Food_Mexican',
+    '기타': 'Food_ETC',
+    '프랜차이즈': 'Cafe_Franchise',
+    '개인': 'Cafe_Private',
+    '주점': 'Alcohol_Pub',
+    '호프': 'Alcohol_Hof',
+    '이자카야': 'Alcohol_Izakaya',
+    '와인': 'Alcohol_Wine',
+    '칵테일,양주': 'Alcohol_Cocktail'};
 
   for(int i=0;i<store.length;i++){
     Map<String,dynamic> menu = Map();
@@ -130,7 +176,7 @@ Map change_data(store){
     Map<String,dynamic> opening_lastorder = Map();
     Map<String,dynamic> one_dict = Map();
     one_dict['uid'] = store[i]['id'];
-    one_dict['store_name'] = store[i]['source']['name'];
+    one_dict['name'] = store[i]['source']['name'];
     one_dict["road_address"] = "서울 " + store[i]['source']["road_address"];
     one_dict["jibun_address"] = "서울 " + store[i]['source']["jibun_address"];
 
@@ -167,7 +213,7 @@ Map change_data(store){
 
 
     one_dict['theme'] = store[i]['source']["theme"].split('-');
-    one_dict['service'] = store[i]['source']["theme"].split('-');
+    one_dict['service'] = store[i]['source']["service"].split('-');
 
     // 메뉴
     try{
@@ -186,16 +232,17 @@ Map change_data(store){
       one_dict["longitude"] = double.parse(store[i]['source']['location']["lon"]);
     }
     catch(e) {}
-
-    try{
-      one_dict['store_image'] = store[i]['source']['outer_image'];
-    }
-    catch(e) {}
     List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
     for(int j=0;j<site_info.length;j = j+2){
       one_dict[site_info[j]] = double.parse(store[i]['source'][site_info[j]]);
       one_dict[site_info[j+1]] = int.parse(store[i]['source'][site_info[j+1]]);
     }
+
+    // url
+    one_dict['kakao_review_url'] = 'https://place.map.kakao.com/m/11101743#comment';
+    one_dict['google_review_url'] = 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko';
+    one_dict['naver_review_url'] = 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll';
+
     store_dict["$i"] = one_dict;
   }
   return store_dict;

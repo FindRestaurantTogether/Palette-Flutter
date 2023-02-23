@@ -5,6 +5,7 @@ import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
 
 class ListviewPage extends StatefulWidget {
 
@@ -18,7 +19,6 @@ class _ListviewPageState extends State<ListviewPage> {
 
   final _NaverMapPageController = Get.put(NaverMapPageController());
   final _ScrollController = ScrollController();
-
 
   @override
   void initState() {
@@ -287,9 +287,11 @@ class _ListviewPageState extends State<ListviewPage> {
           itemCount: restaurantList.length,
           itemBuilder: (context, index){
             return ExpandTapWidget(
-              onTap: () {
-                Get.to(() => DetailPage(),
-                    arguments: restaurantList[index]);
+              onTap: () async {
+                uid_Network uid_network = uid_Network(restaurantList[index].uid);
+                var uid_store = await uid_network.getJsonData();
+                print(uid_store);
+                Get.to(() => DetailPage(), arguments: restaurantList[index]);
               },
               tapPadding: EdgeInsets.all(25),
               child: Container(

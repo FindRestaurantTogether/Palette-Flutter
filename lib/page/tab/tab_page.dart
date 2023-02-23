@@ -9,7 +9,6 @@ import 'package:myapp/page/my/my_page.dart';
 import 'package:myapp/page/tab/tab_page_controller.dart';
 import 'package:myapp/page/group/group_page.dart';
 import 'package:myapp/page/onboarding/onboarding.dart';
-import 'package:fluttericon/elusive_icons.dart';
 
 // 바텀네비게이션바 기능 추가
 class TabPage extends StatefulWidget {
@@ -47,49 +46,52 @@ class _TabPageState extends State<TabPage> {
                     MyPage(),
                   ],
                 ),
-                bottomNavigationBar: Theme(
-                  data: ThemeData(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
+                bottomNavigationBar: SizedBox(
+                  height: 55,
+                  child: Theme(
+                    data: ThemeData(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: BottomNavigationBar(
+                        showSelectedLabels: false,
+                        showUnselectedLabels: false,
+                        type: BottomNavigationBarType.fixed,
+                        backgroundColor: Colors.white,
+                        selectedItemColor: Color(0xfff42957),
+                        selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                        unselectedLabelStyle: TextStyle(fontSize: 10),
+                        unselectedItemColor: Colors.grey,
+                        onTap: _TabPageController.ChangeTab,
+                        currentIndex: _TabPageController.CurrentTab.value,
+                        items: [
+                          BottomNavigationBarItem(
+                            label: '홈',
+                            icon: ImageIcon(
+                              AssetImage("assets/bottomnavigation_image/home.png"),
+                              size: 23,
+                            ),
+                          ),
+                          BottomNavigationBarItem(
+                            label: '즐겨찾기',
+                            icon: ImageIcon(
+                              AssetImage("assets/bottomnavigation_image/favorite.png"),
+                              size: 23,
+                            ),
+                          ),
+                          // BottomNavigationBarItem(
+                          //   label: '그룹',
+                          //   icon: Icon(Icons.add_alarm),
+                          // ),
+                          BottomNavigationBarItem(
+                            label: '마이페이지',
+                            icon: ImageIcon(
+                              AssetImage("assets/bottomnavigation_image/mypage.png"),
+                              size: 23,
+                            ),
+                          ),
+                        ]),
                   ),
-                  child: BottomNavigationBar(
-                      // showSelectedLabels: false,
-                      // showUnselectedLabels: false,
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor: Colors.white,
-                      selectedItemColor: Color(0xfff42957),
-                      selectedLabelStyle: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
-                      unselectedLabelStyle: TextStyle(fontSize: 10),
-                      unselectedItemColor: Colors.grey,
-                      onTap: _TabPageController.ChangeTab,
-                      currentIndex: _TabPageController.CurrentTab.value,
-                      items: [
-                        BottomNavigationBarItem(
-                          label: '홈',
-                          icon: ImageIcon(
-                            AssetImage("assets/bottomnavigation_image/home.png"),
-                            size: 23,
-                          ),
-                        ),
-                        BottomNavigationBarItem(
-                          label: '즐겨찾기',
-                          icon: ImageIcon(
-                            AssetImage("assets/bottomnavigation_image/favorite.png"),
-                            size: 23,
-                          ),
-                        ),
-                        // BottomNavigationBarItem(
-                        //   label: '그룹',
-                        //   icon: Icon(Icons.add_alarm),
-                        // ),
-                        BottomNavigationBarItem(
-                          label: '마이페이지',
-                          icon: ImageIcon(
-                            AssetImage("assets/bottomnavigation_image/mypage.png"),
-                            size: 23,
-                          ),
-                        ),
-                      ]),
                 ),
               )),
     );

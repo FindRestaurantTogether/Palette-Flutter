@@ -915,6 +915,7 @@ class _FolderPageState extends State<FolderPage> {
                               return ExpandTapWidget(
                                   onTap: () {
                                     if (_FolderPageController.editShare.value == false) {
+
                                       Get.to(() => DetailPage(), arguments: favoriteRestaurant);
                                     }
                                   },

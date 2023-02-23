@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:myapp/page/detail/menu/menu_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
@@ -159,15 +160,13 @@ class _DetailPageState extends State<DetailPage> {
                                                   : IconButton(
                                                 padding: EdgeInsets.all(0.0),
                                                 onPressed: () {
-                                                  setState(() {
-                                                    showDialog(
-                                                        context: context,
-                                                        barrierDismissible: false,
-                                                        builder: (BuildContext context) {
-                                                          return SelectFolderPage(selectedRestaurant: selectedRestaurant);
-                                                        }
-                                                    );
-                                                  });
+                                                  showDialog(
+                                                      context: context,
+                                                      barrierDismissible: false,
+                                                      builder: (BuildContext context) {
+                                                        return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                                      }
+                                                  );
                                                 },
                                                 icon: Image.asset('assets/button_image/unfavorite_button.png'),
                                               )
@@ -561,7 +560,7 @@ class _DetailPageState extends State<DetailPage> {
                                       highlightColor: Colors.transparent,
                                       fillColor: Colors.white,
                                       onPressed: (int index) {
-                                        setState(() {
+                                        setState(() async {
                                           for (int i = 0; i < ToggleSelected.length; i++) {
                                             ToggleSelected[i] = i == index;
                                           }
@@ -569,7 +568,23 @@ class _DetailPageState extends State<DetailPage> {
                                           if (ToggleSelected[0]) {
                                             launch("tel://" + selectedRestaurant.call);
                                           } else if (ToggleSelected[1]) {
-
+                                            bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
+                                            if (isKakaoTalkSharingAvailable) {
+                                              try {
+                                                Uri uri = await ShareClient.instance.shareDefault(template: defaultFeed);
+                                                await ShareClient.instance.launchKakaoTalk(uri);
+                                                print('카카오톡 공유 완료');
+                                              } catch (error) {
+                                                print('카카오톡 공유 실패 $error');
+                                              }
+                                            } else {
+                                              try {
+                                                Uri shareUrl = await WebSharerClient.instance.makeDefaultUrl(template: defaultFeed);
+                                                await launchBrowserTab(shareUrl, popupOpen: true);
+                                              } catch (error) {
+                                                print('카카오톡 공유 실패 $error');
+                                              }
+                                            }
                                           } else if (ToggleSelected[2]) {
                                             showModalBottomSheet(
                                                 shape: RoundedRectangleBorder(
@@ -1082,3 +1097,49 @@ class NaverMapUtils {
     }
   }
 }
+FeedTemplate defaultFeed = FeedTemplate(
+  content: Content(
+    title: '딸기 치즈 케익',
+    description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
+    imageUrl: Uri.parse(
+        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+    link: Link(
+        webUrl: Uri.parse('https://developers.kakao.com'),
+        mobileWebUrl: Uri.parse('https://developers.kakao.com')),
+  ),
+  itemContent: ItemContent(
+    profileText: 'Kakao',
+    profileImageUrl: Uri.parse(
+        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+    titleImageUrl: Uri.parse(
+        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+    titleImageText: 'Cheese cake',
+    titleImageCategory: 'cake',
+    items: [
+      ItemInfo(item: 'cake1', itemOp: '1000원'),
+      ItemInfo(item: 'cake2', itemOp: '2000원'),
+      ItemInfo(item: 'cake3', itemOp: '3000원'),
+      ItemInfo(item: 'cake4', itemOp: '4000원'),
+      ItemInfo(item: 'cake5', itemOp: '5000원')
+    ],
+    sum: 'total',
+    sumOp: '15000원',
+  ),
+  social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
+  buttons: [
+    Button(
+      title: '웹으로 보기',
+      link: Link(
+        webUrl: Uri.parse('https: //developers.kakao.com'),
+        mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
+      ),
+    ),
+    Button(
+      title: '앱으로보기',
+      link: Link(
+        androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+        iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+      ),
+    ),
+  ],
+);
