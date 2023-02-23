@@ -123,60 +123,63 @@ class uid_Network {
 
 
 Map change_data(store){
-  Map<String,dynamic> store_dict = Map();
-  Map<String,dynamic> name = {'해산물(게)': 'Food_Korean_Seafood_Crab',
-    '해산물(문어)': 'Food_Korean_Seafood_Octopus',
-    '해산물(생선)': 'Food_Korean_Seafood_Fish',
-    '해산물(조개)': 'Food_Korean_Seafood_Seashell',
-    '한식' : 'Food_Korean',
-    '양식' : 'Food_Western',
-    '중식' : 'Food_Chinese',
-    '일식' : 'Food_Japanese',
-    '분식': 'Food_Korean_Snack',
-    '고기': 'Food_Korean_Meat',
-    '전': 'Food_Korean_Jeon',
-    '곱/대/막창': 'Food_Korean_Giblets',
-    '백반/죽/찌개': 'Food_Korean_Meal',
-    '국밥': 'Food_Korean_Gukbap',
-    '전골/탕/찜': 'Food_Korean_Stew',
-    '냉면/국수': 'Food_Korean_Noodles',
-    '기타(한식)': 'Food_Korean_Etc',
-    '피자': 'Food_Western_Pizza',
-    '샌드위치': 'Food_Western_Sandwich',
-    '햄버거': 'Food_Western_Hamburger',
-    '파스타': 'Food_Western_Pasta',
-    '스테이크': 'Food_Western_Steak',
-    '기타(양식)': 'Food_Western_Etc',
-    '마라/훠궈': 'Food_Chinese_Hotpot',
-    '딤섬': 'Food_Chinese_Dimsum',
-    '중국집': 'Food_Chinese_Restaurant',
-    '양꼬치': 'Food_Chinese_Lambskewers',
-    '기타(중식)': 'Food_Chinese_Etc',
-    '초밥/회': 'Food_Japanese_Sushi',
-    '돈까스': 'Food_Japanese_Porkcutlet',
-    '라멘': 'Food_Japanese_Ramen',
-    '우동/메밀': 'Food_Japanese_Udon',
-    '덮밥': 'Food_Japanese_Dnburi',
-    '기타(일식)': 'Food_Japanese_Etc',
-    '아시안': 'Food_Asian',
-    '멕시칸': 'Food_Mexican',
-    '기타': 'Food_ETC',
-    '프랜차이즈': 'Cafe_Franchise',
-    '개인': 'Cafe_Private',
-    '주점': 'Alcohol_Pub',
-    '호프': 'Alcohol_Hof',
-    '이자카야': 'Alcohol_Izakaya',
-    '와인': 'Alcohol_Wine',
-    '칵테일,양주': 'Alcohol_Cocktail'};
+  ///
+  Map<int,dynamic> store_dict = Map();
+  Map<String,dynamic> name = {
+    '해산물(게)': 'food_korean_seafood_crab',
+    '해산물(문어)': 'food_korean_seafood_octopus',
+    '해산물(생선)': 'food_korean_seafood_fish',
+    '해산물(조개)': 'food_korean_seafood_seashell',
+    '한식' : 'food_korean',
+    '양식' : 'food_western',
+    '중식' : 'food_chinese',
+    '일식' : 'food_japanese',
+    '분식': 'food_korean_snack',
+    '고기': 'food_korean_meat',
+    '전': 'food_korean_jeon',
+    '곱/대/막창': 'food_korean_giblets',
+    '백반/죽/찌개': 'food_korean_meal',
+    '국밥': 'food_korean_gukbap',
+    '전골/탕/찜': 'food_korean_stew',
+    '냉면/국수': 'food_korean_noodles',
+    '기타(한식)': 'food_korean_etc',
+    '피자': 'food_western_pizza',
+    '샌드위치': 'food_western_sandwich',
+    '햄버거': 'food_western_hamburger',
+    '파스타': 'food_western_pasta',
+    '스테이크': 'food_western_steak',
+    '기타(양식)': 'food_western_etc',
+    '마라/훠궈': 'food_chinese_hotpot',
+    '딤섬': 'food_chinese_dimsum',
+    '중국집': 'food_chinese_restaurant',
+    '양꼬치': 'food_chinese_lambskewers',
+    '기타(중식)': 'food_chinese_etc',
+    '초밥/회': 'food_japanese_sushi',
+    '돈까스': 'food_japanese_porkcutlet',
+    '라멘': 'food_japanese_ramen',
+    '우동/메밀': 'food_japanese_udon',
+    '덮밥': 'food_japanese_dnburi',
+    '기타(일식)': 'food_japanese_etc',
+    '아시안': 'food_asian',
+    '멕시칸': 'food_mexican',
+    '기타': 'food_etc',
+    '프랜차이즈': 'cafe_franchise',
+    '개인': 'cafe_private',
+    '주점': 'alcohol_pub',
+    '호프': 'alcohol_hof',
+    '이자카야': 'alcohol_izakaya',
+    '와인': 'alcohol_wine',
+    '칵테일,양주': 'alcohol_cocktail'
+  };
 
   for(int i=0;i<store.length;i++){
-    Map<String,dynamic> menu = Map();
-    Map<String,dynamic> opening_hour = Map();
-    Map<String,dynamic> opening_breaktime = Map();
-    Map<String,dynamic> opening_lastorder = Map();
+    Map<String,int> menu = Map();
+    Map<String,String> opening_hour = Map();
+    Map<String,String> opening_breaktime = Map();
+    Map<String,String> opening_lastorder = Map();
     Map<String,dynamic> one_dict = Map();
     one_dict['uid'] = store[i]['id'];
-    one_dict['name'] = store[i]['source']['name'];
+    one_dict['store_name'] = store[i]['source']['name'];
     one_dict["road_address"] = "서울 " + store[i]['source']["road_address"];
     one_dict["jibun_address"] = "서울 " + store[i]['source']["jibun_address"];
 
@@ -185,7 +188,14 @@ Map change_data(store){
     }
     catch(e) {}
 
-    one_dict['main_category'] = name[store[i]['source']["main_category"]];
+    ///
+    List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
+    for(int j=0;j<site_info.length;j = j+2){
+      one_dict[site_info[j]] = double.parse(store[i]['source'][site_info[j]]);
+      one_dict[site_info[j+1]] = int.parse(store[i]['source'][site_info[j+1]]);
+    }
+
+    one_dict['main_category'] = 'assets/marker_image/${name[store[i]['source']["main_category"]]}_${one_dict['naver_star'].toStringAsFixed(1)}.png';
     one_dict['category'] = store[i]['source']["category"].split('-');
 
     // 시간
@@ -193,21 +203,21 @@ Map change_data(store){
       for(int j=0;j<store[i]['source']['opening_hour'].length;j++){
         opening_hour.addAll(store[i]['source']['opening_hour'][j]);
       }
-      one_dict['opening_hour'] = opening_hour;
+      one_dict['opening_hour'] = Map<String, String>.from(opening_hour);
     }
     catch(e){}
     try{
       for(int j=0;j<store[i]['source']['opening_breaktime'].length;j++){
         opening_breaktime.addAll(store[i]['source']['opening_breaktime'][j]);
       }
-      one_dict['opening_breaktime'] = opening_breaktime;
+      one_dict['opening_breaktime'] = Map<String, String>.from(opening_breaktime);
     }
     catch(e){}
     try{
       for(int j=0;j<store[i]['source']['opening_lastorder'].length;j++){
         opening_lastorder.addAll(store[i]['source']['opening_lastorder'][j]);
       }
-      one_dict['opening_lastorder'] = opening_lastorder;
+      one_dict['opening_lastorder'] = Map<String, String>.from(opening_lastorder);
     }
     catch(e){}
 
@@ -218,7 +228,7 @@ Map change_data(store){
     // 메뉴
     try{
       for(int j=0;j<store[i]['source']['menu'].length;j++){
-        Map<String,String> one_menu = {};
+        Map<String,int> one_menu = {};
         one_menu[store[i]['source']['menu'][j].split(':')[0]] = store[i]['source']['menu'][j].split(':')[1];
         menu.addAll(one_menu);
       }
@@ -226,24 +236,22 @@ Map change_data(store){
     }
     catch(e){}
 
+    one_dict['open'] = 'open';
+    one_dict['store_image'] = ['assets/background_image/taroya.jpeg'];
 
     try {
       one_dict["latitude"] = double.parse(store[i]['source']['location']["lat"]);
       one_dict["longitude"] = double.parse(store[i]['source']['location']["lon"]);
     }
     catch(e) {}
-    List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
-    for(int j=0;j<site_info.length;j = j+2){
-      one_dict[site_info[j]] = double.parse(store[i]['source'][site_info[j]]);
-      one_dict[site_info[j+1]] = int.parse(store[i]['source'][site_info[j+1]]);
-    }
+
 
     // url
     one_dict['kakao_review_url'] = 'https://place.map.kakao.com/m/11101743#comment';
     one_dict['google_review_url'] = 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko';
     one_dict['naver_review_url'] = 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll';
 
-    store_dict["$i"] = one_dict;
+    store_dict[i] = one_dict;
   }
   return store_dict;
 }

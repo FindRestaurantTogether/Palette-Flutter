@@ -172,23 +172,23 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     height: 20,
                     child: _FavoritePageController.favoriteRestaurantUids.contains(selectedRestaurant.uid)
                         ? IconButton(
-                          padding: EdgeInsets.all(0.0),
-                          onPressed: (){
-                            _FavoritePageController.favoriteRestaurantUids.remove(selectedRestaurant.uid);
+                      padding: EdgeInsets.all(0.0),
+                      onPressed: (){
+                        _FavoritePageController.favoriteRestaurantUids.remove(selectedRestaurant.uid);
 
-                            Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-                            List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
-                            for (int i=0 ; i<favoriteFolders.length ; i++) {
-                              for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
-                                if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedRestaurant.uid) {
-                                  favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
-                                  favoriteFolders[i].save();
-                                }
-                              }
+                        Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+                        List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
+                        for (int i=0 ; i<favoriteFolders.length ; i++) {
+                          for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
+                            if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedRestaurant.uid) {
+                              favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
+                              favoriteFolders[i].save();
                             }
-                          },
-                          icon: Image.asset('assets/button_image/favorite_button.png'),
-                        )
+                          }
+                        }
+                      },
+                      icon: Image.asset('assets/button_image/favorite_button.png'),
+                    )
                         : IconButton(
                       padding: EdgeInsets.all(0.0),
                       onPressed: () {
@@ -212,13 +212,13 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
           Container(
             height: 20,
             child: Row(
-              children: [
-                for (int i = 0; i < selectedRestaurant.theme.length; i++)
+                children: [
+                  for (int i = 0; i < selectedRestaurant.theme.length; i++)
                     Text(
                       '#${selectedRestaurant.theme[i]} ',
                       style: TextStyle(fontSize: 13, color: Color(0xff57dde0)),
                     )
-              ]
+                ]
             ),
           ), // 분위기
           SizedBox(height: 2),
@@ -296,7 +296,55 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                 if (ToggleSelected[0]) {
                   launch("tel://" + selectedRestaurant.call);
                 } else if (ToggleSelected[1]) {
+                  final FeedTemplate defaultFeed = FeedTemplate(
+                    content: Content(
+                      title: '${selectedRestaurant.store_name}',
+                      description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
+                      imageUrl: Uri.parse(
+                          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                      link: Link(
+                          webUrl: Uri.parse('https://developers.kakao.com'),
+                          mobileWebUrl: Uri.parse('https://developers.kakao.com')),
+                    ),
+                    itemContent: ItemContent(
+                      profileText: 'Kakao',
+                      profileImageUrl: Uri.parse(
+                          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                      titleImageUrl: Uri.parse(
+                          'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                      titleImageText: 'Cheese cake',
+                      titleImageCategory: 'cake',
+                      items: [
+                        ItemInfo(item: 'cake1', itemOp: '1000원'),
+                        ItemInfo(item: 'cake2', itemOp: '2000원'),
+                        ItemInfo(item: 'cake3', itemOp: '3000원'),
+                        ItemInfo(item: 'cake4', itemOp: '4000원'),
+                        ItemInfo(item: 'cake5', itemOp: '5000원')
+                      ],
+                      sum: 'total',
+                      sumOp: '15000원',
+                    ),
+                    social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
+                    buttons: [
+                      Button(
+                        title: '웹으로 보기',
+                        link: Link(
+                          webUrl: Uri.parse('https: //developers.kakao.com'),
+                          mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
+                        ),
+                      ),
+                      Button(
+                        title: '앱으로보기',
+                        link: Link(
+                          androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+                          iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+                        ),
+                      ),
+                    ],
+                  );
+
                   bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
+
                   if (isKakaoTalkSharingAvailable) {
                     try {
                       Uri uri = await ShareClient.instance.shareDefault(template: defaultFeed);
@@ -411,7 +459,31 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               isSelected: ToggleSelected,
               borderRadius: BorderRadius.all(Radius.circular(10)),
               children: [
-              Container(
+                Container(
+                    width: (width - 57) * 0.33,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: Image.asset('assets/button_image/call_button.png'),
+                        ),
+                      ],
+                    )),
+                Container(
+                    width: (width - 57) * 0.33,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          width: 15,
+                          height: 15,
+                          child: Image.asset('assets/button_image/share_button.png'),
+                        ),
+                      ],
+                    )),
+                Container(
                   width: (width - 57) * 0.33,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -419,36 +491,12 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       SizedBox(
                         width: 15,
                         height: 15,
-                        child: Image.asset('assets/button_image/call_button.png'),
+                        child: Image.asset('assets/button_image/navigation_button.png'),
                       ),
                     ],
-                  )),
-              Container(
-                  width: (width - 57) * 0.33,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        width: 15,
-                        height: 15,
-                        child: Image.asset('assets/button_image/share_button.png'),
-                      ),
-                    ],
-                  )),
-              Container(
-                width: (width - 57) * 0.33,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      width: 15,
-                      height: 15,
-                      child: Image.asset('assets/button_image/navigation_button.png'),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
             ),
           ) // toggle button
         ],
@@ -494,50 +542,3 @@ class NaverMapUtils {
     }
   }
 }
-FeedTemplate defaultFeed = FeedTemplate(
-  content: Content(
-    title: '딸기 치즈 케익',
-    description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-    imageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    link: Link(
-        webUrl: Uri.parse('https://developers.kakao.com'),
-        mobileWebUrl: Uri.parse('https://developers.kakao.com')),
-  ),
-  itemContent: ItemContent(
-    profileText: 'Kakao',
-    profileImageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    titleImageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    titleImageText: 'Cheese cake',
-    titleImageCategory: 'cake',
-    items: [
-      ItemInfo(item: 'cake1', itemOp: '1000원'),
-      ItemInfo(item: 'cake2', itemOp: '2000원'),
-      ItemInfo(item: 'cake3', itemOp: '3000원'),
-      ItemInfo(item: 'cake4', itemOp: '4000원'),
-      ItemInfo(item: 'cake5', itemOp: '5000원')
-    ],
-    sum: 'total',
-    sumOp: '15000원',
-  ),
-  social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-  buttons: [
-    Button(
-      title: '웹으로 보기',
-      link: Link(
-        webUrl: Uri.parse('https: //developers.kakao.com'),
-        mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
-      ),
-    ),
-    Button(
-      title: '앱으로보기',
-      link: Link(
-        androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-        iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-      ),
-    ),
-  ],
-);
-
