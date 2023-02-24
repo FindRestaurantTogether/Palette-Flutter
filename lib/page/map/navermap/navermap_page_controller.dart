@@ -257,15 +257,17 @@ class NaverMapPageController extends GetxService {
 
       List filter = read_all();
       Network network = Network(filter, _SearchPageController.searchedWord);
-      var rawRestaurantData = await network.getJsonData();
+      print(11111111111);
+      rawRestaurantData = await network.getJsonData();
+      print(22222222222);
       print('================================================================');
       for (String i in [
-        'uid'
-        ,'store_name'
-        ,'road_address'
-        ,'jibun_address'
-        ,'latitude'
-        ,'longitude'
+          'uid'
+          ,'store_name'
+          ,'road_address'
+          ,'jibun_address'
+          ,'latitude'
+          ,'longitude'
           ,'call'
           ,'category'
           ,'main_category'
@@ -289,7 +291,6 @@ class NaverMapPageController extends GetxService {
         print('${i} : ${rawRestaurantData[0][i].runtimeType}');
       print('================================================================');
 
-      // 백에서 가져온 map 데이터 30개
       // rawRestaurantData = {
       //   0: {
       //     'uid': '0',

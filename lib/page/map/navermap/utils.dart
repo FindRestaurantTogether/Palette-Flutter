@@ -13,17 +13,14 @@ class Network {
   var text;
   var current_place;
 
+  Map<int,dynamic> store_dict = Map();
+
   // var bottom_left;
   Network(this.filter, this.text);
 
-  // String url = 'http://34.64.166.110/api/testsearch?top_right_lat=37.4986&top_right_lon=127.0202&bottom_left_lat=37.4132&bottom_left_lon=126.734';
-
   Future<dynamic> getJsonData() async {
-    // ?top-right-lat=37.5779&top-right-lon=127.0388&bottom-left-lat=37.4899&bottom-left-lon=126.9617
-    // &category=Food-Chinese-Etc&category=Food-Western-Etc&text=감자나라
-
     var store;
-
+    Map<String, dynamic>? one_dict;
     // 위도경도 바뀌는 코드!!!!!!!!!!!!!!!!
     double rightUpLat;
     double rightUpLon;
@@ -37,41 +34,62 @@ class Network {
     double lat_one_size = filter[0].latitude - filter[2].latitude;
     double lon_one_size = filter[0].longitude - filter[2].longitude;
 
-    for (int size = 1; size <= 8; size++) {
-      rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) +
-          lat_one_size * size, max_lat);
-      rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) +
-          lon_one_size * size, max_lon);
-      leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) -
-          lat_one_size * size, min_lat);
-      leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) -
-          lon_one_size * size, min_lon);
-      String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+    // for (int size = 1; size <= 8; size++) {
+    //   rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) +
+    //       lat_one_size * size, max_lat);
+    //   rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) +
+    //       lon_one_size * size, max_lon);
+    //   leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) -
+    //       lat_one_size * size, min_lat);
+    //   leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) -
+    //       lon_one_size * size, min_lon);
+    //   String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
 
-      // List<dynamic> category = filter[3];
-      // if(category.length>0){
-      //   url2 = url2 + 'category=${category[0]}';
-      //   for(int i = 1;i<category.length;i++){
-      //     url2 = url2 + '&${category[i]}';
-      //   }
-      // }
-      // if(text != ''){
-      //   url2 = url2 + '&text=${text}';
-      // }
 
-      print(url2);
-      http.Response response = await http.get(Uri.parse(url2));
-      if (response.statusCode == 200) {
-        //String jsonData = response.body;
-        var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-        store = parsingData;
-        print("길이 ${store.length}");
-        if (store.length == 30) {
-          break;
-        }
-      }
+    // List<dynamic> category = filter[3];
+    // if(category.length>0){
+    //   url2 = url2 + 'category=${category[0]}';
+    //   for(int i = 1;i<category.length;i++){
+    //     url2 = url2 + '&${category[i]}';
+    //   }
+    // }
+    // if(text != ''){
+    //   url2 = url2 + '&text=${text}';
+    // }
+
+    //   print(url2);
+    //   http.Response response = await http.get(Uri.parse(url2));
+    //   if (response.statusCode == 200) {
+    //     //String jsonData = response.body;
+    //     var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+    //     store = parsingData;
+    //     print("길이 ${store.length}");
+    //     if (store.length == 30) {
+    //       break;
+    //     }
+    //   }
+    // }
+
+    rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)), max_lat);
+    rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),max_lon);
+    leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)),min_lat);
+    leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),min_lon);
+    String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+
+    http.Response response = await http.get(Uri.parse(url2));
+    if (response.statusCode == 200) {
+      //String jsonData = response.body;
+      var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+      store = parsingData;
     }
-    Map store_dict = change_data(store);
+
+    for (int i=0;i<store.length;i++){
+      one_dict = change_data(store[i]).cast<String, dynamic>();
+      open_Network open_network = open_Network(one_dict['id']);
+      var isOpen = await open_network.getJsonData();
+      one_dict['open'] = isOpen;
+      store_dict[i] = one_dict;
+    }
     return store_dict;
   }
 }
@@ -102,19 +120,21 @@ class open_Network {
 }
 
 
-
-
 class uid_Network {
   var uid;
   uid_Network(this.uid);
 
   Future<dynamic> getJsonData() async {
+    Map<String, dynamic>? store_dict;
     String url = 'http://34.64.166.110/api/idsearch?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
       var store = parsingData;
-      Map store_dict = change_data(store);
+      store_dict = change_data(store).cast<String, dynamic>();
+      open_Network open_network = open_Network(uid);
+      var isOpen = await open_network.getJsonData();
+      store_dict['open'] = isOpen;
       return store_dict;
     }
   }
@@ -122,9 +142,7 @@ class uid_Network {
 
 
 
-Map change_data(store){
-  ///
-  Map<int,dynamic> store_dict = Map();
+Map change_data(store_i) {
   Map<String,dynamic> name = {
     '해산물(게)': 'food_korean_seafood_crab',
     '해산물(문어)': 'food_korean_seafood_octopus',
@@ -172,116 +190,90 @@ Map change_data(store){
     '칵테일,양주': 'alcohol_cocktail'
   };
 
-  for(int i=0;i<store.length;i++){
-    Map<String,int> menu = Map();
-    Map<String,String> opening_hour = Map();
-    Map<String,String> opening_breaktime = Map();
-    Map<String,String> opening_lastorder = Map();
-    Map<String,dynamic> one_dict = Map();
-    one_dict['uid'] = store[i]['id'];
-    one_dict['store_name'] = store[i]['source']['name'];
-    one_dict["road_address"] = "서울 " + store[i]['source']["road_address"];
-    one_dict["jibun_address"] = "서울 " + store[i]['source']["jibun_address"];
+  Map<String,String> menu = Map();
+  Map<String,String> opening_hour = Map();
+  Map<String,String> opening_breaktime = Map();
+  Map<String,String> opening_lastorder = Map();
+  Map<String,dynamic> one_dict = Map();
+  one_dict['uid'] = store_i['id'];
+  one_dict['store_name'] = store_i['source']['name'];
+  one_dict["road_address"] = "서울 " + store_i['source']["road_address"];
+  one_dict["jibun_address"] = "서울 " + store_i['source']["jibun_address"];
 
-    try {
-      one_dict["call"] = store[i]['source']["call"].replaceAll(RegExp('[^0-9\\s]'), "");
-    }
-    catch(e) {}
-
-    ///
-    List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
-    for(int j=0;j<site_info.length;j = j+2){
-      one_dict[site_info[j]] = double.parse(store[i]['source'][site_info[j]]);
-      one_dict[site_info[j+1]] = int.parse(store[i]['source'][site_info[j+1]]);
-    }
-
-    one_dict['main_category'] = 'assets/marker_image/${name[store[i]['source']["main_category"]]}_${one_dict['naver_star'].toStringAsFixed(1)}.png';
-    one_dict['category'] = store[i]['source']["category"].split('-');
-
-    // 시간
-    try{
-      for(int j=0;j<store[i]['source']['opening_hour'].length;j++){
-        opening_hour.addAll(store[i]['source']['opening_hour'][j]);
-      }
-      one_dict['opening_hour'] = Map<String, String>.from(opening_hour);
-    }
-    catch(e){}
-    try{
-      for(int j=0;j<store[i]['source']['opening_breaktime'].length;j++){
-        opening_breaktime.addAll(store[i]['source']['opening_breaktime'][j]);
-      }
-      one_dict['opening_breaktime'] = Map<String, String>.from(opening_breaktime);
-    }
-    catch(e){}
-    try{
-      for(int j=0;j<store[i]['source']['opening_lastorder'].length;j++){
-        opening_lastorder.addAll(store[i]['source']['opening_lastorder'][j]);
-      }
-      one_dict['opening_lastorder'] = Map<String, String>.from(opening_lastorder);
-    }
-    catch(e){}
-
-
-    one_dict['theme'] = store[i]['source']["theme"].split('-');
-    one_dict['service'] = store[i]['source']["service"].split('-');
-
-    // 메뉴
-    try{
-      for(int j=0;j<store[i]['source']['menu'].length;j++){
-        Map<String,int> one_menu = {};
-        one_menu[store[i]['source']['menu'][j].split(':')[0]] = store[i]['source']['menu'][j].split(':')[1];
-        menu.addAll(one_menu);
-      }
-      one_dict['menu'] = menu;
-    }
-    catch(e){}
-
-    one_dict['open'] = 'open';
-    one_dict['store_image'] = ['assets/background_image/taroya.jpeg'];
-
-    try {
-      one_dict["latitude"] = double.parse(store[i]['source']['location']["lat"]);
-      one_dict["longitude"] = double.parse(store[i]['source']['location']["lon"]);
-    }
-    catch(e) {}
-
-
-    // url
-    one_dict['kakao_review_url'] = 'https://place.map.kakao.com/m/11101743#comment';
-    one_dict['google_review_url'] = 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko';
-    one_dict['naver_review_url'] = 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll';
-
-    store_dict[i] = one_dict;
+  try {
+    one_dict["call"] = store_i['source']["call"].replaceAll(RegExp('[^0-9\\s]'), "");
   }
-  return store_dict;
+  catch(e) {}
+
+  List site_info = ['kakao_star','kakao_cnt','naver_star','naver_cnt','google_star','google_cnt'];
+  for(int j=0;j<site_info.length;j = j+2){
+    one_dict[site_info[j]] = double.parse(store_i['source'][site_info[j]]);
+    one_dict[site_info[j+1]] = int.parse(store_i['source'][site_info[j+1]]);
+  }
+
+  one_dict['main_category'] = 'assets/marker_image/${name[store_i['source']["main_category"]]}_${one_dict['naver_star'].toStringAsFixed(1)}.png';
+  one_dict['category'] = store_i['source']["category"].split('-');
+
+  // 시간
+  try{
+    for(int j=0;j<store_i['source']['opening_hour'].length;j++){
+      opening_hour.addAll(store_i['source']['opening_hour'][j]);
+    }
+    one_dict['opening_hour'] = opening_hour;
+  }
+  catch(e){}
+
+  try{
+    for(int j=0;j<store_i['source']['opening_breaktime'].length;j++){
+      opening_breaktime.addAll(store_i['source']['opening_breaktime'][j]);
+    }
+    one_dict['opening_breaktime'] = opening_breaktime;
+  }
+  catch(e){}
+
+  try{
+    for(int j=0;j<store_i['source']['opening_lastorder'].length;j++){
+      opening_lastorder.addAll(store_i['source']['opening_lastorder'][j]);
+    }
+    one_dict['opening_lastorder'] = opening_lastorder;
+  }
+  catch(e){}
+
+
+  one_dict['theme'] = store_i['source']["theme"].split('-');
+  one_dict['service'] = store_i['source']["service"].split('-');
+
+  // 메뉴
+  try{
+    for(int j=0;j<store_i['source']['menu'].length;j++){
+      Map<String,String> one_menu = {};
+      one_menu[store_i['source']['menu'][j].split(':')[0]] = store_i['source']['menu'][j].split(':')[1];
+      menu.addAll(one_menu);
+    }
+    one_dict['menu'] = menu;
+  }
+  catch(e){}
+
+
+  try {
+    one_dict["latitude"] = double.parse(store_i['source']['location']["lat"]);
+    one_dict["longitude"] = double.parse(store_i['source']['location']["lon"]);
+  }
+  catch(e) {}
+
+  one_dict["store_image"] = store_i["outer_image"];
+
+  // url
+  one_dict['kakao_review_url'] = 'https://place.map.kakao.com/m/11101743#comment';
+  one_dict['google_review_url'] = 'https://www.google.co.kr/maps/place/%EC%95%85%EC%96%B4%EB%96%A1%EB%B3%B6%EC%9D%B4/data=!4m16!1m7!3m6!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!2z7JWF7Ja065ah67O27J20!8m2!3d37.5606004!4d127.0410712!16s%2Fg%2F11bwf81cmq!3m7!1s0x357ca4a7947b9d09:0xec0032b0df2fe422!8m2!3d37.5606004!4d127.0410712!9m1!1b1!16s%2Fg%2F11bwf81cmq?hl=ko';
+  one_dict['naver_review_url'] = 'https://m.place.naver.com/restaurant/1988367250/review/visitor?entry=pll';
+
+  // open_Network open_network = open_Network(store_i['id']);
+  // var isOpen = await open_network.getJsonData();
+  // one_dict['open'] = isOpen;
+  return one_dict;
 }
 
-
-
-
-
-
-//   // try{
-//   //   for(int j=0;j<store[i]['source']['opening_breaktime'].length;j++){
-//   //     opening_breaktime.addAll(store[i]['source']['opening_breaktime'][j]);
-//   //   }
-//   //   store[i]['source']['opening_breaktime'] = opening_breaktime;
-//   // }
-//   // catch(e){}
-//   // try{
-//   //   for(int j=0;j<store[i]['source']['opening_lastorder'].length;j++){
-//   //     opening_lastorder.addAll(store[i]['source']['opening_lastorder'][j]);
-//   //   }
-//   //   store[i]['source']['opening_lastorder'] = opening_lastorder;
-//   // }
-//   // catch(e){}
-
-//   // try {
-//   //   store["store$i"]['main_category'] = name[store["store$i"]['main_category']];
-//   // }
-//   // catch(e) {}
-//
-//
 
 
 
