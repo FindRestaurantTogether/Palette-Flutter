@@ -172,8 +172,8 @@ class _LoginPageState extends State<LoginPage> {
                                     suffixIconConstraints: BoxConstraints(maxHeight: 20),
                                     hintText: 'palette@naver.com',
                                     hintStyle: TextStyle(
-                                      color: Color(0xffb9b9b9),
-                                      fontSize: 14
+                                        color: Color(0xffb9b9b9),
+                                        fontSize: 14
                                     ),
                                   ),
                                 ),
@@ -259,13 +259,13 @@ class _LoginPageState extends State<LoginPage> {
                         child: Text(
                           '회원가입',
                           style: TextStyle(
-                            fontSize: 13,
-                            color: Color(0xff787878)
+                              fontSize: 13,
+                              color: Color(0xff787878)
                           ),
                         ),
                       ),
                       Text(
-                          '   |   ',
+                        '   |   ',
                         style: TextStyle(
                             fontSize: 13,
                             color: Color(0xffb9b9b9)
@@ -330,26 +330,26 @@ class _LoginPageState extends State<LoginPage> {
                 signUpLoading
                     ? Center(
                     child: CircularProgressIndicator(color: Color(0xfff42957))
-                    )
+                )
                     : Container(
-                      width: width - 60,
-                      height: 50,
-                      child: ElevatedButton(
-                        onPressed: signInButton,
-                        child: Text(
-                          '확인',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Color(0xfff42957),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
+                  width: width - 60,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: signInButton,
+                    child: Text(
+                      '확인',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold
                       ),
-                    ) // 확인박스
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      primary: Color(0xfff42957),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ) // 확인박스
               ],
             ),
           ),

@@ -1,5 +1,4 @@
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/my/account/account_page.dart';
@@ -32,20 +31,6 @@ class _MyPageState extends State<MyPage> {
     ThirdSliderPage(),
     FourthSliderPage()
   ];
-
-  // checkIfAlreadyLogin() async {
-  //   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-  //     if (user != null && mounted) {
-  //       _MyPageController.isLogin.value = true;
-  //     }
-  //   });
-  // }
-  //
-  // @override
-  // void initState() {
-  //   checkIfAlreadyLogin();
-  //   super.initState();
-  // }
 
   @override
   Widget build(BuildContext context) {

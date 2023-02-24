@@ -168,9 +168,9 @@ class _SignupPageState extends State<SignupPage> {
                               : FileImage(_pickedImage!),
                           child: _pickedImage == null
                               ? ClipRRect(
-                                borderRadius: BorderRadius.circular(300),
-                                child: Image.asset('assets/logo_image/logo_image.png')
-                              )
+                              borderRadius: BorderRadius.circular(300),
+                              child: Image.asset('assets/logo_image/logo_image.png')
+                          )
                               : null,
                         ),
                       ),
@@ -178,79 +178,79 @@ class _SignupPageState extends State<SignupPage> {
                           bottom: -5,
                           right: -25,
                           child: RawMaterialButton(
-                            fillColor: Color(0xfff42957),
-                            child: Icon(Icons.photo_camera, size: 18, color: Colors.white),
-                            shape: CircleBorder(),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.vertical(
-                                      top: Radius.circular(30),
-                                    ),
-                                  ),
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return Container(
-                                      height: 210,
-                                      child: Center(
-                                        child: Column(
-                                          children: [
-                                            SizedBox(height: 30),
-                                            Text(
-                                              '프로필 사진 설정',
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            SizedBox(height: 25),
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                GestureDetector(
-                                                  onTap: pickImageFromCamera,
-                                                  child: Container(
-                                                    child: Column(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          radius: 35,
-                                                          backgroundColor: Colors.black,
-                                                          child: Icon(Icons.camera_alt, color: Colors.white, size: 32),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                            '사진 찰영'
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                                GestureDetector(
-                                                  onTap: pickImageFromGallery,
-                                                  child: Container(
-                                                    child: Column(
-                                                      children: [
-                                                        CircleAvatar(
-                                                          radius: 35,
-                                                          backgroundColor: Colors.black,
-                                                          child: Icon(Icons.photo, color: Colors.white, size: 32),
-                                                        ),
-                                                        SizedBox(height: 10),
-                                                        Text(
-                                                            '사진 선택'
-                                                        )
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          ],
-                                        ),
+                              fillColor: Color(0xfff42957),
+                              child: Icon(Icons.photo_camera, size: 18, color: Colors.white),
+                              shape: CircleBorder(),
+                              onPressed: () {
+                                showModalBottomSheet(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                        top: Radius.circular(30),
                                       ),
-                                    );
-                                  }
-                              );
-                            }
+                                    ),
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        height: 210,
+                                        child: Center(
+                                          child: Column(
+                                            children: [
+                                              SizedBox(height: 30),
+                                              Text(
+                                                '프로필 사진 설정',
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight: FontWeight.bold),
+                                              ),
+                                              SizedBox(height: 25),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: pickImageFromCamera,
+                                                    child: Container(
+                                                      child: Column(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 35,
+                                                            backgroundColor: Colors.black,
+                                                            child: Icon(Icons.camera_alt, color: Colors.white, size: 32),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Text(
+                                                              '사진 찰영'
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  GestureDetector(
+                                                    onTap: pickImageFromGallery,
+                                                    child: Container(
+                                                      child: Column(
+                                                        children: [
+                                                          CircleAvatar(
+                                                            radius: 35,
+                                                            backgroundColor: Colors.black,
+                                                            child: Icon(Icons.photo, color: Colors.white, size: 32),
+                                                          ),
+                                                          SizedBox(height: 10),
+                                                          Text(
+                                                              '사진 선택'
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                );
+                              }
                           )
                       ),
                     ],
@@ -492,7 +492,7 @@ class _SignupPageState extends State<SignupPage> {
                                     ),
                                     suffixIcon: GestureDetector(
                                       onTap: () {
-                                        _PasswordTextEditingController.clear();
+                                        _PasswordConfirmTextEditingController.clear();
                                       },
                                       child: Icon(
                                         Icons.clear,
@@ -516,10 +516,10 @@ class _SignupPageState extends State<SignupPage> {
                 ), // 이름 & 아이디 & 비밀번호 & 비밀번호 확인
                 SizedBox(height: 60),
                 signUpLoading
-                  ? Center(
+                    ? Center(
                     child: CircularProgressIndicator(color: Color(0xfff42957))
                 )
-                  : Container(
+                    : Container(
                   width: width - 60,
                   height: 50,
                   child: ElevatedButton(
@@ -547,4 +547,3 @@ class _SignupPageState extends State<SignupPage> {
     );
   }
 }
-

@@ -190,7 +190,7 @@ Map change_data(store_i) {
     '칵테일,양주': 'alcohol_cocktail'
   };
 
-  Map<String,String> menu = Map();
+  Map<String,int> menu = Map();
   Map<String,String> opening_hour = Map();
   Map<String,String> opening_breaktime = Map();
   Map<String,String> opening_lastorder = Map();
@@ -246,8 +246,8 @@ Map change_data(store_i) {
   // 메뉴
   try{
     for(int j=0;j<store_i['source']['menu'].length;j++){
-      Map<String,String> one_menu = {};
-      one_menu[store_i['source']['menu'][j].split(':')[0]] = store_i['source']['menu'][j].split(':')[1];
+      Map<String,int> one_menu = {};
+      one_menu[store_i['source']['menu'][j].split(':')[0]] = int.parse(store_i['source']['menu'][j].split(':')[1]);
       menu.addAll(one_menu);
     }
     one_dict['menu'] = menu;

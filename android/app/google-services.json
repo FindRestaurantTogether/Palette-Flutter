@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "870327208124",
-    "project_id": "palette-1fba4",
-    "storage_bucket": "palette-1fba4.appspot.com"
+    "project_number": "689668528222",
+    "project_id": "palette-59d1f",
+    "storage_bucket": "palette-59d1f.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:870327208124:android:f6e29c179eadd36ad6a8b9",
+        "mobilesdk_app_id": "1:689668528222:android:a6244e830d9462d1e6bccf",
         "android_client_info": {
-          "package_name": "com.example.myapp"
+          "package_name": "com.FiReTo.Palette"
         }
       },
       "oauth_client": [
         {
-          "client_id": "870327208124-8na7q7dn6a1pj6jotanc7ut2p59smkon.apps.googleusercontent.com",
+          "client_id": "689668528222-3efnigmm2ok4itu5f9ttgus5p01kk3ue.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCT1CyOv4pYqeyZ2CbM3DKCOCNjnXI5_dE"
+          "current_key": "AIzaSyC9D8kU2wNrg8BwiqsI57SD8W-EnWOW6CA"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "870327208124-8na7q7dn6a1pj6jotanc7ut2p59smkon.apps.googleusercontent.com",
+              "client_id": "689668528222-3efnigmm2ok4itu5f9ttgus5p01kk3ue.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
