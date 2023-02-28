@@ -1,6 +1,6 @@
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 
-abstract class NaverMapPageModel {
+abstract class DetailNaverMapPageModel {
   final String uid = '';
   final String main_category = '';
   final List<String> store_image = [];
@@ -25,10 +25,10 @@ abstract class NaverMapPageModel {
   final String jibun_address = '';
   final String call = '';
   final LocationClass position = LocationClass(longitude: 0.0, latitude: 0.0);
-  final Map<String,int> menu = {};
+  final Map<String,String> menu = {};
 }
 
-class NaverMapPageRestaurant implements NaverMapPageModel {
+class DetailNaverMapPageRestaurant implements DetailNaverMapPageModel {
   @override
   final String uid;
   @override
@@ -78,9 +78,9 @@ class NaverMapPageRestaurant implements NaverMapPageModel {
   @override
   final LocationClass position;
   @override
-  final Map<String,int> menu;
+  final Map<String,String> menu;
 
-  NaverMapPageRestaurant({
+  DetailNaverMapPageRestaurant({
     required this.uid,
     required this.main_category,
     required this.store_image,

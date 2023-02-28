@@ -108,7 +108,7 @@ class _SearchPageState extends State<SearchPage> {
                                   }
 
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
-                                  await _NaverMapPageController.fetchRestaurantData(context);
+                                  await _NaverMapPageController.fetchAbstractRestaurantData(context);
 
                                   Get.off(ListPage());
                                 }
@@ -214,7 +214,7 @@ class _SearchPageState extends State<SearchPage> {
                             child: ElevatedButton(
                               onPressed: () async {
                                 _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
-                                await _NaverMapPageController.fetchRestaurantData(context);
+                                await _NaverMapPageController.fetchAbstractRestaurantData(context);
 
                                 box.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
                                 if (recentSearchs.length > 10) {

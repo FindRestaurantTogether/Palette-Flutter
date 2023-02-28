@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_abstract_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 
 class SelectFolderPage extends StatefulWidget {
 
-  final NaverMapPageModel selectedRestaurant;
+  final DetailNaverMapPageRestaurant selectedRestaurant;
 
   SelectFolderPage({Key? key, required this.selectedRestaurant}) : super(key: key);
 
@@ -17,7 +18,7 @@ class SelectFolderPage extends StatefulWidget {
 
 class _SelectFolderPageState extends State<SelectFolderPage> {
 
-  final NaverMapPageModel selectedRestaurant;
+  final DetailNaverMapPageRestaurant selectedRestaurant;
   _SelectFolderPageState({required this.selectedRestaurant});
 
   final _FavoritePageController = Get.put(FavoritePageController());

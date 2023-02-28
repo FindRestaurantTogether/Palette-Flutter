@@ -4,35 +4,30 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_abstract_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:myapp/page/share/share_template.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_share.dart';
 
 class BottomsheetPage extends StatefulWidget {
 
-  final NaverMapPageModel selectedRestaurant;
+  final DetailNaverMapPageRestaurant selectedDetailRestaurant;
 
-  BottomsheetPage({Key? key, required this.selectedRestaurant}) : super(key: key);
+  BottomsheetPage({Key? key, required this.selectedDetailRestaurant}) : super(key: key);
 
   @override
-  State<BottomsheetPage> createState() => _BottomsheetPageState(selectedRestaurant: selectedRestaurant);
+  State<BottomsheetPage> createState() => _BottomsheetPageState(selectedDetailRestaurant: selectedDetailRestaurant);
 }
 
 class _BottomsheetPageState extends State<BottomsheetPage> {
 
-  final NaverMapPageModel selectedRestaurant;
-  _BottomsheetPageState({required this.selectedRestaurant});
+  final DetailNaverMapPageRestaurant selectedDetailRestaurant;
+  _BottomsheetPageState({required this.selectedDetailRestaurant});
 
   final _FavoritePageController = Get.put(FavoritePageController());
 
-  late List<bool> ToggleSelected;
-
-  @override
-  void initState() {
-    ToggleSelected = [false, false, false];
-    super.initState();
-  }
+  List<bool> ToggleSelected  = [false, false, false];
 
   @override
   void dispose() {
@@ -74,14 +69,14 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       height: 24,
                       alignment: Alignment.bottomCenter,
                       child: Text(
-                        '${selectedRestaurant.store_name}',
+                        '${selectedDetailRestaurant.store_name}',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                     ), // 타로야
                     SizedBox(
                       width: 3,
                     ),
-                    if (selectedRestaurant.open == 'open')
+                    if (selectedDetailRestaurant.open == 'open')
                       Container(
                         height: 20,
                         child: Align(
@@ -95,7 +90,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                           ),
                         ),
                       )
-                    else if (selectedRestaurant.open == 'close')
+                    else if (selectedDetailRestaurant.open == 'close')
                       Container(
                         height: 20,
                         child: Align(
@@ -109,7 +104,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                           ),
                         ),
                       )
-                    else if (selectedRestaurant.open == 'breaktime')
+                    else if (selectedDetailRestaurant.open == 'breaktime')
                         Container(
                           height: 20,
                           child: Align(
@@ -123,7 +118,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                             ),
                           ),
                         )
-                      else if (selectedRestaurant.open == 'null')
+                      else if (selectedDetailRestaurant.open == 'null')
                           Container(
                             height: 20,
                             child: Align(
@@ -145,19 +140,19 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       alignment: Alignment.bottomRight,
                       child: Row(
                         children: [
-                          for (int i = 0; i < selectedRestaurant.category.length; i++)
-                            if (i == selectedRestaurant.category.length - 1)
+                          for (int i = 0; i < selectedDetailRestaurant.category.length; i++)
+                            if (i == selectedDetailRestaurant.category.length - 1)
                               Text(
-                                '${selectedRestaurant.category[i]}',
+                                '${selectedDetailRestaurant.category[i]}',
                                 style: TextStyle(color: Colors.grey, fontSize: 14),
                               )
                             else
                               Text(
-                                '${selectedRestaurant.category[i]}, ',
+                                '${selectedDetailRestaurant.category[i]}, ',
                                 style: TextStyle(color: Colors.grey, fontSize: 14),
                               ),
                           Text(
-                            '  |  ${selectedRestaurant.distance}km',
+                            '  |  ${selectedDetailRestaurant.distance}km',
                             style: TextStyle(color: Colors.grey, fontSize: 14),
                           ),
                         ],
@@ -170,17 +165,17 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                 return SizedBox(
                     width: 17,
                     height: 20,
-                    child: _FavoritePageController.favoriteRestaurantUids.contains(selectedRestaurant.uid)
+                    child: _FavoritePageController.favoriteRestaurantUids.contains(selectedDetailRestaurant.uid)
                         ? IconButton(
                       padding: EdgeInsets.all(0.0),
                       onPressed: (){
-                        _FavoritePageController.favoriteRestaurantUids.remove(selectedRestaurant.uid);
+                        _FavoritePageController.favoriteRestaurantUids.remove(selectedDetailRestaurant.uid);
 
                         Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
                         List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
                         for (int i=0 ; i<favoriteFolders.length ; i++) {
                           for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
-                            if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedRestaurant.uid) {
+                            if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedDetailRestaurant.uid) {
                               favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
                               favoriteFolders[i].save();
                             }
@@ -197,7 +192,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                return SelectFolderPage(selectedRestaurant: selectedDetailRestaurant);
                               }
                           );
                         });
@@ -213,9 +208,9 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
             height: 20,
             child: Row(
                 children: [
-                  for (int i = 0; i < selectedRestaurant.theme.length; i++)
+                  for (int i = 0; i < selectedDetailRestaurant.theme.length; i++)
                     Text(
-                      '#${selectedRestaurant.theme[i]} ',
+                      '#${selectedDetailRestaurant.theme[i]} ',
                       style: TextStyle(fontSize: 13, color: Color(0xff57dde0)),
                     )
                 ]
@@ -231,7 +226,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 4),
               Text(
-                '${selectedRestaurant.naver_star}',
+                '${selectedDetailRestaurant.naver_star}',
                 style:
                 TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
               ),
@@ -242,7 +237,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ),
               SizedBox(width: 10),
               Text(
-                '${selectedRestaurant.naver_cnt}건',
+                '${selectedDetailRestaurant.naver_cnt}건',
                 style: TextStyle(color: Colors.black87, fontSize: 13),
               )
             ],
@@ -263,15 +258,15 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     SizedBox(width: 4),
                     Row(
                         children: [
-                          for (int i = 0; i < selectedRestaurant.service.length; i++)
-                            if (i == selectedRestaurant.service.length - 1)
+                          for (int i = 0; i < selectedDetailRestaurant.service.length; i++)
+                            if (i == selectedDetailRestaurant.service.length - 1)
                               Text(
-                                '${selectedRestaurant.service[i]}',
+                                '${selectedDetailRestaurant.service[i]}',
                                 style: TextStyle(fontSize: 13, color: Colors.black87),
                               )
                             else
                               Text(
-                                '${selectedRestaurant.service[i]}, ',
+                                '${selectedDetailRestaurant.service[i]}, ',
                                 style: TextStyle(fontSize: 13, color: Colors.black87),
                               )
                         ]
@@ -294,11 +289,11 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                   }
                 });
                 if (ToggleSelected[0]) {
-                  launch("tel://" + selectedRestaurant.call);
+                  launch("tel://" + selectedDetailRestaurant.call);
                 } else if (ToggleSelected[1]) {
                   final FeedTemplate defaultFeed = FeedTemplate(
                     content: Content(
-                      title: '${selectedRestaurant.store_name}',
+                      title: '${selectedDetailRestaurant.store_name}',
                       description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
                       imageUrl: Uri.parse(
                           'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
@@ -388,7 +383,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                   children: [
                                     GestureDetector(
                                       onTap: () {
-                                        KakaoMapUtils.OpenKakaoMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                        KakaoMapUtils.OpenKakaoMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(
@@ -408,7 +403,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        GoogleMapUtils.OpenGoogleMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                        GoogleMapUtils.OpenGoogleMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(
@@ -428,7 +423,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        NaverMapUtils.OpenNaverMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                        NaverMapUtils.OpenNaverMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                       },
                                       child: Container(
                                         child: Column(

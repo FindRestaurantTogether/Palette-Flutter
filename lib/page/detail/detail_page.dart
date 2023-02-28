@@ -6,6 +6,7 @@ import 'package:myapp/page/detail/menu/menu_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
@@ -19,17 +20,11 @@ class _DetailPageState extends State<DetailPage> {
 
   final _FavoritePageController = Get.put(FavoritePageController());
 
-  final selectedRestaurant = Get.arguments;
+  final DetailNaverMapPageRestaurant selectedDetailRestaurant = Get.arguments;
 
-  late List<bool> ToggleSelected;
+  List<bool> ToggleSelected  = [false, false, false];
 
   bool moreOpenInformation = false;
-
-  @override
-  void initState() {
-    ToggleSelected = [false, false, false];
-    super.initState();
-  }
 
   @override
   void dispose() {
@@ -41,17 +36,17 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
 
-    final menuName = selectedRestaurant.menu.keys.toList();
-    final menuPrice = selectedRestaurant.menu.values.toList();
+    final menuName = selectedDetailRestaurant.menu.keys.toList();
+    final menuPrice = selectedDetailRestaurant.menu.values.toList();
 
-    final openDay = selectedRestaurant.opening_hour.keys.toList();
-    final openHour = selectedRestaurant.opening_hour.values.toList();
+    final openDay = selectedDetailRestaurant.opening_hour.keys.toList();
+    final openHour = selectedDetailRestaurant.opening_hour.values.toList();
 
-    final breaktimeDay = selectedRestaurant.opening_breaktime.keys.toList();
-    final breaktimeHour = selectedRestaurant.opening_breaktime.values.toList();
+    final breaktimeDay = selectedDetailRestaurant.opening_breaktime.keys.toList();
+    final breaktimeHour = selectedDetailRestaurant.opening_breaktime.values.toList();
 
-    final lastorderDay = selectedRestaurant.opening_lastorder.keys.toList();
-    final lastorderHour = selectedRestaurant.opening_lastorder.values.toList();
+    final lastorderDay = selectedDetailRestaurant.opening_lastorder.keys.toList();
+    final lastorderHour = selectedDetailRestaurant.opening_lastorder.values.toList();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -72,7 +67,8 @@ class _DetailPageState extends State<DetailPage> {
         body: SingleChildScrollView(
           child: Stack(
             children: [
-              Positioned(
+              if (selectedDetailRestaurant.store_image.length != 0)
+                Positioned(
                 top: 0,
                 right: 0,
                 left: 0,
@@ -89,7 +85,7 @@ class _DetailPageState extends State<DetailPage> {
                     height: height * 0.32,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(selectedRestaurant.store_image[0]),
+                          image: AssetImage(selectedDetailRestaurant.store_image[0]),
                           fit: BoxFit.fill
                       ),
                     ),
@@ -139,17 +135,17 @@ class _DetailPageState extends State<DetailPage> {
                                           return SizedBox(
                                               width: 17,
                                               height: 21,
-                                              child: _FavoritePageController.favoriteRestaurantUids.contains(selectedRestaurant.uid)
+                                              child: _FavoritePageController.favoriteRestaurantUids.contains(selectedDetailRestaurant.uid)
                                                   ? IconButton(
                                                 padding: EdgeInsets.all(0.0),
                                                 onPressed: (){
-                                                  _FavoritePageController.favoriteRestaurantUids.remove(selectedRestaurant.uid);
+                                                  _FavoritePageController.favoriteRestaurantUids.remove(selectedDetailRestaurant.uid);
 
                                                   Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
                                                   List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
                                                   for (int i=0 ; i<favoriteFolders.length ; i++) {
                                                     for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
-                                                      if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedRestaurant.uid) {
+                                                      if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedDetailRestaurant.uid) {
                                                         favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
                                                       }
                                                     }
@@ -164,7 +160,7 @@ class _DetailPageState extends State<DetailPage> {
                                                       context: context,
                                                       barrierDismissible: false,
                                                       builder: (BuildContext context) {
-                                                        return SelectFolderPage(selectedRestaurant: selectedRestaurant);
+                                                        return SelectFolderPage(selectedRestaurant: selectedDetailRestaurant);
                                                       }
                                                   );
                                                 },
@@ -184,7 +180,7 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          '   ${selectedRestaurant.store_name}',
+                                          '   ${selectedDetailRestaurant.store_name}',
                                           style: TextStyle(
                                               fontSize: 22,
                                               fontWeight: FontWeight.bold),
@@ -193,7 +189,7 @@ class _DetailPageState extends State<DetailPage> {
                                       SizedBox(
                                         width: 3,
                                       ),
-                                      if (selectedRestaurant.open == 'open')
+                                      if (selectedDetailRestaurant.open == 'open')
                                         Container(
                                           height: 32,
                                           child: Align(
@@ -207,7 +203,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                         )
-                                      else if (selectedRestaurant.open == 'close')
+                                      else if (selectedDetailRestaurant.open == 'close')
                                         Container(
                                           height: 32,
                                           child: Align(
@@ -221,7 +217,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                         )
-                                      else if (selectedRestaurant.open == 'breaktime')
+                                      else if (selectedDetailRestaurant.open == 'breaktime')
                                         Container(
                                             height: 32,
                                             child: Align(
@@ -235,7 +231,7 @@ class _DetailPageState extends State<DetailPage> {
                                               ),
                                             ),
                                           )
-                                      else if (selectedRestaurant.open == 'null')
+                                      else if (selectedDetailRestaurant.open == 'null')
                                         Container(
                                               height: 32,
                                               child: Align(
@@ -267,7 +263,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 SizedBox(width: 2),
                                 Text(
-                                  ' ${selectedRestaurant.naver_star}(${selectedRestaurant.naver_cnt})',
+                                  ' ${selectedDetailRestaurant.naver_star}(${selectedDetailRestaurant.naver_cnt})',
                                   style:
                                   TextStyle(fontSize: 15),
                                 ),
@@ -277,15 +273,15 @@ class _DetailPageState extends State<DetailPage> {
                                   style: TextStyle(fontSize: 15, color: Colors.black87),
                                 ),
                                 SizedBox(width: 6),
-                                for (int i = 0; i < selectedRestaurant.category.length; i++)
+                                for (int i = 0; i < selectedDetailRestaurant.category.length; i++)
                                   if (i == 0)
                                     Text(
-                                      '${selectedRestaurant.category[i]}',
+                                      '${selectedDetailRestaurant.category[i]}',
                                       style: TextStyle(fontSize: 15),
                                     )
                                   else
                                     Text(
-                                      ',${selectedRestaurant.category[i]}',
+                                      ',${selectedDetailRestaurant.category[i]}',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                 SizedBox(width: 3),
@@ -296,9 +292,9 @@ class _DetailPageState extends State<DetailPage> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                for (int i = 0; i < selectedRestaurant.theme.length; i++)
+                                for (int i = 0; i < selectedDetailRestaurant.theme.length; i++)
                                   Text(
-                                    '#${selectedRestaurant.theme[i]} ',
+                                    '#${selectedDetailRestaurant.theme[i]} ',
                                     style: TextStyle(fontSize: 12, color: Color(0xff57dde0)),
                                   )
                               ]
@@ -327,7 +323,7 @@ class _DetailPageState extends State<DetailPage> {
                                         size: 16,
                                       ),
                                       SizedBox(width: 6), // 빈 공간
-                                      if (selectedRestaurant.open == 'open') ... [
+                                      if (selectedDetailRestaurant.open == 'open') ... [
                                         Text(
                                           '영업중',
                                           style: TextStyle(
@@ -337,7 +333,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ) // 영업시간
                                       ]
-                                      else if (selectedRestaurant.open == 'close') ... [
+                                      else if (selectedDetailRestaurant.open == 'close') ... [
                                         Text(
                                           '영업종료',
                                           style: TextStyle(
@@ -347,7 +343,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ),
                                       ]
-                                      else if (selectedRestaurant.open == 'breaktime') ... [
+                                      else if (selectedDetailRestaurant.open == 'breaktime') ... [
                                           Text(
                                             '브레이크타임',
                                             style: TextStyle(
@@ -357,7 +353,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                       ]
-                                      else if (selectedRestaurant.open == 'null') ... [
+                                      else if (selectedDetailRestaurant.open == 'null') ... [
                                           Text(
                                             '정보없음',
                                             style: TextStyle(
@@ -383,7 +379,7 @@ class _DetailPageState extends State<DetailPage> {
                                     ],
                                   ),
                                 ),
-                                if (selectedRestaurant.open != 'null')// 영업시간
+                                if (selectedDetailRestaurant.open != 'null')// 영업시간
                                   moreOpenInformation
                                       ? Container(
                                           width: width * 0.67,
@@ -476,7 +472,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                          '${selectedRestaurant.jibun_address}',
+                                          '${selectedDetailRestaurant.jibun_address}',
                                           style: TextStyle(fontSize: 12)
                                       ),
                                     ],
@@ -495,15 +491,15 @@ class _DetailPageState extends State<DetailPage> {
                                       SizedBox(width: 6),
                                       Row(
                                           children: [
-                                            for (int i = 0; i < selectedRestaurant.service.length; i++)
-                                              if (i == selectedRestaurant.service.length - 1)
+                                            for (int i = 0; i < selectedDetailRestaurant.service.length; i++)
+                                              if (i == selectedDetailRestaurant.service.length - 1)
                                                 Text(
-                                                  '${selectedRestaurant.service[i]}',
+                                                  '${selectedDetailRestaurant.service[i]}',
                                                   style: TextStyle(fontSize: 12, color: Colors.black87),
                                                 )
                                               else
                                                 Text(
-                                                  '${selectedRestaurant.service[i]}, ',
+                                                  '${selectedDetailRestaurant.service[i]}, ',
                                                   style: TextStyle(fontSize: 12, color: Colors.black87),
                                                 )
                                           ]
@@ -566,8 +562,55 @@ class _DetailPageState extends State<DetailPage> {
                                           }
 
                                           if (ToggleSelected[0]) {
-                                            launch("tel://" + selectedRestaurant.call);
+                                            launch("tel://" + selectedDetailRestaurant.call);
                                           } else if (ToggleSelected[1]) {
+                                            final FeedTemplate defaultFeed = FeedTemplate(
+                                              content: Content(
+                                                title: '${selectedDetailRestaurant.store_name}',
+                                                description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
+                                                imageUrl: Uri.parse(
+                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                                                link: Link(
+                                                    webUrl: Uri.parse('https://developers.kakao.com'),
+                                                    mobileWebUrl: Uri.parse('https://developers.kakao.com')),
+                                              ),
+                                              itemContent: ItemContent(
+                                                profileText: 'Kakao',
+                                                profileImageUrl: Uri.parse(
+                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                                                titleImageUrl: Uri.parse(
+                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                                                titleImageText: 'Cheese cake',
+                                                titleImageCategory: 'cake',
+                                                items: [
+                                                  ItemInfo(item: 'cake1', itemOp: '1000원'),
+                                                  ItemInfo(item: 'cake2', itemOp: '2000원'),
+                                                  ItemInfo(item: 'cake3', itemOp: '3000원'),
+                                                  ItemInfo(item: 'cake4', itemOp: '4000원'),
+                                                  ItemInfo(item: 'cake5', itemOp: '5000원')
+                                                ],
+                                                sum: 'total',
+                                                sumOp: '15000원',
+                                              ),
+                                              social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
+                                              buttons: [
+                                                Button(
+                                                  title: '웹으로 보기',
+                                                  link: Link(
+                                                    webUrl: Uri.parse('https: //developers.kakao.com'),
+                                                    mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
+                                                  ),
+                                                ),
+                                                Button(
+                                                  title: '앱으로보기',
+                                                  link: Link(
+                                                    androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+                                                    iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+
                                             bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
                                             if (isKakaoTalkSharingAvailable) {
                                               try {
@@ -612,7 +655,7 @@ class _DetailPageState extends State<DetailPage> {
                                                             children: [
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  KakaoMapUtils.OpenKakaoMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                                                  KakaoMapUtils.OpenKakaoMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -632,7 +675,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  GoogleMapUtils.OpenGoogleMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                                                  GoogleMapUtils.OpenGoogleMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -652,7 +695,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  NaverMapUtils.OpenNaverMap(selectedRestaurant.jibun_address + ' ' + selectedRestaurant.store_name);
+                                                                  NaverMapUtils.OpenNaverMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -711,7 +754,7 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => MenuPage(), arguments: selectedRestaurant);
+                                Get.to(() => MenuPage(), arguments: selectedDetailRestaurant);
                               },
                               child: Row(
                                 children: [
@@ -739,7 +782,7 @@ class _DetailPageState extends State<DetailPage> {
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             physics: BouncingScrollPhysics(),
-                            itemCount: selectedRestaurant.menu.length,
+                            itemCount: selectedDetailRestaurant.menu.length,
                             itemBuilder: (BuildContext context, int index) {
                               return  Row(
                                 children: [
@@ -764,7 +807,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                     ],
                                   ),
-                                  if (index != selectedRestaurant.menu.length - 1)
+                                  if (index != selectedDetailRestaurant.menu.length - 1)
                                     VerticalDivider(width: 30, color: Colors.black45)
                                 ],
                               );
@@ -842,7 +885,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              selectedRestaurant.naver_star.toString(),
+                                              selectedDetailRestaurant.naver_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -853,7 +896,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '${selectedRestaurant.naver_cnt.toString()}건',
+                                              '${selectedDetailRestaurant.naver_cnt.toString()}건',
                                               style: TextStyle(color: Colors.grey, fontSize: 12),
                                             ),
                                             SizedBox(width: 4),
@@ -925,7 +968,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              selectedRestaurant.google_star.toString(),
+                                              selectedDetailRestaurant.google_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -936,7 +979,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '${selectedRestaurant.google_cnt.toString()}건',
+                                                '${selectedDetailRestaurant.google_cnt.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),
@@ -1008,7 +1051,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                                selectedRestaurant.kakao_star.toString(),
+                                              selectedDetailRestaurant.kakao_star.toString(),
                                               style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
                                             ),
                                           ],
@@ -1019,7 +1062,7 @@ class _DetailPageState extends State<DetailPage> {
                                         Row(
                                             children: [
                                               Text(
-                                                '${selectedRestaurant.kakao_cnt.toString()}건',
+                                                '${selectedDetailRestaurant.kakao_cnt.toString()}건',
                                                 style: TextStyle(color: Colors.grey, fontSize: 12),
                                               ),
                                               SizedBox(width: 4),
@@ -1097,49 +1140,3 @@ class NaverMapUtils {
     }
   }
 }
-FeedTemplate defaultFeed = FeedTemplate(
-  content: Content(
-    title: '딸기 치즈 케익',
-    description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-    imageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    link: Link(
-        webUrl: Uri.parse('https://developers.kakao.com'),
-        mobileWebUrl: Uri.parse('https://developers.kakao.com')),
-  ),
-  itemContent: ItemContent(
-    profileText: 'Kakao',
-    profileImageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    titleImageUrl: Uri.parse(
-        'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-    titleImageText: 'Cheese cake',
-    titleImageCategory: 'cake',
-    items: [
-      ItemInfo(item: 'cake1', itemOp: '1000원'),
-      ItemInfo(item: 'cake2', itemOp: '2000원'),
-      ItemInfo(item: 'cake3', itemOp: '3000원'),
-      ItemInfo(item: 'cake4', itemOp: '4000원'),
-      ItemInfo(item: 'cake5', itemOp: '5000원')
-    ],
-    sum: 'total',
-    sumOp: '15000원',
-  ),
-  social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-  buttons: [
-    Button(
-      title: '웹으로 보기',
-      link: Link(
-        webUrl: Uri.parse('https: //developers.kakao.com'),
-        mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
-      ),
-    ),
-    Button(
-      title: '앱으로보기',
-      link: Link(
-        androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-        iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-      ),
-    ),
-  ],
-);

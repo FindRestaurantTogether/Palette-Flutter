@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page_controller.dart';
+import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart' as naver;
 
@@ -446,6 +447,14 @@ class _HotPlacePageState extends State<HotPlacePage> {
                           CameraUpdate cameraUpdate = CameraUpdate.toCameraPosition(cameraPosition);
                           // CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(hotPlaceLatitude[selectedIndex], hotPlaceLongitude[selectedIndex]));
                           naverMapController.moveCamera(cameraUpdate);
+
+                          LatLngBounds bound = await naverMapController.getVisibleRegion();
+                          CameraPosition position = await naverMapController.getCameraPosition();
+                          setState(() {
+                            centerPosition = position.target;
+                            rightUpPosition = bound.northeast;
+                            leftDownPosition = bound.southwest;
+                          });
                           Get.back();
                         },
                         child: Text(

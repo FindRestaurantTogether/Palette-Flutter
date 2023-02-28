@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_abstract_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 
 class ListviewPage extends StatefulWidget {
@@ -30,7 +31,7 @@ class _ListviewPageState extends State<ListviewPage> {
   Widget build(BuildContext context) {
 
     setState(() {});
-    List<NaverMapPageModel> restaurantList = _NaverMapPageController.restaurants.value;
+    List<DetailNaverMapPageRestaurant> restaurantList = _NaverMapPageController.detailRestaurants.value;
 
     if (listDropdownSelected == '평점순') {
       if (listOpen == true) {
@@ -517,7 +518,7 @@ class _ListviewPageState extends State<ListviewPage> {
 
   void _ScrollListener() {
     if (_ScrollController.position.pixels == _ScrollController.position.maxScrollExtent) {
-      _NaverMapPageController.processRestaurantData(context);
+      // _NaverMapPageController.processRestaurantData(context);
     }
   }
 }

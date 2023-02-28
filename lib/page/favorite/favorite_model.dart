@@ -60,7 +60,7 @@ class RestaurantModel extends HiveObject {
   final List<String> service;
 
   @HiveField(14)
-  final Map<String, int> menu;
+  final Map<String, String> menu;
 
   @HiveField(15)
   final List<String> store_image;

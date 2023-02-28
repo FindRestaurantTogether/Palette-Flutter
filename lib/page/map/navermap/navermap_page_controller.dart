@@ -6,8 +6,9 @@ import 'package:myapp/page/map/bottomsheet/bottomsheet_page.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/map_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:myapp/page/map/navermap/navermap_page_marker.dart';
-import 'package:myapp/page/map/navermap/navermap_page_model.dart';
+import 'package:myapp/page/map/navermap/navermap_page_abstract_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -19,249 +20,52 @@ class NaverMapPageController extends GetxService {
   final _SearchPageController = Get.put(SearchPageController());
 
   // 백에서 가져온 데이터 저장 후 이후 다른 페이지에서 이 데이터들 사용
-  var restaurants = <NaverMapPageRestaurant>[].obs;
+  var abstractRestaurants = <AbstractNaverMapPageRestaurant>[].obs;
+  var detailRestaurants = <DetailNaverMapPageRestaurant>[].obs;
   // 위에 데이터들로 CustomMarker 생성후 markers에 저장
   var markers = <CustomMarker>[].obs;
 
-  var rawRestaurantData = {};
+  var rawAbstractRestaurantData = {};
 
-  RxBool getMoreRestaurantData = false.obs;
+  RxBool getMoreAbstractRestaurantData = false.obs;
 
   // process 10개씩
-  Future<void> processRestaurantData(context) async {
+  Future<void> processAbstractRestaurantData(context) async {
 
-      if (restaurants.length == 0) {
-        final Position currentPosition = await Geolocator.getCurrentPosition();
-        for (int i=0 ; i<10; i++) {
-          restaurants.add(
-              NaverMapPageRestaurant(
-                uid: rawRestaurantData[i]['uid'] as String, // 음식점 고유 번호
-                store_name: rawRestaurantData[i]['store_name'] as String, // 음식점 이름
-                jibun_address: rawRestaurantData[i]['jibun_address'] as String, // 음식점 주소
-                position: LocationClass(latitude: rawRestaurantData[i]['latitude'] as double, longitude: rawRestaurantData[i]['longitude'] as double),
-                call: rawRestaurantData[i]['call'] as String, // 음식점 전화번호
-                category: rawRestaurantData[i]['category'] as List<String>, // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
-                main_category: rawRestaurantData[i]['main_category'] as String, // 음식점 마커 이미지
-                open: rawRestaurantData[i]['open'] as String,
-                opening_hour: rawRestaurantData[i]['opening_hour'] as Map<String, String>, // 음식점 영업 시간
-                opening_breaktime: rawRestaurantData[i]['opening_breaktime'] as Map<String, String>,
-                opening_lastorder: rawRestaurantData[i]['opening_lastorder'] as Map<String, String>,
-                theme: rawRestaurantData[i]['theme'] as List<String>, // 음식점 분위기
-                service: rawRestaurantData[i]['service'] as List<String>, // 음식점 서비스
-                menu: rawRestaurantData[i]['menu']  as Map<String, int>, // 음식점 메뉴
-                store_image: rawRestaurantData[i]['store_image'] as List<String>, // 음식점 외부 이미지
-                distance: get_distance(LatLng(rawRestaurantData[i]['latitude'] as double, rawRestaurantData[i]['longitude'] as double), LatLng(currentPosition.latitude, currentPosition.longitude)), // 음식점의 현 위치와의 거리
-                naver_star: rawRestaurantData[i]['naver_star'] as double, // 음식점 네이버 평점
-                naver_cnt: rawRestaurantData[i]['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
-                naver_review_url: rawRestaurantData[i]['naver_review_url'] as String,
-                google_star: rawRestaurantData[i]['google_star'] as double, // 음식점 구글 평점
-                google_cnt: rawRestaurantData[i]['google_cnt'] as int, // 음식점 구글 리뷰 개수
-                google_review_url: rawRestaurantData[i]['google_review_url'] as String,
-                kakao_star: rawRestaurantData[i]['kakao_star'] as double, // 음식점 카카오 평점
-                kakao_cnt: rawRestaurantData[i]['kakao_cnt'] as int, // 음식점 카카오 리뷰 개수
-                kakao_review_url: rawRestaurantData[i]['kakao_review_url'] as String,
-              )
-          );
-        }
-        for (int i=0 ; i<10; i++) {
-          CustomMarker customMarker = CustomMarker(
-            restaurant: restaurants[i],
-            position: restaurants[i].position,
-          );
+    final int currentAbstractRestaurantsLength = abstractRestaurants.length;
 
-          await customMarker.createImage(context);
-          customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
-            final NaverMapPageModel selectedRestaurant = restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
-            final NaverMapController naverMapController = await naverMapCompleter.future;
-            await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
-            if (_MapPageController.bottomSheet == false) {
-              _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-            }
-            showBottomSheet(
-              context: context,
-              builder: (context) => GestureDetector(
-                  onTap: () {
-                    Get.to(DetailPage(), arguments: selectedRestaurant);
-                  },
-                  onVerticalDragUpdate: (details) {
-                    int sensitivity = 3;
-                    if (details.delta.dy < -sensitivity) {
-                      Get.to(DetailPage(), arguments: selectedRestaurant);
-                    }
-                    if (details.delta.dy > sensitivity) {
-                      _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-                      Get.back();
-                    }
-                  },
-                  child: BottomsheetPage(selectedRestaurant: selectedRestaurant)
-              ),
-            );
-          });
-          markers.add(customMarker);
-        }
-      } else if (restaurants.length == 10) {
-        final Position currentPosition = await Geolocator.getCurrentPosition();
-        for (int i=10 ; i<20; i++) {
-          restaurants.add(
-              NaverMapPageRestaurant(
-                uid: rawRestaurantData[i]['uid'] as String, // 음식점 고유 번호
-                store_name: rawRestaurantData[i]['store_name'] as String, // 음식점 이름
-                jibun_address: rawRestaurantData[i]['jibun_address'] as String, // 음식점 주소
-                position: LocationClass(latitude: rawRestaurantData[i]['latitude'] as double, longitude: rawRestaurantData[i]['longitude'] as double),
-                call: rawRestaurantData[i]['call'] as String, // 음식점 전화번호
-                category: rawRestaurantData[i]['category'] as List<String>, // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
-                main_category: rawRestaurantData[i]['main_category'] as String, // 음식점 마커 이미지
-                open: rawRestaurantData[i]['open'] as String,
-                opening_hour: rawRestaurantData[i]['opening_hour'] as Map<String, String>, // 음식점 영업 시간
-                opening_breaktime: rawRestaurantData[i]['opening_breaktime'] as Map<String, String>,
-                opening_lastorder: rawRestaurantData[i]['opening_lastorder'] as Map<String, String>,
-                theme: rawRestaurantData[i]['theme'] as List<String>, // 음식점 분위기
-                service: rawRestaurantData[i]['service'] as List<String>, // 음식점 서비스
-                menu: rawRestaurantData[i]['menu']  as Map<String, int>, // 음식점 메뉴
-                store_image: rawRestaurantData[i]['store_image'] as List<String>, // 음식점 외부 이미지
-                distance: get_distance(LatLng(rawRestaurantData[i]['latitude'] as double, rawRestaurantData[i]['longitude'] as double), LatLng(currentPosition.latitude, currentPosition.longitude)), // 음식점의 현 위치와의 거리
-                naver_star: rawRestaurantData[i]['naver_star'] as double, // 음식점 네이버 평점
-                naver_cnt: rawRestaurantData[i]['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
-                naver_review_url: rawRestaurantData[i]['naver_review_url'] as String,
-                google_star: rawRestaurantData[i]['google_star'] as double, // 음식점 구글 평점
-                google_cnt: rawRestaurantData[i]['google_cnt'] as int, // 음식점 구글 리뷰 개수
-                google_review_url: rawRestaurantData[i]['google_review_url'] as String,
-                kakao_star: rawRestaurantData[i]['kakao_star'] as double, // 음식점 카카오 평점
-                kakao_cnt: rawRestaurantData[i]['kakao_cnt'] as int, // 음식점 카카오 리뷰 개수
-                kakao_review_url: rawRestaurantData[i]['kakao_review_url'] as String,
-              )
-          );
-        }
-        for (int i=10 ; i<20; i++) {
-          CustomMarker customMarker = CustomMarker(
-            restaurant: restaurants[i],
-            position: restaurants[i].position,
-          );
-
-          await customMarker.createImage(context);
-          customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
-            final NaverMapPageModel selectedRestaurant = restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
-            final NaverMapController naverMapController = await naverMapCompleter.future;
-            await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
-            if (_MapPageController.bottomSheet == false) {
-              _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-            }
-            showBottomSheet(
-              context: context,
-              builder: (context) => GestureDetector(
-                  onTap: () {
-                    Get.to(DetailPage(), arguments: selectedRestaurant);
-                  },
-                  onVerticalDragUpdate: (details) {
-                    int sensitivity = 3;
-                    if (details.delta.dy < -sensitivity) {
-                      Get.to(DetailPage(), arguments: selectedRestaurant);
-                    }
-                    if (details.delta.dy > sensitivity) {
-                      _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-                      Get.back();
-                    }
-                  },
-                  child: BottomsheetPage(selectedRestaurant: selectedRestaurant)
-              ),
-            );
-          });
-          markers.add(customMarker);
-        }
-      } else if (restaurants.length == 20) {
-        final Position currentPosition = await Geolocator.getCurrentPosition();
-        for (int i=20 ; i<30; i++) {
-          restaurants.add(
-              NaverMapPageRestaurant(
-                uid: rawRestaurantData[i]['uid'] as String, // 음식점 고유 번호
-                store_name: rawRestaurantData[i]['store_name'] as String, // 음식점 이름
-                jibun_address: rawRestaurantData[i]['jibun_address'] as String, // 음식점 주소
-                position: LocationClass(latitude: rawRestaurantData[i]['latitude'] as double, longitude: rawRestaurantData[i]['longitude'] as double),
-                call: rawRestaurantData[i]['call'] as String, // 음식점 전화번호
-                category: rawRestaurantData[i]['category'] as List<String>, // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
-                main_category: rawRestaurantData[i]['main_category'] as String, // 음식점 마커 이미지
-                open: rawRestaurantData[i]['open'] as String,
-                opening_hour: rawRestaurantData[i]['opening_hour'] as Map<String, String>, // 음식점 영업 시간
-                opening_breaktime: rawRestaurantData[i]['opening_breaktime'] as Map<String, String>,
-                opening_lastorder: rawRestaurantData[i]['opening_lastorder'] as Map<String, String>,
-                theme: rawRestaurantData[i]['theme'] as List<String>, // 음식점 분위기
-                service: rawRestaurantData[i]['service'] as List<String>, // 음식점 서비스
-                menu: rawRestaurantData[i]['menu']  as Map<String, int>, // 음식점 메뉴
-                store_image: rawRestaurantData[i]['store_image'] as List<String>, // 음식점 외부 이미지
-                distance: get_distance(LatLng(rawRestaurantData[i]['latitude'] as double, rawRestaurantData[i]['longitude'] as double), LatLng(currentPosition.latitude, currentPosition.longitude)), // 음식점의 현 위치와의 거리
-                naver_star: rawRestaurantData[i]['naver_star'] as double, // 음식점 네이버 평점
-                naver_cnt: rawRestaurantData[i]['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
-                naver_review_url: rawRestaurantData[i]['naver_review_url'] as String,
-                google_star: rawRestaurantData[i]['google_star'] as double, // 음식점 구글 평점
-                google_cnt: rawRestaurantData[i]['google_cnt'] as int, // 음식점 구글 리뷰 개수
-                google_review_url: rawRestaurantData[i]['google_review_url'] as String,
-                kakao_star: rawRestaurantData[i]['kakao_star'] as double, // 음식점 카카오 평점
-                kakao_cnt: rawRestaurantData[i]['kakao_cnt'] as int, // 음식점 카카오 리뷰 개수
-                kakao_review_url: rawRestaurantData[i]['kakao_review_url'] as String,
-              )
-          );
-        }
-        for (int i=20 ; i<30; i++) {
-          CustomMarker customMarker = CustomMarker(
-            restaurant: restaurants[i],
-            position: restaurants[i].position,
-          );
-
-          await customMarker.createImage(context);
-          customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
-            final NaverMapPageModel selectedRestaurant = restaurants.firstWhere((NaverMapPageModel restaurant) => restaurant.uid == marker.markerId);
-            final NaverMapController naverMapController = await naverMapCompleter.future;
-            await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
-            if (_MapPageController.bottomSheet == false) {
-              _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-            }
-            showBottomSheet(
-              context: context,
-              builder: (context) => GestureDetector(
-                  onTap: () {
-                    Get.to(DetailPage(), arguments: selectedRestaurant);
-                  },
-                  onVerticalDragUpdate: (details) {
-                    int sensitivity = 3;
-                    if (details.delta.dy < -sensitivity) {
-                      Get.to(DetailPage(), arguments: selectedRestaurant);
-                    }
-                    if (details.delta.dy > sensitivity) {
-                      _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-                      Get.back();
-                    }
-                  },
-                  child: BottomsheetPage(selectedRestaurant: selectedRestaurant)
-              ),
-            );
-          });
-          markers.add(customMarker);
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+    for (int i=currentAbstractRestaurantsLength ; i<currentAbstractRestaurantsLength+10; i++) {
+      if (i == 30) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('한 번에 볼 수 있는 음식점의 개수는 최대 30개 입니다.'),
               backgroundColor: Color(0xfff42957),
-            )
-        );
+            ));
+        break;
       }
-    }
+      if (i == rawAbstractRestaurantData.length)
+        break;
 
-  // fetch 30개 & process 10개
-  Future<void> fetchRestaurantData(context) async {
+      abstractRestaurants.add(AbstractNaverMapPageRestaurant(
+        uid: rawAbstractRestaurantData[i]['uid'] as String, // 움식점 고유 id
+        main_category: rawAbstractRestaurantData[i]['main_category'] as String, // 음식점 마커 이미지
+        position: LocationClass(latitude: rawAbstractRestaurantData[i]['latitude'] as double, longitude: rawAbstractRestaurantData[i]['longitude'] as double),
+      ));
 
-    restaurants.value = [];
-    markers.value = [];
+      CustomMarker customMarker = CustomMarker(
+        abstractRestaurant: abstractRestaurants[i],
+        position: abstractRestaurants[i].position,
+      );
+      await customMarker.createImage(context);
+      customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
+        final AbstractNaverMapPageRestaurant selectedAbstractRestaurant = abstractRestaurants.firstWhere((AbstractNaverMapPageRestaurant abstractRestaurant) => abstractRestaurant.uid == marker.markerId);
+        final NaverMapController naverMapController = await naverMapCompleter.future;
+        await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
 
-    if (_FilterPageController.FilterSelected.value.contains(true) || _SearchPageController.searchedWord.value != '') {
+        uid_Network uid_network = uid_Network(selectedAbstractRestaurant.uid);
+        var uid_store = await uid_network.getJsonData();
 
-      List filter = read_all();
-      Network network = Network(filter, _SearchPageController.searchedWord);
-      print(11111111111);
-      rawRestaurantData = await network.getJsonData();
-      print(22222222222);
-      print('================================================================');
-      for (String i in [
+        print('==================');
+        for (String i in [
           'uid'
           ,'store_name'
           ,'road_address'
@@ -288,7 +92,108 @@ class NaverMapPageController extends GetxService {
           ,'naver_star'
           ,'naver_cnt'
           ,'naver_review_url'])
-        print('${i} : ${rawRestaurantData[0][i].runtimeType}');
+          print('${i} : ${uid_store[i]}\n');
+        print('==================');
+
+        final Position currentPosition = await Geolocator.getCurrentPosition();
+        DetailNaverMapPageRestaurant selectedDetailRestaurant = DetailNaverMapPageRestaurant(
+          uid: uid_store['uid'] as String, // 음식점 고유 번호
+          store_name: uid_store['store_name'] as String, // 음식점 이름
+          jibun_address: uid_store['jibun_address'] as String, // 음식점 주소
+          position: LocationClass(latitude: uid_store['latitude'] as double, longitude: uid_store['longitude'] as double),
+          call: uid_store['call'] as String, // 음식점 전화번호
+          category: uid_store['category'] as List<String>, // 음식점의 표기되는 카테고리(회의 때 얘기한 소분류 없으면 중분류)
+          main_category: uid_store['main_category'] as String, // 음식점 마커 이미지
+          open: uid_store['open'] as String,
+          opening_hour: uid_store['opening_hour'] as Map<String, String>, // 음식점 영업 시간
+          opening_breaktime: uid_store['opening_breaktime'] as Map<String, String>,
+          opening_lastorder: uid_store['opening_lastorder'] as Map<String, String>,
+          theme: uid_store['theme'] as List<String>, // 음식점 분위기
+          service: uid_store['service'] as List<String>, // 음식점 서비스
+          menu: uid_store['menu']  as Map<String, String>, // 음식점 메뉴
+          store_image: uid_store['store_image'] as List<String>, // 음식점 외부 이미지
+          distance: get_distance(LatLng(uid_store['latitude'] as double, uid_store['longitude'] as double), LatLng(currentPosition.latitude, currentPosition.longitude)), // 음식점의 현 위치와의 거리
+          naver_star: uid_store['naver_star'] as double, // 음식점 네이버 평점
+          naver_cnt: uid_store['naver_cnt'] as int, // 음식점 네이버 리뷰 개수
+          naver_review_url:uid_store['naver_review_url'] as String,
+          google_star: uid_store['google_star'] as double, // 음식점 구글 평점
+          google_cnt: uid_store['google_cnt'] as int, // 음식점 구글 리뷰 개수
+          google_review_url: uid_store['google_review_url'] as String,
+          kakao_star: uid_store['kakao_star'] as double, // 음식점 카카오 평점
+          kakao_cnt: uid_store['kakao_cnt'] as int, // 음식점 카카오 리뷰 개수
+          kakao_review_url: uid_store['kakao_review_url'] as String,
+        );
+
+        if (_MapPageController.bottomSheet == false) {
+          _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+        }
+
+        showBottomSheet(
+          context: context,
+          builder: (context) => GestureDetector(
+              onTap: () {
+                Get.to(DetailPage(), arguments: selectedDetailRestaurant);
+              },
+              onVerticalDragUpdate: (details) {
+                int sensitivity = 3;
+                if (details.delta.dy < -sensitivity) {
+                  Get.to(DetailPage(), arguments: selectedDetailRestaurant);
+                }
+                if (details.delta.dy > sensitivity) {
+                  _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+                  Get.back();
+                }
+              },
+              child: BottomsheetPage(selectedDetailRestaurant: selectedDetailRestaurant)
+          ),
+        );
+      });
+      markers.add(customMarker);
+    }
+    print(markers.length);
+  }
+
+  // fetch 30개 & process 10개
+  Future<void> fetchAbstractRestaurantData(context) async {
+
+    abstractRestaurants.value = [];
+    markers.value = [];
+
+    if (_FilterPageController.FilterSelected.value.contains(true) || _SearchPageController.searchedWord.value != '') {
+
+      List filter = read_all();
+      Network network = Network(filter, _SearchPageController.searchedWord);
+      rawAbstractRestaurantData = await network.getJsonData(); // 30개 받기
+      print('================================================================');
+      print(rawAbstractRestaurantData.length);
+      // for (String i in [
+      //     'uid'
+      //     ,'store_name'
+      //     ,'road_address'
+      //     ,'jibun_address'
+      //     ,'latitude'
+      //     ,'longitude'
+      //     ,'call'
+      //     ,'category'
+      //     ,'main_category'
+      //     ,'open'
+      //     ,'opening_hour'
+      //     ,'opening_breaktime'
+      //     ,'opening_lastorder'
+      //     ,'theme'
+      //     ,'service'
+      //     ,'menu'
+      //     ,'store_image'
+      //     ,'kakao_star'
+      //     ,'kakao_cnt'
+      //     ,'kakao_review_url'
+      //     ,'google_star'
+      //     ,'google_cnt'
+      //     ,'google_review_url'
+      //     ,'naver_star'
+      //     ,'naver_cnt'
+      //     ,'naver_review_url'])
+      //   print('${i} : ${rawRestaurantData[0][i].runtimeType}');
       print('================================================================');
 
       // rawRestaurantData = {
@@ -1134,17 +1039,15 @@ class NaverMapPageController extends GetxService {
       //   },
       // };
 
-      if (rawRestaurantData.length == 0) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
+      if (rawAbstractRestaurantData.length == 0) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('만족하는 음식점이 없습니다. 필터와 검색 단어를 다시 확인해주세요.'),
               backgroundColor: Color(0xfff42957),
-            )
-        );
+            ));
       }
       else {
-        await processRestaurantData(context);
-        getMoreRestaurantData.value = true;
+        await processAbstractRestaurantData(context);
+        getMoreAbstractRestaurantData.value = true;
       }
     }
   }

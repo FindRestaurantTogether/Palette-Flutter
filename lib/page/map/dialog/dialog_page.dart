@@ -198,7 +198,7 @@ class _DialogPageState extends State<DialogPage> {
                                     Icon(Icons.location_on, size: 18, color: Color(0xfff42957)),
                                     SizedBox(width: 1),
                                     Text(
-                                      '${_NaverMapPageController.restaurants.length}',
+                                      '${_NaverMapPageController.abstractRestaurants.length}',
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: Color(0xfff42957),
@@ -250,7 +250,7 @@ class _DialogPageState extends State<DialogPage> {
                                   Icon(Icons.location_on, size: 18, color: Color(0xfff42957)),
                                   SizedBox(width: 1),
                                   Text(
-                                    '${_NaverMapPageController.restaurants.length}',
+                                    '${_NaverMapPageController.abstractRestaurants.length}',
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: Color(0xfff42957),

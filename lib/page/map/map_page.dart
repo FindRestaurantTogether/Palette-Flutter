@@ -114,7 +114,7 @@ class _MapPageState extends State<MapPage> {
                                     highlightColor: Colors.transparent,
                                     onPressed: () async {
                                       _SearchPageController.searchedWord.value = '';
-                                      await _NaverMapPageController.fetchRestaurantData(context);
+                                      await _NaverMapPageController.fetchAbstractRestaurantData(context);
                                     },
                                     icon: Image.asset('assets/button_image/close_button.png')
                                 ),

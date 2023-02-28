@@ -106,7 +106,7 @@ class _ListPageState extends State<ListPage> {
                       onPressed: () async {
                         _SearchPageController.searchedWord.value = '';
                         Get.back();
-                        await _NaverMapPageController.fetchRestaurantData(context);
+                        await _NaverMapPageController.fetchAbstractRestaurantData(context);
                         // Future.delayed(Duration(milliseconds: 500), () async {
                         //   await _NaverMapPageController.fetchRestaurantData(context, '');
                         // });

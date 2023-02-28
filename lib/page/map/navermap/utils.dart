@@ -1,11 +1,13 @@
 import 'dart:convert';
-import 'dart:ffi';
 import 'package:get/get.dart';
 import 'package:myapp/page/map/filter/filter_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart' as naver;
 import 'package:http/http.dart' as http;
+import 'package:naver_map_plugin/naver_map_plugin.dart';
 import 'dart:math' show cos, sqrt, asin;
 import 'dart:math';
+
+import 'navermap_page.dart';
 
 
 class Network {
@@ -21,73 +23,103 @@ class Network {
   Future<dynamic> getJsonData() async {
     var store;
     Map<String, dynamic>? one_dict;
+
+    String url2 = '';
     // 위도경도 바뀌는 코드!!!!!!!!!!!!!!!!
-    double rightUpLat;
-    double rightUpLon;
-    double leftDownLat;
-    double leftDownLon;
+    double rightUpLat = rightUpPosition.latitude;
+    double rightUpLon = rightUpPosition.longitude;
+    double leftDownLat = leftDownPosition.latitude;
+    double leftDownLon = leftDownPosition.longitude;
 
     double max_lat = 37.7151;
     double max_lon = 127.2693;
     double min_lat = 37.4132;
     double min_lon = 126.7340;
-    double lat_one_size = filter[0].latitude - filter[2].latitude;
-    double lon_one_size = filter[0].longitude - filter[2].longitude;
-
-    // for (int size = 1; size <= 8; size++) {
-    //   rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) +
-    //       lat_one_size * size, max_lat);
-    //   rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) +
-    //       lon_one_size * size, max_lon);
-    //   leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)) -
-    //       lat_one_size * size, min_lat);
-    //   leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)) -
-    //       lon_one_size * size, min_lon);
-    //   String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
 
 
-    // List<dynamic> category = filter[3];
-    // if(category.length>0){
-    //   url2 = url2 + 'category=${category[0]}';
-    //   for(int i = 1;i<category.length;i++){
-    //     url2 = url2 + '&${category[i]}';
-    //   }
-    // }
-    // if(text != ''){
-    //   url2 = url2 + '&text=${text}';
-    // }
+    rightUpLat = min(rightUpLat, max_lat);
+    rightUpLon = min(rightUpLon,max_lon);
+    leftDownLat = min(leftDownLat,min_lat);
+    leftDownLon = min(leftDownLon,min_lon);
 
-    //   print(url2);
-    //   http.Response response = await http.get(Uri.parse(url2));
-    //   if (response.statusCode == 200) {
-    //     //String jsonData = response.body;
-    //     var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-    //     store = parsingData;
-    //     print("길이 ${store.length}");
-    //     if (store.length == 30) {
-    //       break;
-    //     }
-    //   }
-    // }
 
-    rightUpLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)), max_lat);
-    rightUpLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),max_lon);
-    leftDownLat = min(double.parse(filter[0].latitude.toStringAsFixed(4)),min_lat);
-    leftDownLon = min(double.parse(filter[0].longitude.toStringAsFixed(4)),min_lon);
-    String url2 = 'http://34.64.166.110/api/testsearch?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+    // 필터 클릭, 이지도 재검색 클릭
+    if(text == '') {
+      String cat_url = '';
+      List<dynamic> category = filter[0];
+      if (category.length > 0) {
+        cat_url = cat_url + '&category=${category[0]}';
+        for (int i = 1; i < category.length; i++) {
+          cat_url = cat_url + '-${category[i]}';
+        }
+      }
 
-    http.Response response = await http.get(Uri.parse(url2));
-    if (response.statusCode == 200) {
-      //String jsonData = response.body;
-      var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
-      store = parsingData;
+      // 카테고리 추가!!
+      // 서비스
+      if (filter[1].length > 0) {
+        cat_url = cat_url + '&service=${filter[1][0]}';
+        for (int i = 1; i < filter[1].length; i++) {
+          cat_url = cat_url + '-${filter[1][i]}';
+        }
+      }
+
+      // 테마
+      if (filter[2].length > 0) {
+        cat_url = cat_url + '&theme=${filter[2][0]}';
+        for (int i = 1; i < filter[2].length; i++) {
+          cat_url = cat_url + '-${filter[2][i]}';
+        }
+      }
+
+      url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}' + cat_url;
+      http.Response response = await http.get(Uri.parse(url2));
+      if (response.statusCode == 200) {
+        var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+        store = parsingData;
+      }
+
+      // // 개수에 따라 줌 늘리기
+      // for (int num = 0; num < 4; num++) {
+      //
+      //   rightUpLat = min(rightUpPosition.latitude, max_lat);
+      //   rightUpLon = min(rightUpPosition.longitude,max_lon);
+      //   leftDownLat = max(leftDownPosition.latitude,min_lat);
+      //   leftDownLon = max(leftDownPosition.longitude,min_lon);
+      //
+      //   url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}' + cat_url;
+      //
+      //   print('url!!!!!!!!!!!!11111=======');
+      //   print(url2);
+      //   http.Response response = await http.get(Uri.parse(url2));
+      //   if (response.statusCode == 200) {
+      //     var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+      //     store = parsingData;
+      //     print('store 길이 : ${store.length}');
+      //     if(store.length<10){
+      //       zoomout();
+      //     }
+      //     else{
+      //       break;
+      //     }
+      //   }
+      // }
+    }
+
+
+
+    // text
+    if(text != '') {
+      url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+      url2 = url2 + '&text=${text}';
+      http.Response response = await http.get(Uri.parse(url2));
+      if (response.statusCode == 200) {
+        var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
+        store = parsingData;
+      }
     }
 
     for (int i=0;i<store.length;i++){
-      one_dict = change_data(store[i]).cast<String, dynamic>();
-      open_Network open_network = open_Network(one_dict['id']);
-      var isOpen = await open_network.getJsonData();
-      one_dict['open'] = isOpen;
+      one_dict = change_data(store[i], 'network').cast<String, dynamic>();
       store_dict[i] = one_dict;
     }
     return store_dict;
@@ -111,7 +143,7 @@ class open_Network {
   open_Network(this.uid);
 
   Future<dynamic> getJsonData() async {
-    String url = 'http://34.64.166.110/api/isopeing?store_id=${uid}';
+    String url = 'http://34.64.166.110/api/is-opening?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return response.body;
@@ -126,12 +158,12 @@ class uid_Network {
 
   Future<dynamic> getJsonData() async {
     Map<String, dynamic>? store_dict;
-    String url = 'http://34.64.166.110/api/idsearch?store_id=${uid}';
+    String url = 'http://34.64.166.110/api/info-from-id?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
       var store = parsingData;
-      store_dict = change_data(store).cast<String, dynamic>();
+      store_dict = change_data(store, 'uid').cast<String, dynamic>();
       open_Network open_network = open_Network(uid);
       var isOpen = await open_network.getJsonData();
       store_dict['open'] = isOpen;
@@ -140,9 +172,17 @@ class uid_Network {
   }
 }
 
+Map change_time(hour){
+  Map<String,String> get_time = {};
+  List week = ['월','화','수','목','금','토','일'];
+  for(int i=0;i<hour.length;i++){
+    get_time[week[i]] = hour[i][week[i]];
+  }
+  return get_time;
+}
 
 
-Map change_data(store_i) {
+Map change_data(store_i, how) {
   Map<String,dynamic> name = {
     '해산물(게)': 'food_korean_seafood_crab',
     '해산물(문어)': 'food_korean_seafood_octopus',
@@ -190,12 +230,28 @@ Map change_data(store_i) {
     '칵테일,양주': 'alcohol_cocktail'
   };
 
-  Map<String,int> menu = Map();
-  Map<String,String> opening_hour = Map();
-  Map<String,String> opening_breaktime = Map();
-  Map<String,String> opening_lastorder = Map();
-  Map<String,dynamic> one_dict = Map();
+  Map<String,String> menu = {};
+  Map<String,String> opening_hour = {};
+  // Map<String,String> opening_breaktime = {};
+  // Map<String,String> opening_lastorder = {};
+  Map<String,dynamic> one_dict = {};
+  List<String> store_img = new List.empty(growable: true);
+
   one_dict['uid'] = store_i['id'];
+  try {
+    one_dict["latitude"] = double.parse(store_i['source']['location']["lat"]);
+    one_dict["longitude"] = double.parse(store_i['source']['location']["lon"]);
+  }
+  catch(e) {}
+
+  one_dict['main_category'] = 'assets/marker_image/${name[store_i['source']["main_category"]]}_${double.parse(store_i['source']['naver_star']).toStringAsFixed(1)}.png';
+
+  one_dict['naver_star'] = double.parse(store_i['source']['naver_star']);
+
+  if(how == 'network'){
+    return one_dict;
+  }
+
   one_dict['store_name'] = store_i['source']['name'];
   one_dict["road_address"] = "서울 " + store_i['source']["road_address"];
   one_dict["jibun_address"] = "서울 " + store_i['source']["jibun_address"];
@@ -211,31 +267,26 @@ Map change_data(store_i) {
     one_dict[site_info[j+1]] = int.parse(store_i['source'][site_info[j+1]]);
   }
 
-  one_dict['main_category'] = 'assets/marker_image/${name[store_i['source']["main_category"]]}_${one_dict['naver_star'].toStringAsFixed(1)}.png';
-  one_dict['category'] = store_i['source']["category"].split('-');
+  try {
+    one_dict['category'] = store_i['source']["category"].split('-');
+  }
+  catch(e){}
 
   // 시간
   try{
-    for(int j=0;j<store_i['source']['opening_hour'].length;j++){
-      opening_hour.addAll(store_i['source']['opening_hour'][j]);
-    }
-    one_dict['opening_hour'] = opening_hour;
+    one_dict['opening_hour'] = change_time(store_i['source']['opening_hour']);
+  }
+  catch(e){
+    one_dict['opening_hour'] = {};
+  }
+
+  try{
+    one_dict['opening_breaktime'] = change_time(store_i['source']['opening_breaktime']);
   }
   catch(e){}
 
   try{
-    for(int j=0;j<store_i['source']['opening_breaktime'].length;j++){
-      opening_breaktime.addAll(store_i['source']['opening_breaktime'][j]);
-    }
-    one_dict['opening_breaktime'] = opening_breaktime;
-  }
-  catch(e){}
-
-  try{
-    for(int j=0;j<store_i['source']['opening_lastorder'].length;j++){
-      opening_lastorder.addAll(store_i['source']['opening_lastorder'][j]);
-    }
-    one_dict['opening_lastorder'] = opening_lastorder;
+    one_dict['opening_lastorder'] = change_time(store_i['source']['opening_lastorder']);
   }
   catch(e){}
 
@@ -246,13 +297,16 @@ Map change_data(store_i) {
   // 메뉴
   try{
     for(int j=0;j<store_i['source']['menu'].length;j++){
-      Map<String,int> one_menu = {};
-      one_menu[store_i['source']['menu'][j].split(':')[0]] = int.parse(store_i['source']['menu'][j].split(':')[1]);
+      Map<String,String> one_menu = {};
+      one_menu[store_i['source']['menu'][j].split(':')[0]] = store_i['source']['menu'][j].split(':')[1];
       menu.addAll(one_menu);
     }
     one_dict['menu'] = menu;
   }
-  catch(e){}
+  catch(e){
+    Map<String,String> menu = {};
+    one_dict['menu'] = menu;
+  }
 
 
   try {
@@ -261,7 +315,11 @@ Map change_data(store_i) {
   }
   catch(e) {}
 
-  one_dict["store_image"] = store_i["outer_image"];
+  // one_dict["store_image"] = store_i['source']["outer_image"];
+  for(int j=0;j<store_i['source']["outer_image"].length;j++){
+    store_img.add(store_i['source']["outer_image"][j]);
+  }
+  one_dict["store_image"] = store_img;
 
   // url
   one_dict['kakao_review_url'] = 'https://place.map.kakao.com/m/11101743#comment';
@@ -284,6 +342,8 @@ List read_all(){
   final _FilterPageController = Get.put(FilterPageController());
   var filter = new List.empty(growable: true);
   var category = new List.empty(growable: true);
+  var service = new List.empty(growable: true);
+  var theme = new List.empty(growable: true);
 
   Map<String,dynamic> name = {'해산물(게)': 'Food-Korean-Seafood-Crab',
     '해산물(문어)': 'Food-Korean-Seafood-Octopus',
@@ -330,10 +390,10 @@ List read_all(){
   // print(naver.centerPosition);
   // print(naver.rightUpPosition);
   // print(naver.leftDownPosition);
-  filter.add(naver.rightUpPosition);
-  filter.add(naver.leftDownPosition);
-  // filter.add(naver.centerPosition);
-  filter.add(naver.rightUpPosition);
+  // filter.add(naver.rightUpPosition);
+  // filter.add(naver.leftDownPosition);
+  // // filter.add(naver.centerPosition);
+  // filter.add(naver.rightUpPosition);
 
 
   // print('필터 정보');
@@ -359,20 +419,22 @@ List read_all(){
     }
   }
   // 주차, 24시 영업, 포장, 예약, 애완동물 출입가능, 코스, 뷔페, 배달, 무한리필, 오마카세, 미슐랭, 콜키지, 룸 선택 여부
-  List<String> service = ["주차", "24시 영업", "포장", "예약", "애완동물 출입가능", "코스", "뷔페", "배달", "무한리필", "오마카세", "미슐랭", "콜키지", "룸"];
+  List<String> service_name = ["주차", "24시 영업", "포장", "예약", "애완동물 출입가능", "코스", "뷔페", "배달", "무한리필", "오마카세", "미슐랭", "콜키지", "룸"];
   for(int i=0;i<_FilterPageController.OuterServiceSelected.length;i++){
     if(_FilterPageController.OuterServiceSelected[i]==true){
-      category.add(service[i]);
+      service.add(service_name[i]);
     }
   }
   // 데이트, 가성비, 조용한, 친절한, 인스타, 깨끗한, 고급, 이색적인, 혼밥, 단체, 다이어트, 뷰가 좋은, 방송 맛집 선택 여부
   List<String> mood = ["데이트", "가성비", "조용한", "친절한", "인스타", "깨끗한", "고급", "이색적인", "혼밥", "단체", "다이어트", "뷰가 좋은", "방송 맛집"];
   for(int i=0;i<_FilterPageController.OuterMoodSelected.length;i++){
     if(_FilterPageController.OuterMoodSelected[i]==true){
-      category.add(mood[i]);
+      theme.add(mood[i]);
     }
   }
   filter.add(category);
+  filter.add(service);
+  filter.add(theme);
 
   print("================================================================");
   print(filter);
@@ -391,4 +453,16 @@ double get_distance(position, myPosition) {
   var lon2 = myPosition.longitude;
   var a = 0.5 - c((lat2 - lat1) * p)/2 + c(lat1 * p) * c(lat2 * p) * (1 - c((lon2 - lon1) * p))/2;
   return double.parse((12742 * asin(sqrt(a))).toStringAsFixed(1));
+}
+
+
+Future<void> zoomout() async {
+  print('이전');
+  print(rightUpPosition);
+  print(leftDownPosition);
+  final naverMapController = await naverMapCompleter.future;
+  naverMapController.moveCamera(CameraUpdate.zoomOut());
+  print('이후');
+  print(rightUpPosition);
+  print(leftDownPosition);
 }
