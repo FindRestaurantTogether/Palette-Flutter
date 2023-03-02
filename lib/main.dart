@@ -26,14 +26,14 @@ void main() async {
   await Hive.openBox<RecentSearchModel>('recentsearch');
   await Hive.openBox<FavoriteModel>('favorite');
 
-  // Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
-  // recentSearchBox.clear();
-  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-  // favoriteBox.clear();
+  Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
+  recentSearchBox.clear();
+  Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  favoriteBox.clear();
 
 
   final _FavoritePageController = Get.put(FavoritePageController());
-  Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
+  // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
   List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
   for (int i=0; i<favoriteFolders.length; i++) {
     for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length; j++) {

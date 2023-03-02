@@ -1310,8 +1310,8 @@ class _FolderPageState extends State<FolderPage> {
                       ),
                       if (_FolderPageController.checkEdit.value == true) ... [
                         Positioned(
-                          left: 32,
-                          bottom: 20,
+                          left: (width - 300)/2,
+                          bottom: 25,
                           child: Container(
                             width: 300,
                             height: 50,
@@ -1354,8 +1354,8 @@ class _FolderPageState extends State<FolderPage> {
                       ]
                       else if (_FolderPageController.checkShare.value == true) ... [
                         Positioned(
-                          left: 32,
-                          bottom: 20,
+                          left: (width - 300)/2,
+                          bottom: 25,
                           child: Container(
                             width: 300,
                             height: 50,

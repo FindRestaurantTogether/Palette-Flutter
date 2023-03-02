@@ -213,14 +213,11 @@ class _NaverMapPageState extends State<NaverMapPage> {
     //     '\n원인: $reason'
     //     '\n에니메이션 여부: $isAnimated'
     // );
-
     if (_NaverMapPageController.getMoreAbstractRestaurantData.value == true)
       _NaverMapPageController.getMoreAbstractRestaurantData.value = false;
 
   }
   Future<void> _onCameraIdle() async {
-    // print('카메라 움직임 멈춤');
-
     NaverMapController naverMapController = await naverMapCompleter.future;
     LatLngBounds bound = await naverMapController.getVisibleRegion();
     CameraPosition position = await naverMapController.getCameraPosition();
@@ -235,9 +232,10 @@ class _NaverMapPageState extends State<NaverMapPage> {
     print('북동쪽: ${rightUpPosition}');
     print('남서쪽: ${leftDownPosition}');
     print("========================================");
+
+
   }
   void _onMapTap(LatLng latLng) {
-
     // 바텀시트 상태 변경
     if (_MapPageController.bottomSheet.value == false) {
       var currentIndex = _FilterPageController.CurrentOuterIndex.toInt();
