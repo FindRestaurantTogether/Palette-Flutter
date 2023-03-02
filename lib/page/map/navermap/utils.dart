@@ -39,8 +39,8 @@ class Network {
 
     rightUpLat = min(rightUpLat, max_lat);
     rightUpLon = min(rightUpLon,max_lon);
-    leftDownLat = min(leftDownLat,min_lat);
-    leftDownLon = min(leftDownLon,min_lon);
+    leftDownLat = max(leftDownLat,min_lat);
+    leftDownLon = max(leftDownLon,min_lon);
 
 
     // 필터 클릭, 이지도 재검색 클릭
@@ -72,6 +72,7 @@ class Network {
       }
 
       url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}' + cat_url;
+      print(url2);
       http.Response response = await http.get(Uri.parse(url2));
       if (response.statusCode == 200) {
         var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -104,8 +105,6 @@ class Network {
       //   }
       // }
     }
-
-
 
     // text
     if(text != '') {

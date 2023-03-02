@@ -207,6 +207,12 @@ class _NaverMapPageState extends State<NaverMapPage> {
       rightUpPosition = bound.northeast;
       leftDownPosition = bound.southwest;
     });
+
+    print("========================================");
+    print('중심: ${centerPosition}');
+    print('북동쪽: ${rightUpPosition}');
+    print('남서쪽: ${leftDownPosition}');
+    print("========================================");
   }
   Future<void> _onCameraChange(LatLng latLng, CameraChangeReason reason, bool isAnimated) async {
     // print('카메라 움직임 >>> 위치 : ${latLng.latitude}, ${latLng.longitude}'
@@ -216,6 +222,11 @@ class _NaverMapPageState extends State<NaverMapPage> {
     if (_NaverMapPageController.getMoreAbstractRestaurantData.value == true)
       _NaverMapPageController.getMoreAbstractRestaurantData.value = false;
 
+    print("========================================");
+    print('중심: ${centerPosition}');
+    print('북동쪽: ${rightUpPosition}');
+    print('남서쪽: ${leftDownPosition}');
+    print("========================================");
   }
   Future<void> _onCameraIdle() async {
     NaverMapController naverMapController = await naverMapCompleter.future;
@@ -232,8 +243,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
     print('북동쪽: ${rightUpPosition}');
     print('남서쪽: ${leftDownPosition}');
     print("========================================");
-
-
   }
   void _onMapTap(LatLng latLng) {
     // 바텀시트 상태 변경
