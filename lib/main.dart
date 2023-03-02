@@ -10,6 +10,8 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/map/search/recentsearch_model.dart';
 
+// flutter build apk --release --no-sound-null-safety --target-platform=android-arm64
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();

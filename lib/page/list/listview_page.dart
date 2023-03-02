@@ -290,7 +290,6 @@ class _ListviewPageState extends State<ListviewPage> {
           padding: EdgeInsets.all(3),
           itemCount: restaurantList.length,
           itemBuilder: (context, index){
-
             return ExpandTapWidget(
               onTap: () {
                 Get.to(() => DetailPage(), arguments: restaurantList[index]);
