@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk_common/kakao_flutter_sdk_common.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
-import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/loading/loading_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
@@ -32,14 +31,14 @@ void main() async {
   favoriteBox.clear();
 
 
-  final _FavoritePageController = Get.put(FavoritePageController());
+  // final _FavoritePageController = Get.put(FavoritePageController());
   // Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
-  List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
-  for (int i=0; i<favoriteFolders.length; i++) {
-    for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length; j++) {
-      _FavoritePageController.favoriteRestaurantUids.add(favoriteFolders[i].favoriteFolderRestaurantList[j].uid);
-    }
-  }
+  // List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
+  // for (int i=0; i<favoriteFolders.length; i++) {
+  //   for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length; j++) {
+  //     _FavoritePageController.favoriteRestaurantUids.add(favoriteFolders[i].favoriteFolderRestaurantList[j].uid);
+  //   }
+  // }
 
 
   WidgetsFlutterBinding.ensureInitialized();

@@ -1312,17 +1312,18 @@ class _FavoritePageState extends State<FavoritePage> {
                                             ],
                                           ),
                                         ),
-                                        Container(
-                                          width: 120,
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                                image: NetworkImage(favoriteRestaurant.store_image[0]),
-                                                fit: BoxFit.fill
+                                        if (favoriteRestaurant.store_image.length != 0)
+                                          Container(
+                                            width: 120,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              image: DecorationImage(
+                                                  image: NetworkImage(favoriteRestaurant.store_image[0]),
+                                                  fit: BoxFit.fill
+                                              ),
                                             ),
-                                          ),
-                                        )
+                                          )
                                       ],
                                     ),
                                   )

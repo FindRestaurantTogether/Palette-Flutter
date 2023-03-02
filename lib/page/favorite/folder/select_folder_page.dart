@@ -11,7 +11,6 @@ import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SelectFolderPage extends StatefulWidget {
-
   final DetailNaverMapPageRestaurant selectedDetailRestaurant;
 
   SelectFolderPage({Key? key, required this.selectedDetailRestaurant}) : super(key: key);
@@ -301,7 +300,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                             naver_cnt: selectedDetailRestaurant.naver_cnt,
                         )
                       );
-                      selectedFavoriteFolder.save();
+                      selectedFavoriteFolder!.save();
 
                       Get.back();
                     },
