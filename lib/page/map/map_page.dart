@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/filter/filter_page.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
+import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
+import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key? key}) : super(key: key);

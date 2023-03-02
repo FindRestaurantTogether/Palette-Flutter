@@ -27,6 +27,12 @@ class _ListPageState extends State<ListPage> {
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
   @override
+  void initState() {
+    _NaverMapPageController.processDetailRestaurantData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
@@ -327,7 +333,9 @@ class _ListPageState extends State<ListPage> {
             height: 4,
             color: Color(0xffeeeeee),
           ), // 회색 바
-          ListviewPage(), // 음식점 리스트
+          _NaverMapPageController.detailRestaurantDataLoading.value
+              ? Expanded(child: Center(child: CircularProgressIndicator(color: Color(0xfff42957))))
+              : ListviewPage(), // 음식점 리스트
         ],
       ),
     );
