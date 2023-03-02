@@ -29,8 +29,6 @@ class NaverMapPageController extends GetxService {
 
   RxBool getMoreAbstractRestaurantData = false.obs;
 
-  RxBool detailRestaurantDataLoading = false.obs;
-
   // process 10개씩
   Future<void> processAbstractRestaurantData(context) async {
 
@@ -47,20 +45,16 @@ class NaverMapPageController extends GetxService {
       if (i == rawAbstractRestaurantData.length)
         break;
 
-      print(444);
       abstractRestaurants.add(AbstractNaverMapPageRestaurant(
         uid: rawAbstractRestaurantData[i]['uid'] as String, // 움식점 고유 id
         main_category: rawAbstractRestaurantData[i]['main_category'] as String, // 음식점 마커 이미지
         position: LocationClass(latitude: rawAbstractRestaurantData[i]['latitude'] as double, longitude: rawAbstractRestaurantData[i]['longitude'] as double),
       ));
-      print(555);
       CustomMarker customMarker = CustomMarker(
         abstractRestaurant: abstractRestaurants[i],
         position: abstractRestaurants[i].position,
       );
-      print(666);
       await customMarker.createImage(context);
-      print(777);
       customMarker.onMarkerTab = customMarker.setOnMarkerTab((marker, iconSize) async {
         final AbstractNaverMapPageRestaurant selectedAbstractRestaurant = abstractRestaurants.firstWhere((AbstractNaverMapPageRestaurant abstractRestaurant) => abstractRestaurant.uid == marker.markerId);
         final NaverMapController naverMapController = await naverMapCompleter.future;
@@ -153,11 +147,12 @@ class NaverMapPageController extends GetxService {
           ),
         );
       });
-      print(888);
       markers.add(customMarker);
-      print(999);
     }
-    print(markers.length);
+    print('================================================================');
+    print('총 abstract 개수: ${abstractRestaurants.length}');
+    print('총 marker 개수: ${markers.length}');
+    print('================================================================');
   }
 
   // fetch 30개 & process 10개
@@ -169,41 +164,10 @@ class NaverMapPageController extends GetxService {
     if (_FilterPageController.FilterSelected.value.contains(true) || _SearchPageController.searchedWord.value != '') {
 
       List filter = read_all();
-      print(111);
       Network network = Network(filter, _SearchPageController.searchedWord);
-      print(222);
       rawAbstractRestaurantData = await network.getJsonData(); // 30개 받기
-      print(333);
       print('================================================================');
-      // print(rawAbstractRestaurantData.length);
-      // for (String i in [
-      //     'uid'
-      //     ,'store_name'
-      //     ,'road_address'
-      //     ,'jibun_address'
-      //     ,'latitude'
-      //     ,'longitude'
-      //     ,'call'
-      //     ,'category'
-      //     ,'main_category'
-      //     ,'open'
-      //     ,'opening_hour'
-      //     ,'opening_breaktime'
-      //     ,'opening_lastorder'
-      //     ,'theme'
-      //     ,'service'
-      //     ,'menu'
-      //     ,'store_image'
-      //     ,'kakao_star'
-      //     ,'kakao_cnt'
-      //     ,'kakao_review_url'
-      //     ,'google_star'
-      //     ,'google_cnt'
-      //     ,'google_review_url'
-      //     ,'naver_star'
-      //     ,'naver_cnt'
-      //     ,'naver_review_url'])
-      //   print('${i} : ${rawRestaurantData[0][i].runtimeType}');
+      print('총 raw 데이터: ${rawAbstractRestaurantData.length}개');
       print('================================================================');
 
       // rawRestaurantData = {
@@ -1062,19 +1026,25 @@ class NaverMapPageController extends GetxService {
     }
   }
 
+  // 리스트 페이지 data loading
+  RxBool detailRestaurantDataLoading = false.obs;
   Future<void> processDetailRestaurantData() async {
+
     detailRestaurantDataLoading.value = true;
+
+    detailRestaurants.value = [];
 
     final int currentAbstractRestaurantsLength = abstractRestaurants.length;
     final int currentDetailRestaurantsLength = detailRestaurants.length;
+
     if (currentDetailRestaurantsLength == 0) {
       for (int i=0 ; i<currentAbstractRestaurantsLength; i++) {
         print(i);
-        uid_Network uid_network = uid_Network(abstractRestaurants[i].uid);
+        uid_Network uid_network = await uid_Network(abstractRestaurants[i].uid);
         var uid_store = await uid_network.getJsonData();
 
         final Position currentPosition = await Geolocator.getCurrentPosition();
-        DetailNaverMapPageRestaurant detailRestaurant = DetailNaverMapPageRestaurant(
+        DetailNaverMapPageRestaurant detailRestaurant = await DetailNaverMapPageRestaurant(
           uid: uid_store['uid'] as String, // 음식점 고유 번호
           store_name: uid_store['store_name'] as String, // 음식점 이름
           jibun_address: uid_store['jibun_address'] as String, // 음식점 주소
@@ -1103,6 +1073,8 @@ class NaverMapPageController extends GetxService {
         );
 
         detailRestaurants.add(detailRestaurant);
+
+        print('detailRestaurants.length: ${detailRestaurants.length}개');
       }
     }
     else {
@@ -1143,6 +1115,10 @@ class NaverMapPageController extends GetxService {
         detailRestaurants.add(detailRestaurant);
       }
     }
+
+    print('================================================================');
+    print('총 detail 데이터: ${detailRestaurants.length}개');
+    print('================================================================');
 
     detailRestaurantDataLoading.value = false;
   }

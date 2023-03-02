@@ -292,10 +292,7 @@ class _ListviewPageState extends State<ListviewPage> {
           itemBuilder: (context, index){
 
             return ExpandTapWidget(
-              onTap: () async {
-                uid_Network uid_network = uid_Network(restaurantList[index].uid);
-                var uid_store = await uid_network.getJsonData();
-                print(uid_store);
+              onTap: () {
                 Get.to(() => DetailPage(), arguments: restaurantList[index]);
               },
               tapPadding: EdgeInsets.all(25),

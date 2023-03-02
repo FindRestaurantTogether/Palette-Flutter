@@ -1,25 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
+import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_abstract_model.dart';
 import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
+import 'package:myapp/page/map/navermap/utils.dart';
+import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class SelectFolderPage extends StatefulWidget {
 
-  final DetailNaverMapPageRestaurant selectedRestaurant;
+  final DetailNaverMapPageRestaurant selectedDetailRestaurant;
 
-  SelectFolderPage({Key? key, required this.selectedRestaurant}) : super(key: key);
+  SelectFolderPage({Key? key, required this.selectedDetailRestaurant}) : super(key: key);
 
   @override
-  State<SelectFolderPage> createState() => _SelectFolderPageState(selectedRestaurant: selectedRestaurant);
+  State<SelectFolderPage> createState() => _SelectFolderPageState(selectedDetailRestaurant: selectedDetailRestaurant);
 }
 
 class _SelectFolderPageState extends State<SelectFolderPage> {
 
-  final DetailNaverMapPageRestaurant selectedRestaurant;
-  _SelectFolderPageState({required this.selectedRestaurant});
+  final DetailNaverMapPageRestaurant selectedDetailRestaurant;
+  _SelectFolderPageState({required this.selectedDetailRestaurant});
 
   final _FavoritePageController = Get.put(FavoritePageController());
   final _TextEditingController = TextEditingController();
@@ -56,7 +60,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
             child: Column(
               children: [
                 Text(
-                  '${selectedRestaurant.store_name}',
+                  '${selectedDetailRestaurant.store_name}',
                   style: TextStyle(
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.bold,
@@ -280,38 +284,21 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                   width: width * 0.8 - 20,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: () {
-                      _FavoritePageController.favoriteRestaurantUids.add(selectedRestaurant.uid);
+                    onPressed: () async {
+                      _FavoritePageController.favoriteRestaurantUids.add(selectedDetailRestaurant.uid);
 
                       int selectedIndex = favoriteFolderIsChecked.indexWhere((e) => e == true);
                       FavoriteModel? selectedFavoriteFolder = favoriteBox.getAt(selectedIndex);
                       selectedFavoriteFolder!.favoriteFolderRestaurantList.add(
                         RestaurantModel(
-                            uid: selectedRestaurant.uid,
-                            store_name: selectedRestaurant.store_name,
-                            jibun_address: selectedRestaurant.jibun_address,
-                            latitude: selectedRestaurant.position.latitude,
-                            longitude: selectedRestaurant.position.longitude,
-                            call: selectedRestaurant.call,
-                            category: selectedRestaurant.category,
-                            main_category: selectedRestaurant.main_category,
-                            open: selectedRestaurant.open,
-                            opening_hour: selectedRestaurant.opening_hour,
-                            opening_breaktime: selectedRestaurant.opening_breaktime,
-                            opening_lastorder: selectedRestaurant.opening_lastorder,
-                            theme: selectedRestaurant.theme,
-                            service: selectedRestaurant.service,
-                            menu: selectedRestaurant.menu,
-                            store_image: selectedRestaurant.store_image,
-                            naver_star: selectedRestaurant.naver_star,
-                            naver_cnt: selectedRestaurant.naver_cnt,
-                            naver_review_url: selectedRestaurant.naver_review_url,
-                            google_star: selectedRestaurant.google_star,
-                            google_cnt: selectedRestaurant.google_cnt,
-                            google_review_url: selectedRestaurant.google_review_url,
-                            kakao_star: selectedRestaurant.kakao_star,
-                            kakao_cnt: selectedRestaurant.kakao_cnt,
-                            kakao_review_url: selectedRestaurant.kakao_review_url
+                            uid: selectedDetailRestaurant.uid,
+                            store_name: selectedDetailRestaurant.store_name,
+                            jibun_address: selectedDetailRestaurant.jibun_address,
+                            category: selectedDetailRestaurant.category,
+                            open: selectedDetailRestaurant.open,
+                            store_image: selectedDetailRestaurant.store_image,
+                            naver_star: selectedDetailRestaurant.naver_star,
+                            naver_cnt: selectedDetailRestaurant.naver_cnt,
                         )
                       );
                       selectedFavoriteFolder.save();

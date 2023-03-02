@@ -45,7 +45,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
     return Container(
       padding: EdgeInsets.only(top: 22, bottom: 22, left: 28, right: 28),
       width: width,
-      height: 212,
+      height: 225,
       decoration: BoxDecoration(
           shape: BoxShape.rectangle,
           color: Colors.white,
@@ -57,7 +57,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Container(
-                padding: EdgeInsets.only(bottom: 6),
+                height: 36,
+                padding: EdgeInsets.only(bottom: 5),
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(color: Colors.black12),
@@ -66,11 +67,10 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                 child: Row(
                   children: [
                     Container(
-                      height: 24,
                       alignment: Alignment.bottomCenter,
                       child: Text(
                         '${selectedDetailRestaurant.store_name}',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                     ), // 타로야
                     SizedBox(
@@ -136,7 +136,6 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                       width: 6,
                     ),
                     Container(
-                      height: 24,
                       alignment: Alignment.bottomRight,
                       child: Row(
                         children: [
@@ -163,8 +162,8 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
               ), // 음식점 이름 및 분류
               Obx(() {
                 return SizedBox(
-                    width: 17,
-                    height: 20,
+                    width: 19.5,
+                    height: 24,
                     child: _FavoritePageController.favoriteRestaurantUids.contains(selectedDetailRestaurant.uid)
                         ? IconButton(
                       padding: EdgeInsets.all(0.0),
@@ -192,7 +191,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                               context: context,
                               barrierDismissible: false,
                               builder: (BuildContext context) {
-                                return SelectFolderPage(selectedRestaurant: selectedDetailRestaurant);
+                                return SelectFolderPage(selectedDetailRestaurant: selectedDetailRestaurant);
                               }
                           );
                         });

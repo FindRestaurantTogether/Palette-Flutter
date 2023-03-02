@@ -133,8 +133,8 @@ class _DetailPageState extends State<DetailPage> {
                                       children: [
                                         Obx(() {
                                           return SizedBox(
-                                              width: 17,
-                                              height: 21,
+                                              width: 19.5,
+                                              height: 24,
                                               child: _FavoritePageController.favoriteRestaurantUids.contains(selectedDetailRestaurant.uid)
                                                   ? IconButton(
                                                 padding: EdgeInsets.all(0.0),
@@ -160,7 +160,7 @@ class _DetailPageState extends State<DetailPage> {
                                                       context: context,
                                                       barrierDismissible: false,
                                                       builder: (BuildContext context) {
-                                                        return SelectFolderPage(selectedRestaurant: selectedDetailRestaurant);
+                                                        return SelectFolderPage(selectedDetailRestaurant: selectedDetailRestaurant);
                                                       }
                                                   );
                                                 },

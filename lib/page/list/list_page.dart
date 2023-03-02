@@ -209,7 +209,7 @@ class _ListPageState extends State<ListPage> {
                     Row(
                       children: [
                         Container(
-                          width: 72,
+                          width: 75,
                           height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -333,9 +333,11 @@ class _ListPageState extends State<ListPage> {
             height: 4,
             color: Color(0xffeeeeee),
           ), // 회색 바
-          _NaverMapPageController.detailRestaurantDataLoading.value
-              ? Expanded(child: Center(child: CircularProgressIndicator(color: Color(0xfff42957))))
-              : ListviewPage(), // 음식점 리스트
+          Obx(() {
+            return _NaverMapPageController.detailRestaurantDataLoading.value
+                ? Expanded(child: Center(child: CircularProgressIndicator(color: Color(0xfff42957))))
+                : ListviewPage();
+          }) // 음식점 리스트
         ],
       ),
     );
