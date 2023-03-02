@@ -499,7 +499,7 @@ class _ListviewPageState extends State<ListviewPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
-                              image: AssetImage(restaurantList[index].store_image[0]),
+                              image: NetworkImage(restaurantList[index].store_image[0]),
                               fit: BoxFit.fill
                           ),
                         ),

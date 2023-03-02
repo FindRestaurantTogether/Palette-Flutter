@@ -1318,7 +1318,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
                                             image: DecorationImage(
-                                                image: AssetImage(favoriteRestaurant.store_image[0]),
+                                                image: NetworkImage(favoriteRestaurant.store_image[0]),
                                                 fit: BoxFit.fill
                                             ),
                                           ),
@@ -1336,8 +1336,8 @@ class _FavoritePageState extends State<FavoritePage> {
                     ),
                     if (_FavoritePageController.checkEdit.value == true) ... [
                       Positioned(
-                        left: 32,
-                        bottom: 20,
+                        left: (width - 300)/2,
+                        bottom: 25,
                         child: Container(
                           width: 300,
                           height: 50,
@@ -1385,8 +1385,8 @@ class _FavoritePageState extends State<FavoritePage> {
                     ]
                     else if (_FavoritePageController.checkShare.value == true) ... [
                       Positioned(
-                        left: 32,
-                        bottom: 20,
+                        left: (width - 300)/2,
+                        bottom: 25,
                         child: Container(
                           width: 300,
                           height: 50,

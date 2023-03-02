@@ -85,7 +85,7 @@ class _DetailPageState extends State<DetailPage> {
                     height: height * 0.32,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage(selectedDetailRestaurant.store_image[0]),
+                          image: NetworkImage(selectedDetailRestaurant.store_image[0]),
                           fit: BoxFit.fill
                       ),
                     ),

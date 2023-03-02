@@ -102,7 +102,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
 
     Widget hotPlaceFilter (int index) {
       return Container(
-        width: 100,
+        width: 115,
         height: index == 3 || index == 9 || index == 14 ? 40 : 20,
         child: Row(
           children: [
@@ -149,8 +149,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
           Obx(() {
             return Center(
               child: Container(
-                width: width * 0.85,
-                height: 581,
+                width: 350,
                 padding: EdgeInsets.only(top: 12, bottom: 25, left: 16, right: 16),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -242,7 +241,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                               ], // 도심권
                             ),
                           ), // 도심권 필터들
-                          Divider(height: 1,thickness: 1),
+                          Divider(height: 1,thickness: 1, endIndent: 10),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
                             child: Row(
@@ -283,7 +282,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                               ],
                             ),
                           ), // 동북권 필터들
-                          Divider(height: 1,thickness: 1),
+                          Divider(height: 1,thickness: 1, endIndent: 10),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
                             child: Row(
@@ -337,7 +336,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                               ], // 도심권
                             ),
                           ), // 동남권 필터들
-                          Divider(height: 1,thickness: 1),
+                          Divider(height: 1,thickness: 1, endIndent: 10),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
                             child: Row(
@@ -391,7 +390,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                               ], // 도심권
                             ),
                           ), // 서남권 필터들
-                          Divider(height: 1,thickness: 1),
+                          Divider(height: 1,thickness: 1, endIndent: 10),
                           Padding(
                             padding: EdgeInsets.only(top: 15),
                             child: Row(
@@ -434,7 +433,7 @@ class _HotPlacePageState extends State<HotPlacePage> {
                         ],
                       ),
                     ), // 핕러들
-                    SizedBox(height: 10),
+                    SizedBox(height: 15),
                     Container(
                       width: width * 0.85 - 32,
                       height: 50,

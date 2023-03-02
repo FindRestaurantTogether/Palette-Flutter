@@ -1292,7 +1292,7 @@ class _FolderPageState extends State<FolderPage> {
                                           decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(10),
                                             image: DecorationImage(
-                                                image: AssetImage(favoriteRestaurant.store_image[0]),
+                                                image: NetworkImage(favoriteRestaurant.store_image[0]),
                                                 fit: BoxFit.fill
                                             ),
                                           ),
