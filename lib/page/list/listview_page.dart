@@ -292,7 +292,8 @@ class _ListviewPageState extends State<ListviewPage> {
           itemBuilder: (context, index){
             return ExpandTapWidget(
               onTap: () {
-                Get.to(() => DetailPage(), arguments: restaurantList[index]);
+                _NaverMapPageController.selectedDetailRestaurant.value = restaurantList[index];
+                Get.to(() => DetailPage());
               },
               tapPadding: EdgeInsets.all(25),
               child: Container(

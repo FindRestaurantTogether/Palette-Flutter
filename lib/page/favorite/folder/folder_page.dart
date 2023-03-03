@@ -10,6 +10,7 @@ import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/folder_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -25,6 +26,7 @@ class FolderPage extends StatefulWidget {
 
 class _FolderPageState extends State<FolderPage> {
 
+  final _NaverMapPageController = Get.put(NaverMapPageController());
   final _FavoritePageController = Get.put(FavoritePageController());
   final _FolderPageController = Get.put(FolderPageController());
   // final _TextEditingController = TextEditingController();
@@ -951,7 +953,8 @@ class _FolderPageState extends State<FolderPage> {
                                         kakao_review_url: uid_store['kakao_review_url'] as String,
                                       );
 
-                                      Get.to(() => DetailPage(), arguments: detailRestaurant);
+                                      _NaverMapPageController.selectedDetailRestaurant.value = detailRestaurant;
+                                      Get.to(() => DetailPage());
                                     }
                                   },
                                   tapPadding: EdgeInsets.all(25),

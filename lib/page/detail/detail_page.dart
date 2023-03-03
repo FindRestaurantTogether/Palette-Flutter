@@ -6,6 +6,7 @@ import 'package:myapp/page/detail/menu/menu_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/select_folder_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,8 +20,7 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
 
   final _FavoritePageController = Get.put(FavoritePageController());
-
-  final DetailNaverMapPageRestaurant selectedDetailRestaurant = Get.arguments;
+  final _NaverMapPageController = Get.put(NaverMapPageController());
 
   List<bool> ToggleSelected  = [false, false, false];
 
@@ -36,17 +36,17 @@ class _DetailPageState extends State<DetailPage> {
   @override
   Widget build(BuildContext context) {
 
-    final menuName = selectedDetailRestaurant.menu.keys.toList();
-    final menuPrice = selectedDetailRestaurant.menu.values.toList();
+    final menuName = _NaverMapPageController.selectedDetailRestaurant.value.menu.keys.toList();
+    final menuPrice = _NaverMapPageController.selectedDetailRestaurant.value.menu.values.toList();
 
-    final openDay = selectedDetailRestaurant.opening_hour.keys.toList();
-    final openHour = selectedDetailRestaurant.opening_hour.values.toList();
+    final openDay = _NaverMapPageController.selectedDetailRestaurant.value.opening_hour.keys.toList();
+    final openHour = _NaverMapPageController.selectedDetailRestaurant.value.opening_hour.values.toList();
 
-    final breaktimeDay = selectedDetailRestaurant.opening_breaktime.keys.toList();
-    final breaktimeHour = selectedDetailRestaurant.opening_breaktime.values.toList();
+    final breaktimeDay = _NaverMapPageController.selectedDetailRestaurant.value.opening_breaktime.keys.toList();
+    final breaktimeHour = _NaverMapPageController.selectedDetailRestaurant.value.opening_breaktime.values.toList();
 
-    final lastorderDay = selectedDetailRestaurant.opening_lastorder.keys.toList();
-    final lastorderHour = selectedDetailRestaurant.opening_lastorder.values.toList();
+    final lastorderDay = _NaverMapPageController.selectedDetailRestaurant.value.opening_lastorder.keys.toList();
+    final lastorderHour = _NaverMapPageController.selectedDetailRestaurant.value.opening_lastorder.values.toList();
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
@@ -67,7 +67,7 @@ class _DetailPageState extends State<DetailPage> {
         body: SingleChildScrollView(
           child: Stack(
             children: [
-              if (selectedDetailRestaurant.store_image.length != 0)
+              if (_NaverMapPageController.selectedDetailRestaurant.value.store_image.length != 0)
                 Positioned(
                 top: 0,
                 right: 0,
@@ -85,7 +85,7 @@ class _DetailPageState extends State<DetailPage> {
                     height: height * 0.32,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image: NetworkImage(selectedDetailRestaurant.store_image[0]),
+                          image: NetworkImage(_NaverMapPageController.selectedDetailRestaurant.value.store_image[0]),
                           fit: BoxFit.fill
                       ),
                     ),
@@ -121,7 +121,7 @@ class _DetailPageState extends State<DetailPage> {
                                   children: [
                                     SizedBox(
                                       width: 27,
-                                      height: 34,
+                                      height: 36,
                                       child: IconButton(
                                         onPressed: () {
                                           Get.back();
@@ -129,23 +129,23 @@ class _DetailPageState extends State<DetailPage> {
                                         icon: Image.asset('assets/button_image/back_button.png'),
                                       ),
                                     ), // 뒤로가기 버튼
-                                    Row(
-                                      children: [
-                                        Obx(() {
-                                          return SizedBox(
+                                    Obx(() {
+                                      return Row(
+                                        children: [
+                                          SizedBox(
                                               width: 19.5,
-                                              height: 24,
-                                              child: _FavoritePageController.favoriteRestaurantUids.contains(selectedDetailRestaurant.uid)
+                                              height: 22,
+                                              child: _FavoritePageController.favoriteRestaurantUids.contains(_NaverMapPageController.selectedDetailRestaurant.value.uid)
                                                   ? IconButton(
                                                 padding: EdgeInsets.all(0.0),
                                                 onPressed: (){
-                                                  _FavoritePageController.favoriteRestaurantUids.remove(selectedDetailRestaurant.uid);
+                                                  _FavoritePageController.favoriteRestaurantUids.remove(_NaverMapPageController.selectedDetailRestaurant.value.uid);
 
                                                   Box<FavoriteModel> favoriteBox =  Hive.box<FavoriteModel>('favorite');
                                                   List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
                                                   for (int i=0 ; i<favoriteFolders.length ; i++) {
                                                     for (int j=0 ; j<favoriteFolders[i].favoriteFolderRestaurantList.length ; j++) {
-                                                      if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == selectedDetailRestaurant.uid) {
+                                                      if (favoriteFolders[i].favoriteFolderRestaurantList[j].uid == _NaverMapPageController.selectedDetailRestaurant.value.uid) {
                                                         favoriteFolders[i].favoriteFolderRestaurantList.removeAt(j);
                                                       }
                                                     }
@@ -160,17 +160,17 @@ class _DetailPageState extends State<DetailPage> {
                                                       context: context,
                                                       barrierDismissible: false,
                                                       builder: (BuildContext context) {
-                                                        return SelectFolderPage(selectedDetailRestaurant: selectedDetailRestaurant);
+                                                        return SelectFolderPage(selectedDetailRestaurant: _NaverMapPageController.selectedDetailRestaurant.value);
                                                       }
                                                   );
                                                 },
                                                 icon: Image.asset('assets/button_image/unfavorite_button.png'),
                                               )
-                                          );
-                                        }),
-                                        SizedBox(width: 6)
-                                      ],
-                                    ) // 즐겨찾기 버튼
+                                          ),
+                                          SizedBox(width: 5)
+                                        ],
+                                      );
+                                    }), // 즐겨찾기 버튼
                                   ],
                                 ), // 뒤로가기 버튼, 즐겨찾기 버튼
                                 Container(
@@ -180,16 +180,16 @@ class _DetailPageState extends State<DetailPage> {
                                     children: [
                                       Container(
                                         child: Text(
-                                          '   ${selectedDetailRestaurant.store_name}',
+                                          '   ${_NaverMapPageController.selectedDetailRestaurant.value.store_name}',
                                           style: TextStyle(
-                                              fontSize: 22,
+                                              fontSize: 16,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ), // 음식점 이름
                                       SizedBox(
                                         width: 3,
                                       ),
-                                      if (selectedDetailRestaurant.open == 'open')
+                                      if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'open')
                                         Container(
                                           height: 32,
                                           child: Align(
@@ -203,7 +203,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                         )
-                                      else if (selectedDetailRestaurant.open == 'close')
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'close')
                                         Container(
                                           height: 32,
                                           child: Align(
@@ -217,7 +217,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                         )
-                                      else if (selectedDetailRestaurant.open == 'breaktime')
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'breaktime')
                                         Container(
                                             height: 32,
                                             child: Align(
@@ -231,7 +231,7 @@ class _DetailPageState extends State<DetailPage> {
                                               ),
                                             ),
                                           )
-                                      else if (selectedDetailRestaurant.open == 'null')
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'null')
                                         Container(
                                               height: 32,
                                               child: Align(
@@ -263,7 +263,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 SizedBox(width: 2),
                                 Text(
-                                  ' ${selectedDetailRestaurant.naver_star}(${selectedDetailRestaurant.naver_cnt})',
+                                  ' ${_NaverMapPageController.selectedDetailRestaurant.value.naver_star}(${_NaverMapPageController.selectedDetailRestaurant.value.naver_cnt})',
                                   style:
                                   TextStyle(fontSize: 15),
                                 ),
@@ -273,15 +273,15 @@ class _DetailPageState extends State<DetailPage> {
                                   style: TextStyle(fontSize: 15, color: Colors.black87),
                                 ),
                                 SizedBox(width: 6),
-                                for (int i = 0; i < selectedDetailRestaurant.category.length; i++)
+                                for (int i = 0; i < _NaverMapPageController.selectedDetailRestaurant.value.category.length; i++)
                                   if (i == 0)
                                     Text(
-                                      '${selectedDetailRestaurant.category[i]}',
+                                      '${_NaverMapPageController.selectedDetailRestaurant.value.category[i]}',
                                       style: TextStyle(fontSize: 15),
                                     )
                                   else
                                     Text(
-                                      ',${selectedDetailRestaurant.category[i]}',
+                                      ',${_NaverMapPageController.selectedDetailRestaurant.value.category[i]}',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                 SizedBox(width: 3),
@@ -292,9 +292,9 @@ class _DetailPageState extends State<DetailPage> {
                           Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                for (int i = 0; i < selectedDetailRestaurant.theme.length; i++)
+                                for (int i = 0; i < _NaverMapPageController.selectedDetailRestaurant.value.theme.length; i++)
                                   Text(
-                                    '#${selectedDetailRestaurant.theme[i]} ',
+                                    '#${_NaverMapPageController.selectedDetailRestaurant.value.theme[i]} ',
                                     style: TextStyle(fontSize: 12, color: Color(0xff57dde0)),
                                   )
                               ]
@@ -323,7 +323,7 @@ class _DetailPageState extends State<DetailPage> {
                                         size: 16,
                                       ),
                                       SizedBox(width: 6), // 빈 공간
-                                      if (selectedDetailRestaurant.open == 'open') ... [
+                                      if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'open') ... [
                                         Text(
                                           '영업중',
                                           style: TextStyle(
@@ -333,7 +333,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ) // 영업시간
                                       ]
-                                      else if (selectedDetailRestaurant.open == 'close') ... [
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'close') ... [
                                         Text(
                                           '영업종료',
                                           style: TextStyle(
@@ -343,7 +343,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ),
                                       ]
-                                      else if (selectedDetailRestaurant.open == 'breaktime') ... [
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'breaktime') ... [
                                           Text(
                                             '브레이크타임',
                                             style: TextStyle(
@@ -353,7 +353,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                       ]
-                                      else if (selectedDetailRestaurant.open == 'null') ... [
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'null') ... [
                                           Text(
                                             '정보없음',
                                             style: TextStyle(
@@ -379,7 +379,7 @@ class _DetailPageState extends State<DetailPage> {
                                     ],
                                   ),
                                 ),
-                                if (selectedDetailRestaurant.open != 'null')// 영업시간
+                                if (_NaverMapPageController.selectedDetailRestaurant.value.open != 'null')// 영업시간
                                   moreOpenInformation
                                       ? Container(
                                           width: width * 0.67,
@@ -472,7 +472,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                       SizedBox(width: 5),
                                       Text(
-                                          '${selectedDetailRestaurant.jibun_address}',
+                                          '${_NaverMapPageController.selectedDetailRestaurant.value.jibun_address}',
                                           style: TextStyle(fontSize: 12)
                                       ),
                                     ],
@@ -491,15 +491,15 @@ class _DetailPageState extends State<DetailPage> {
                                       SizedBox(width: 6),
                                       Row(
                                           children: [
-                                            for (int i = 0; i < selectedDetailRestaurant.service.length; i++)
-                                              if (i == selectedDetailRestaurant.service.length - 1)
+                                            for (int i = 0; i < _NaverMapPageController.selectedDetailRestaurant.value.service.length; i++)
+                                              if (i == _NaverMapPageController.selectedDetailRestaurant.value.service.length - 1)
                                                 Text(
-                                                  '${selectedDetailRestaurant.service[i]}',
+                                                  '${_NaverMapPageController.selectedDetailRestaurant.value.service[i]}',
                                                   style: TextStyle(fontSize: 12, color: Colors.black87),
                                                 )
                                               else
                                                 Text(
-                                                  '${selectedDetailRestaurant.service[i]}, ',
+                                                  '${_NaverMapPageController.selectedDetailRestaurant.value.service[i]}, ',
                                                   style: TextStyle(fontSize: 12, color: Colors.black87),
                                                 )
                                           ]
@@ -562,11 +562,11 @@ class _DetailPageState extends State<DetailPage> {
                                           }
 
                                           if (ToggleSelected[0]) {
-                                            launch("tel://" + selectedDetailRestaurant.call);
+                                            launch("tel://" + _NaverMapPageController.selectedDetailRestaurant.value.call);
                                           } else if (ToggleSelected[1]) {
                                             final FeedTemplate defaultFeed = FeedTemplate(
                                               content: Content(
-                                                title: '${selectedDetailRestaurant.store_name}',
+                                                title: '${_NaverMapPageController.selectedDetailRestaurant.value.store_name}',
                                                 description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
                                                 imageUrl: Uri.parse(
                                                     'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
@@ -655,7 +655,7 @@ class _DetailPageState extends State<DetailPage> {
                                                             children: [
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  KakaoMapUtils.OpenKakaoMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
+                                                                  KakaoMapUtils.OpenKakaoMap(_NaverMapPageController.selectedDetailRestaurant.value.jibun_address + ' ' + _NaverMapPageController.selectedDetailRestaurant.value.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -675,7 +675,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  GoogleMapUtils.OpenGoogleMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
+                                                                  GoogleMapUtils.OpenGoogleMap(_NaverMapPageController.selectedDetailRestaurant.value.jibun_address + ' ' + _NaverMapPageController.selectedDetailRestaurant.value.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -695,7 +695,7 @@ class _DetailPageState extends State<DetailPage> {
                                                               ),
                                                               GestureDetector(
                                                                 onTap: () {
-                                                                  NaverMapUtils.OpenNaverMap(selectedDetailRestaurant.jibun_address + ' ' + selectedDetailRestaurant.store_name);
+                                                                  NaverMapUtils.OpenNaverMap(_NaverMapPageController.selectedDetailRestaurant.value.jibun_address + ' ' + _NaverMapPageController.selectedDetailRestaurant.value.store_name);
                                                                 },
                                                                 child: Container(
                                                                   child: Column(
@@ -754,7 +754,7 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                             GestureDetector(
                               onTap: () {
-                                Get.to(() => MenuPage(), arguments: selectedDetailRestaurant);
+                                Get.to(() => MenuPage(), arguments: _NaverMapPageController.selectedDetailRestaurant);
                               },
                               child: Row(
                                 children: [
@@ -782,7 +782,7 @@ class _DetailPageState extends State<DetailPage> {
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             physics: BouncingScrollPhysics(),
-                            itemCount: selectedDetailRestaurant.menu.length,
+                            itemCount: _NaverMapPageController.selectedDetailRestaurant.value.menu.length,
                             itemBuilder: (BuildContext context, int index) {
                               return  Row(
                                 children: [
@@ -807,7 +807,7 @@ class _DetailPageState extends State<DetailPage> {
                                       ),
                                     ],
                                   ),
-                                  if (index != selectedDetailRestaurant.menu.length - 1)
+                                  if (index != _NaverMapPageController.selectedDetailRestaurant.value.menu.length - 1)
                                     VerticalDivider(width: 30, color: Colors.black45)
                                 ],
                               );
@@ -876,36 +876,44 @@ class _DetailPageState extends State<DetailPage> {
                                     ), // 아이콘, 네이버 리뷰
                                     Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xfff42957),
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              selectedDetailRestaurant.naver_star.toString(),
-                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Color(0xfff42957),
+                                                size: 15,
+                                              ),
+                                              SizedBox(width: 4),
+                                              Text(
+                                                _NaverMapPageController.selectedDetailRestaurant.value.naver_star.toString(),
+                                                style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                              ),
+                                            ],
+                                          ),
                                         ), // 별점
                                         SizedBox(
                                             width: 15
                                         ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '${selectedDetailRestaurant.naver_cnt.toString()}건',
-                                              style: TextStyle(color: Colors.grey, fontSize: 12),
-                                            ),
-                                            SizedBox(width: 4),
-                                            Icon(
-                                              Icons.arrow_forward_ios,
-                                              color: Colors.grey,
-                                              size: 14,
-                                            )
-                                          ]
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                '${_NaverMapPageController.selectedDetailRestaurant.value.naver_cnt.toString()}건',
+                                                style: TextStyle(color: Colors.grey, fontSize: 12),
+                                              ),
+                                              SizedBox(width: 4),
+                                              Icon(
+                                                Icons.arrow_forward_ios,
+                                                color: Colors.grey,
+                                                size: 14,
+                                              )
+                                            ]
+                                          ),
                                         ), // 리뷰 개수
                                         SizedBox(width: 7)
                                       ],
@@ -959,36 +967,44 @@ class _DetailPageState extends State<DetailPage> {
                                     ), // 아이콘, 구글 리뷰
                                     Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xfff42957),
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              selectedDetailRestaurant.google_star.toString(),
-                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Color(0xfff42957),
+                                                size: 15,
+                                              ),
+                                              SizedBox(width: 4),
+                                              Text(
+                                                _NaverMapPageController.selectedDetailRestaurant.value.google_star.toString(),
+                                                style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                              ),
+                                            ],
+                                          ),
                                         ), // 별점
                                         SizedBox(
                                             width: 15
                                         ),
-                                        Row(
-                                            children: [
-                                              Text(
-                                                '${selectedDetailRestaurant.google_cnt.toString()}건',
-                                                style: TextStyle(color: Colors.grey, fontSize: 12),
-                                              ),
-                                              SizedBox(width: 4),
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                color: Colors.grey,
-                                                size: 14,
-                                              )
-                                            ]
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  '${_NaverMapPageController.selectedDetailRestaurant.value.google_cnt.toString()}건',
+                                                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                ),
+                                                SizedBox(width: 4),
+                                                Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: Colors.grey,
+                                                  size: 14,
+                                                )
+                                              ]
+                                          ),
                                         ), // 리뷰 개수
                                         SizedBox(width: 7)
                                       ],
@@ -1042,36 +1058,44 @@ class _DetailPageState extends State<DetailPage> {
                                     ), // 아이콘, 카카오 리뷰
                                     Row(
                                       children: [
-                                        Row(
-                                          children: [
-                                            Icon(
-                                              Icons.star,
-                                              color: Color(0xfff42957),
-                                              size: 15,
-                                            ),
-                                            SizedBox(width: 4),
-                                            Text(
-                                              selectedDetailRestaurant.kakao_star.toString(),
-                                              style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
-                                            ),
-                                          ],
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              Icon(
+                                                Icons.star,
+                                                color: Color(0xfff42957),
+                                                size: 15,
+                                              ),
+                                              SizedBox(width: 4),
+                                              Text(
+                                                _NaverMapPageController.selectedDetailRestaurant.value.kakao_star.toString(),
+                                                style: TextStyle(fontSize: 13, color: Color(0xfff42957)),
+                                              ),
+                                            ],
+                                          ),
                                         ), // 별점
                                         SizedBox(
                                             width: 15
                                         ),
-                                        Row(
-                                            children: [
-                                              Text(
-                                                '${selectedDetailRestaurant.kakao_cnt.toString()}건',
-                                                style: TextStyle(color: Colors.grey, fontSize: 12),
-                                              ),
-                                              SizedBox(width: 4),
-                                              Icon(
-                                                Icons.arrow_forward_ios,
-                                                color: Colors.grey,
-                                                size: 14,
-                                              )
-                                            ]
+                                        SizedBox(
+                                          width: 50,
+                                          child: Row(
+                                              mainAxisAlignment: MainAxisAlignment.end,
+                                              children: [
+                                                Text(
+                                                  '${_NaverMapPageController.selectedDetailRestaurant.value.kakao_cnt.toString()}건',
+                                                  style: TextStyle(color: Colors.grey, fontSize: 12),
+                                                ),
+                                                SizedBox(width: 4),
+                                                Icon(
+                                                  Icons.arrow_forward_ios,
+                                                  color: Colors.grey,
+                                                  size: 14,
+                                                )
+                                              ]
+                                          ),
                                         ), // 리뷰 개수
                                         SizedBox(width: 7)
                                       ],

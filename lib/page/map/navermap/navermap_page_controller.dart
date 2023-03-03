@@ -29,6 +29,35 @@ class NaverMapPageController extends GetxService {
 
   RxBool getMoreAbstractRestaurantData = false.obs;
 
+  var selectedDetailRestaurant = DetailNaverMapPageRestaurant(
+      uid: '',
+      main_category: '',
+      store_image: [],
+      store_name: '',
+      open: '',
+      opening_hour: {},
+      opening_breaktime: {},
+      opening_lastorder: {},
+      category: [],
+      distance: 0,
+      theme: [],
+      naver_star: 0,
+      naver_cnt: 0,
+      naver_review_url: '',
+      google_star: 0,
+      google_cnt: 0,
+      google_review_url: '',
+      kakao_star: 0,
+      kakao_cnt: 0,
+      kakao_review_url: '',
+      service: [],
+      jibun_address: '',
+      call: '',
+      position: LocationClass(longitude: 0.0, latitude: 0.0),
+      menu: {}
+
+  ).obs;
+
   // process 10개씩
   Future<void> processAbstractRestaurantData(context) async {
 
@@ -59,6 +88,59 @@ class NaverMapPageController extends GetxService {
         final AbstractNaverMapPageRestaurant selectedAbstractRestaurant = abstractRestaurants.firstWhere((AbstractNaverMapPageRestaurant abstractRestaurant) => abstractRestaurant.uid == marker.markerId);
         final NaverMapController naverMapController = await naverMapCompleter.future;
         await naverMapController.moveCamera(CameraUpdate.scrollTo(marker.position));
+
+        selectedDetailRestaurant.value = DetailNaverMapPageRestaurant(
+            uid: '',
+            main_category: '',
+            store_image: [],
+            store_name: '',
+            open: '',
+            opening_hour: {},
+            opening_breaktime: {},
+            opening_lastorder: {},
+            category: [],
+            distance: 0,
+            theme: [],
+            naver_star: 0,
+            naver_cnt: 0,
+            naver_review_url: '',
+            google_star: 0,
+            google_cnt: 0,
+            google_review_url: '',
+            kakao_star: 0,
+            kakao_cnt: 0,
+            kakao_review_url: '',
+            service: [],
+            jibun_address: '',
+            call: '',
+            position: LocationClass(longitude: 0.0, latitude: 0.0),
+            menu: {}
+
+        );
+
+        if (_MapPageController.bottomSheet == false) {
+          _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+        }
+
+        showBottomSheet(
+            context: context,
+            builder: (context) => GestureDetector(
+                onTap: () {
+                  Get.to(DetailPage());
+                },
+                onVerticalDragUpdate: (details) {
+                  int sensitivity = 3;
+                  if (details.delta.dy < -sensitivity) {
+                    Get.to(DetailPage());
+                  }
+                  if (details.delta.dy > sensitivity) {
+                    _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
+                    Get.back();
+                  }
+                },
+                child: BottomsheetPage()
+            )
+        );
 
         uid_Network uid_network = uid_Network(selectedAbstractRestaurant.uid);
         var uid_store = await uid_network.getJsonData();
@@ -95,7 +177,7 @@ class NaverMapPageController extends GetxService {
         print('==================');
 
         final Position currentPosition = await Geolocator.getCurrentPosition();
-        DetailNaverMapPageRestaurant selectedDetailRestaurant = DetailNaverMapPageRestaurant(
+        selectedDetailRestaurant.value = DetailNaverMapPageRestaurant(
           uid: uid_store['uid'] as String, // 음식점 고유 번호
           store_name: uid_store['store_name'] as String, // 음식점 이름
           jibun_address: uid_store['jibun_address'] as String, // 음식점 주소
@@ -123,29 +205,6 @@ class NaverMapPageController extends GetxService {
           kakao_review_url: uid_store['kakao_review_url'] as String,
         );
 
-        if (_MapPageController.bottomSheet == false) {
-          _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-        }
-
-        showBottomSheet(
-          context: context,
-          builder: (context) => GestureDetector(
-              onTap: () {
-                Get.to(DetailPage(), arguments: selectedDetailRestaurant);
-              },
-              onVerticalDragUpdate: (details) {
-                int sensitivity = 3;
-                if (details.delta.dy < -sensitivity) {
-                  Get.to(DetailPage(), arguments: selectedDetailRestaurant);
-                }
-                if (details.delta.dy > sensitivity) {
-                  _MapPageController.bottomSheet.value = !_MapPageController.bottomSheet.value;
-                  Get.back();
-                }
-              },
-              child: BottomsheetPage(selectedDetailRestaurant: selectedDetailRestaurant)
-          ),
-        );
       });
       markers.add(customMarker);
     }

@@ -69,7 +69,7 @@ class _NaverMapPageState extends State<NaverMapPage> {
               ),
               Positioned(
                 right: 20,
-                bottom: _MapPageController.bottomSheet.value ? 230 : 30,
+                bottom: _MapPageController.bottomSheet.value ? 250 : 30,
                 child: Column(
                   children: [
                     Container(
@@ -257,7 +257,6 @@ class _NaverMapPageState extends State<NaverMapPage> {
     }
   }
 }
-
 
 class LocationClass extends LatLng {
   final double latitude;

@@ -10,6 +10,7 @@ import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
 import 'package:myapp/page/favorite/folder/folder_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
 import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:naver_map_plugin/naver_map_plugin.dart';
@@ -31,6 +32,7 @@ class _FavoritePageState extends State<FavoritePage> {
   String? DropdownSelected = favoriteDropdownList.first;
   // String? DropdownSelected2 = DropdownList2.first;
 
+  final _NaverMapPageController = Get.put(NaverMapPageController());
   final _FavoritePageController = Get.put(FavoritePageController());
   final _TextEditingController = TextEditingController();
 
@@ -981,7 +983,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                         kakao_review_url: uid_store['kakao_review_url'] as String,
                                       );
 
-                                      Get.to(() => DetailPage(), arguments: detailRestaurant);
+                                      _NaverMapPageController.selectedDetailRestaurant.value = detailRestaurant;
+                                      Get.to(() => DetailPage());
                                     }
                                   },
                                   tapPadding: EdgeInsets.all(25),
