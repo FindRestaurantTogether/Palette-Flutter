@@ -1050,7 +1050,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                 ),
                                                               ),
                                                             )
-                                                          else if (favoriteRestaurant.open == 'close')
+                                                          else if (favoriteRestaurant.open == 'closed')
                                                             Container(
                                                               height: 20,
                                                               child: Align(

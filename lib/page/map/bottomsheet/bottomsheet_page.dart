@@ -90,7 +90,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                               ),
                             ),
                           )
-                        else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'close')
+                        else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'closed')
                           Container(
                             height: 20,
                             child: Align(

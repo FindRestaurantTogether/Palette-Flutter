@@ -203,7 +203,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                         )
-                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'close')
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'closed')
                                         Container(
                                           height: 32,
                                           child: Align(
@@ -333,7 +333,7 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                         ) // 영업시간
                                       ]
-                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'close') ... [
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'closed') ... [
                                         Text(
                                           '영업종료',
                                           style: TextStyle(

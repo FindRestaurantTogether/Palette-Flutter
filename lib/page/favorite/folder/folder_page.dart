@@ -1020,7 +1020,7 @@ class _FolderPageState extends State<FolderPage> {
                                                                 ),
                                                               ),
                                                             )
-                                                          else if (favoriteRestaurant.open == 'close')
+                                                          else if (favoriteRestaurant.open == 'closed')
                                                             Container(
                                                               height: 20,
                                                               child: Align(
