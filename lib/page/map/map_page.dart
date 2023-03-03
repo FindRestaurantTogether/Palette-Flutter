@@ -50,9 +50,9 @@ class _MapPageState extends State<MapPage> {
                   Obx(() {
                     return Row(
                       children: [
-                        SizedBox(width: width * 0.065),
+                        SizedBox(width: 30),
                         Container(
-                          width: width * 0.72,
+                          width: width - 115,
                           height: 43,
                           padding: EdgeInsets.only(left: 12, right: 11),
                           decoration: BoxDecoration(
@@ -160,7 +160,7 @@ class _MapPageState extends State<MapPage> {
                           icon: Image.asset('assets/button_image/hot_place_button.png'),
                         ),
                       ),
-                      SizedBox(width: width * 0.065),
+                      SizedBox(width: 30),
                     ],
                   ),
                 ],

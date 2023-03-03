@@ -46,7 +46,7 @@ class _FilterPageState extends State<FilterPage> {
         children: [
           Row(
             children: [
-              SizedBox(width: width * 0.035),
+              SizedBox(width: 19),
               Expanded(
                 child: Container(
                   height: 45,
