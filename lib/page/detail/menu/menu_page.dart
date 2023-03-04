@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
 
 class MenuPage extends StatelessWidget {
   MenuPage({Key? key}) : super(key: key);
 
-  final selectedRestaurant = Get.arguments;
-
   @override
   Widget build(BuildContext context) {
+
+    final _NaverMapPageController = Get.put(NaverMapPageController());
 
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    final menuName = selectedRestaurant.menu.keys.toList();
-    final menuInfo = selectedRestaurant.menu.values.toList();
+    final menuName = _NaverMapPageController.selectedDetailRestaurant.value.menu.keys.toList();
+    final menuInfo = _NaverMapPageController.selectedDetailRestaurant.value.menu.values.toList();
 
     return Material(
       child: Column(
@@ -64,7 +65,7 @@ class MenuPage extends StatelessWidget {
               child: ListView.builder(
                 padding: EdgeInsets.symmetric(horizontal: 38, vertical: 25),
                 physics: BouncingScrollPhysics(),
-                itemCount: selectedRestaurant.menu.length,
+                itemCount: _NaverMapPageController.selectedDetailRestaurant.value.menu.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [

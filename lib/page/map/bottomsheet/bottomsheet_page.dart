@@ -118,7 +118,7 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                                 ),
                               ),
                             )
-                          else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'null')
+                          else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'None')
                               Container(
                                 height: 20,
                                 child: Align(
@@ -288,51 +288,17 @@ class _BottomsheetPageState extends State<BottomsheetPage> {
                     if (ToggleSelected[0]) {
                       launch("tel://" + _NaverMapPageController.selectedDetailRestaurant.value.call);
                     } else if (ToggleSelected[1]) {
-                      final FeedTemplate defaultFeed = FeedTemplate(
+                      final LocationTemplate defaultFeed = LocationTemplate(
+                        address: _NaverMapPageController.selectedDetailRestaurant.value.jibun_address,
                         content: Content(
-                          title: '${_NaverMapPageController.selectedDetailRestaurant.value.store_name}',
-                          description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-                          imageUrl: Uri.parse(
-                              'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                          title: _NaverMapPageController.selectedDetailRestaurant.value.store_name,
+                          description: _NaverMapPageController.selectedDetailRestaurant.value.category.join(', ').replaceAll("[", "").replaceAll("]", ""),
+                          imageUrl: Uri.parse(_NaverMapPageController.selectedDetailRestaurant.value.store_image[0]),
                           link: Link(
-                              webUrl: Uri.parse('https://developers.kakao.com'),
-                              mobileWebUrl: Uri.parse('https://developers.kakao.com')),
-                        ),
-                        itemContent: ItemContent(
-                          profileText: 'Kakao',
-                          profileImageUrl: Uri.parse(
-                              'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-                          titleImageUrl: Uri.parse(
-                              'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-                          titleImageText: 'Cheese cake',
-                          titleImageCategory: 'cake',
-                          items: [
-                            ItemInfo(item: 'cake1', itemOp: '1000원'),
-                            ItemInfo(item: 'cake2', itemOp: '2000원'),
-                            ItemInfo(item: 'cake3', itemOp: '3000원'),
-                            ItemInfo(item: 'cake4', itemOp: '4000원'),
-                            ItemInfo(item: 'cake5', itemOp: '5000원')
-                          ],
-                          sum: 'total',
-                          sumOp: '15000원',
-                        ),
-                        social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-                        buttons: [
-                          Button(
-                            title: '웹으로 보기',
-                            link: Link(
-                              webUrl: Uri.parse('https: //developers.kakao.com'),
-                              mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
-                            ),
+                            webUrl: Uri.parse('https://developers.kakao.com'),
+                            mobileWebUrl: Uri.parse('https://developers.kakao.com'),
                           ),
-                          Button(
-                            title: '앱으로보기',
-                            link: Link(
-                              androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-                              iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-                            ),
-                          ),
-                        ],
+                        ),
                       );
 
                       bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();

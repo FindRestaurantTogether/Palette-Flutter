@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:kakao_flutter_sdk_share/kakao_flutter_sdk_share.dart';
 import 'package:myapp/page/detail/detail_page.dart';
 import 'package:myapp/page/favorite/favorite_model.dart';
 import 'package:myapp/page/favorite/favorite_page_controller.dart';
@@ -144,7 +145,7 @@ class _FavoritePageState extends State<FavoritePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      _FavoritePageController.editShare.value
+                      _FavoritePageController.checkEdit.value
                           ? Row(
                         children: [
                           SizedBox(width: 17),
@@ -184,7 +185,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                         ],
                       ) // 전체선택 check box
-                          : Row(
+                          : _FavoritePageController.checkShare.value ? SizedBox() : Row(
                         children: [
                           SizedBox(width: 26),
                           Container(
@@ -966,7 +967,6 @@ class _FavoritePageState extends State<FavoritePage> {
                                         open: uid_store['open'] as String,
                                         opening_hour: uid_store['opening_hour'] as Map<String, String>, // 음식점 영업 시간
                                         opening_breaktime: uid_store['opening_breaktime'] as Map<String, String>,
-                                        opening_lastorder: uid_store['opening_lastorder'] as Map<String, String>,
                                         theme: uid_store['theme'] as List<String>, // 음식점 분위기
                                         service: uid_store['service'] as List<String>, // 음식점 서비스
                                         menu: uid_store['menu']  as Map<String, String>, // 음식점 메뉴
@@ -993,8 +993,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
-                                        _FavoritePageController.editShare.value
-                                            ? Row(
+                                        if (_FavoritePageController.checkEdit.value)
+                                          Row(
                                           children: [
                                             Container(
                                               height: 95,
@@ -1078,7 +1078,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                   ),
                                                                 ),
                                                               )
-                                                            else if (favoriteRestaurant.open == 'null')
+                                                            else if (favoriteRestaurant.open == 'None')
                                                                 Container(
                                                                   height: 20,
                                                                   child: Align(
@@ -1168,7 +1168,184 @@ class _FavoritePageState extends State<FavoritePage> {
                                             )
                                           ],
                                         )
-                                            : Container(
+                                        else if (_FavoritePageController.checkShare.value)
+                                          Row(
+                                            children: [
+                                              Container(
+                                                height: 95,
+                                                width: 35,
+                                                padding: EdgeInsets.only(top: 1, left: 4),
+                                                child: Align(
+                                                  alignment: Alignment.topCenter,
+                                                  child: Checkbox(
+                                                    value: favoriteRestaurantIsChecked[index],
+                                                    onChanged: (bool? value) {
+                                                      setState(() {
+                                                        favoriteRestaurantIsChecked = List<bool>.filled(favoriteRestaurantList.length, false);
+                                                        favoriteRestaurantIsChecked[index] = true;
+                                                      });
+                                                    },
+                                                    shape: CircleBorder(),
+                                                    checkColor: Colors.white,
+                                                    activeColor: Color(0xfff42957),
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: EdgeInsets.only(left: 3, right: 15, bottom: 10, top: 15),
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                        child: Row(
+                                                          children: [
+                                                            Container(
+                                                              height: 20,
+                                                              child: Text(
+                                                                favoriteRestaurant.store_name,
+                                                                style: TextStyle(
+                                                                    color: Color(0xff464646),
+                                                                    fontSize: 16,
+                                                                    fontWeight: FontWeight.bold),
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              width: 1,
+                                                            ),
+                                                            if (favoriteRestaurant.open == 'open')
+                                                              Container(
+                                                                height: 20,
+                                                                child: Align(
+                                                                  alignment: Alignment.topCenter,
+                                                                  child: Container(
+                                                                    width: 5,
+                                                                    height: 5,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Color(0xff57dde0),
+                                                                        shape: BoxShape.circle),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            else if (favoriteRestaurant.open == 'closed')
+                                                              Container(
+                                                                height: 20,
+                                                                child: Align(
+                                                                  alignment: Alignment.topCenter,
+                                                                  child: Container(
+                                                                    width: 5,
+                                                                    height: 5,
+                                                                    decoration: BoxDecoration(
+                                                                        color: Color(0xfff42957),
+                                                                        shape: BoxShape.circle),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            else if (favoriteRestaurant.open == 'breaktime')
+                                                                Container(
+                                                                  height: 20,
+                                                                  child: Align(
+                                                                    alignment: Alignment.topCenter,
+                                                                    child: Container(
+                                                                      width: 5,
+                                                                      height: 5,
+                                                                      decoration: BoxDecoration(
+                                                                          color: Colors.yellow,
+                                                                          shape: BoxShape.circle),
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              else if (favoriteRestaurant.open == 'None')
+                                                                  Container(
+                                                                    height: 20,
+                                                                    child: Align(
+                                                                      alignment: Alignment.topCenter,
+                                                                      child: Container(
+                                                                        width: 5,
+                                                                        height: 5,
+                                                                        decoration: BoxDecoration(
+                                                                            color: Colors.white,
+                                                                            shape: BoxShape.circle),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                            Container(
+                                                              height: 20,
+                                                              padding: EdgeInsets.only(bottom: 1),
+                                                              child: Column(
+                                                                mainAxisAlignment: MainAxisAlignment.end,
+                                                                children: [
+                                                                  Row(
+                                                                    children: [
+                                                                      for (int i = 0; i < favoriteRestaurant.category.length; i++)
+                                                                        if (i == 0)
+                                                                          Text(
+                                                                            '  ${favoriteRestaurant.category[i]}',
+                                                                            style: TextStyle(color: Color(0xff838383), fontSize: 10),
+                                                                          )
+                                                                        else
+                                                                          Text(
+                                                                            ',${favoriteRestaurant.category[i]}',
+                                                                            style: TextStyle(color: Color(0xff838383), fontSize: 10),
+                                                                          )
+                                                                    ],
+                                                                  ),
+                                                                  SizedBox(height: 1)
+                                                                ],
+                                                              ),
+                                                            )
+                                                          ],
+                                                        )
+                                                    ), // 음식점 이름
+                                                    Container(
+                                                      height: 30,
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(
+                                                            Icons.star,
+                                                            color: Color(0xfff42957),
+                                                            size: 14,
+                                                          ),
+                                                          SizedBox(width: 3),
+                                                          Text(
+                                                            '${favoriteRestaurant.naver_star}',
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Color(0xff464646)
+                                                            ),
+                                                          ),
+                                                          SizedBox(width: 3),
+                                                          Text(
+                                                            '(${favoriteRestaurant.naver_cnt}건)',
+                                                            style: TextStyle(
+                                                                fontSize: 11,
+                                                                color: Color(0xff464646)
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),// 별점
+                                                    Container(
+                                                      height: 20,
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            '${favoriteRestaurant.jibun_address.split(' ').getRange(0,3).join(' ')}',
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Color(0xff464646)
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ), // 주소
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        else
+                                          Container(
                                           padding: EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 15),
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -1231,7 +1408,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                               ),
                                                             ),
                                                           )
-                                                        else if (favoriteRestaurant.open == 'null')
+                                                        else if (favoriteRestaurant.open == 'None')
                                                             Container(
                                                               height: 20,
                                                               child: Align(
@@ -1395,7 +1572,45 @@ class _FavoritePageState extends State<FavoritePage> {
                           width: 300,
                           height: 50,
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
+                              for (int i=favoriteRestaurantIsChecked.length-1; i>=0; i--) {
+                                if (favoriteRestaurantIsChecked[i] == true) {
+                                  final LocationTemplate defaultFeed = LocationTemplate(
+                                    address: favoriteRestaurantList[i].jibun_address,
+                                    content: Content(
+                                      title: favoriteRestaurantList[i].store_name,
+                                      description: favoriteRestaurantList[i].category.join(', ').replaceAll("[", "").replaceAll("]", ""),
+                                      imageUrl: Uri.parse(favoriteRestaurantList[i].store_image[0]),
+                                      link: Link(
+                                        webUrl: Uri.parse('https://developers.kakao.com'),
+                                        mobileWebUrl: Uri.parse('https://developers.kakao.com'),
+                                      ),
+                                    ),
+                                  );
+                                  bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
+                                  if (isKakaoTalkSharingAvailable) {
+                                    try {
+                                      Uri uri = await ShareClient.instance.shareDefault(template: defaultFeed);
+                                      await ShareClient.instance.launchKakaoTalk(uri);
+                                      print('카카오톡 공유 완료');
+                                    } catch (error) {
+                                      print('카카오톡 공유 실패 $error');
+                                    }
+                                  } else {
+                                    try {
+                                      Uri shareUrl = await WebSharerClient.instance.makeDefaultUrl(template: defaultFeed);
+                                      await launchBrowserTab(shareUrl, popupOpen: true);
+                                    } catch (error) {
+                                      print('카카오톡 공유 실패 $error');
+                                    }
+                                  }
+                                }
+                              }
+
+                              _FavoritePageController.editShare.value = false;
+                              _FavoritePageController.checkShare.value = false;
+                            },
                             child: Text(
                               '공유',
                               style: TextStyle(

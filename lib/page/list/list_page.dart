@@ -27,12 +27,6 @@ class _ListPageState extends State<ListPage> {
   final _NaverMapPageController = Get.put(NaverMapPageController());
 
   @override
-  void initState() {
-    _NaverMapPageController.processDetailRestaurantData();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
 
     double width = MediaQuery.of(context).size.width;
@@ -123,7 +117,7 @@ class _ListPageState extends State<ListPage> {
                 ],
               )
           ), // 검색창
-          SizedBox(height: 15),
+          SizedBox(height: 20),
           Center(
             child: Container(
                 width: width * 0.9,
@@ -327,7 +321,7 @@ class _ListPageState extends State<ListPage> {
                   ],
                 )),
           ), // 필터들
-          SizedBox(height: height * 0.032),
+          SizedBox(height: 15),
           Container(
             width: width,
             height: 4,

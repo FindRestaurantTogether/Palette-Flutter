@@ -76,6 +76,7 @@ class _MapPageState extends State<MapPage> {
                                   splashColor: Colors.transparent,
                                   highlightColor: Colors.transparent,
                                   onPressed: () {
+                                    _NaverMapPageController.processDetailRestaurantData();
                                     Get.to(() => ListPage());
                                   },
                                   icon: Image.asset('assets/button_image/list_button.png'),

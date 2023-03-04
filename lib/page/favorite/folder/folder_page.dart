@@ -936,7 +936,6 @@ class _FolderPageState extends State<FolderPage> {
                                         open: uid_store['open'] as String,
                                         opening_hour: uid_store['opening_hour'] as Map<String, String>, // 음식점 영업 시간
                                         opening_breaktime: uid_store['opening_breaktime'] as Map<String, String>,
-                                        opening_lastorder: uid_store['opening_lastorder'] as Map<String, String>,
                                         theme: uid_store['theme'] as List<String>, // 음식점 분위기
                                         service: uid_store['service'] as List<String>, // 음식점 서비스
                                         menu: uid_store['menu']  as Map<String, String>, // 음식점 메뉴
@@ -1048,7 +1047,7 @@ class _FolderPageState extends State<FolderPage> {
                                                                   ),
                                                                 ),
                                                               )
-                                                            else if (favoriteRestaurant.open == 'null')
+                                                            else if (favoriteRestaurant.open == 'None')
                                                                 Container(
                                                                   height: 20,
                                                                   child: Align(
@@ -1201,7 +1200,7 @@ class _FolderPageState extends State<FolderPage> {
                                                               ),
                                                             ),
                                                           )
-                                                      else if (favoriteRestaurant.open == 'null')
+                                                      else if (favoriteRestaurant.open == 'None')
                                                             Container(
                                                               height: 20,
                                                               child: Align(

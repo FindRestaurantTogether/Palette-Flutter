@@ -45,9 +45,6 @@ class _DetailPageState extends State<DetailPage> {
     final breaktimeDay = _NaverMapPageController.selectedDetailRestaurant.value.opening_breaktime.keys.toList();
     final breaktimeHour = _NaverMapPageController.selectedDetailRestaurant.value.opening_breaktime.values.toList();
 
-    final lastorderDay = _NaverMapPageController.selectedDetailRestaurant.value.opening_lastorder.keys.toList();
-    final lastorderHour = _NaverMapPageController.selectedDetailRestaurant.value.opening_lastorder.values.toList();
-
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -353,7 +350,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ),
                                           ),
                                       ]
-                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'null') ... [
+                                      else if (_NaverMapPageController.selectedDetailRestaurant.value.open == 'None') ... [
                                           Text(
                                             '정보없음',
                                             style: TextStyle(
@@ -364,22 +361,23 @@ class _DetailPageState extends State<DetailPage> {
                                           ),
                                       ],
                                       SizedBox(width: 0), // 빈 공간
-                                      Container(
-                                        width: 20,
-                                        child: IconButton(
-                                          padding: EdgeInsets.all(0),
-                                          onPressed: () {
-                                            setState(() {
-                                              moreOpenInformation = !moreOpenInformation;
-                                            });
-                                          },
-                                          icon: moreOpenInformation ? Icon(Icons.keyboard_arrow_up, size: 16) : Icon(Icons.keyboard_arrow_down, size: 16),
-                                        ),
-                                      ), // 더 보기 버튼
+                                      if (_NaverMapPageController.selectedDetailRestaurant.value.open != 'None')
+                                        Container(
+                                          width: 20,
+                                          child: IconButton(
+                                            padding: EdgeInsets.all(0),
+                                            onPressed: () {
+                                              setState(() {
+                                                moreOpenInformation = !moreOpenInformation;
+                                              });
+                                            },
+                                            icon: moreOpenInformation ? Icon(Icons.keyboard_arrow_up, size: 16) : Icon(Icons.keyboard_arrow_down, size: 16),
+                                          ),
+                                        ), // 더 보기 버튼
                                     ],
                                   ),
                                 ),
-                                if (_NaverMapPageController.selectedDetailRestaurant.value.open != 'null')// 영업시간
+                                if (_NaverMapPageController.selectedDetailRestaurant.value.open != 'None') // 영업시간
                                   moreOpenInformation
                                       ? Container(
                                           width: width * 0.67,
@@ -433,29 +431,6 @@ class _DetailPageState extends State<DetailPage> {
                                                   ],
                                                 ],
                                               ), // 브레이크타임
-                                              if (lastorderDay.length != 0)
-                                                Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  SizedBox(height: 5),
-                                                  Text(
-                                                      '라스트오더',
-                                                      style: TextStyle(
-                                                          fontSize: 11,
-                                                          fontWeight: FontWeight.bold
-                                                      )
-                                                  ),
-                                                  SizedBox(height: 3),
-                                                  for (var i=0; i<lastorderDay.length ; i++) ... [
-                                                    Text(
-                                                      '${lastorderDay[i]} : ${lastorderHour[i]}',
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                      ),
-                                                    )
-                                                  ]
-                                                ],
-                                              ), // 라스트 오더
                                             ],
                                           ),
                                       )
@@ -564,54 +539,21 @@ class _DetailPageState extends State<DetailPage> {
                                           if (ToggleSelected[0]) {
                                             launch("tel://" + _NaverMapPageController.selectedDetailRestaurant.value.call);
                                           } else if (ToggleSelected[1]) {
-                                            final FeedTemplate defaultFeed = FeedTemplate(
+                                            final LocationTemplate defaultFeed = LocationTemplate(
+                                              address: _NaverMapPageController.selectedDetailRestaurant.value.jibun_address,
                                               content: Content(
-                                                title: '${_NaverMapPageController.selectedDetailRestaurant.value.store_name}',
-                                                description: '#케익 #딸기 #삼평동 #카페 #분위기 #소개팅',
-                                                imageUrl: Uri.parse(
-                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
+                                                title: _NaverMapPageController.selectedDetailRestaurant.value.store_name,
+                                                description: _NaverMapPageController.selectedDetailRestaurant.value.category.join(', ').replaceAll("[", "").replaceAll("]", ""),
+                                                imageUrl: Uri.parse(_NaverMapPageController.selectedDetailRestaurant.value.store_image[0]),
                                                 link: Link(
-                                                    webUrl: Uri.parse('https://developers.kakao.com'),
-                                                    mobileWebUrl: Uri.parse('https://developers.kakao.com')),
-                                              ),
-                                              itemContent: ItemContent(
-                                                profileText: 'Kakao',
-                                                profileImageUrl: Uri.parse(
-                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-                                                titleImageUrl: Uri.parse(
-                                                    'https://mud-kage.kakao.com/dn/Q2iNx/btqgeRgV54P/VLdBs9cvyn8BJXB3o7N8UK/kakaolink40_original.png'),
-                                                titleImageText: 'Cheese cake',
-                                                titleImageCategory: 'cake',
-                                                items: [
-                                                  ItemInfo(item: 'cake1', itemOp: '1000원'),
-                                                  ItemInfo(item: 'cake2', itemOp: '2000원'),
-                                                  ItemInfo(item: 'cake3', itemOp: '3000원'),
-                                                  ItemInfo(item: 'cake4', itemOp: '4000원'),
-                                                  ItemInfo(item: 'cake5', itemOp: '5000원')
-                                                ],
-                                                sum: 'total',
-                                                sumOp: '15000원',
-                                              ),
-                                              social: Social(likeCount: 286, commentCount: 45, sharedCount: 845),
-                                              buttons: [
-                                                Button(
-                                                  title: '웹으로 보기',
-                                                  link: Link(
-                                                    webUrl: Uri.parse('https: //developers.kakao.com'),
-                                                    mobileWebUrl: Uri.parse('https: //developers.kakao.com'),
-                                                  ),
+                                                  webUrl: Uri.parse('https://developers.kakao.com'),
+                                                  mobileWebUrl: Uri.parse('https://developers.kakao.com'),
                                                 ),
-                                                Button(
-                                                  title: '앱으로보기',
-                                                  link: Link(
-                                                    androidExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-                                                    iosExecutionParams: {'key1': 'value1', 'key2': 'value2'},
-                                                  ),
-                                                ),
-                                              ],
+                                              ),
                                             );
 
                                             bool isKakaoTalkSharingAvailable = await ShareClient.instance.isKakaoTalkSharingAvailable();
+
                                             if (isKakaoTalkSharingAvailable) {
                                               try {
                                                 Uri uri = await ShareClient.instance.shareDefault(template: defaultFeed);
@@ -898,7 +840,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 15
                                         ),
                                         SizedBox(
-                                          width: 50,
+                                          width: 55,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
@@ -989,7 +931,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 15
                                         ),
                                         SizedBox(
-                                          width: 50,
+                                          width: 55,
                                           child: Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
@@ -1059,7 +1001,7 @@ class _DetailPageState extends State<DetailPage> {
                                     Row(
                                       children: [
                                         SizedBox(
-                                          width: 50,
+                                          width: 55,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [

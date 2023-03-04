@@ -362,10 +362,16 @@ class _AccountPageState extends State<AccountPage> {
                                       ),
                                       Padding(
                                         padding: EdgeInsets.only(left: 4, right: 4),
-                                        child: TextField(
+                                        child: TextFormField(
                                           controller: _TextEditingController,
                                           maxLength: 20,
                                           decoration: InputDecoration(
+                                              enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Color(0xfff42957)),
+                                              ),
+                                              focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Color(0xfff42957)),
+                                              ),
                                               hintText: '새 이름을 입력해주세요.',
                                               suffixIcon: IconButton(
                                                   onPressed: () {
@@ -373,7 +379,7 @@ class _AccountPageState extends State<AccountPage> {
                                                   },
                                                   icon: Padding(
                                                     padding: EdgeInsets.only(left: 15),
-                                                    child: Icon(Icons.clear, size: 18),
+                                                    child: Icon(Icons.clear, size: 18, color: Color(0xfff42957)),
                                                   )
                                               )
                                           ),

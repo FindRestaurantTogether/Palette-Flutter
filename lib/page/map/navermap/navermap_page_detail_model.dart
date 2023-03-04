@@ -8,7 +8,6 @@ abstract class DetailNaverMapPageModel {
   final String open = '';
   final Map<String, String> opening_hour = {};
   final Map<String, String> opening_breaktime = {};
-  final Map<String, String> opening_lastorder = {};
   final List<String> category = [];
   final double distance = 0.0;
   final List<String> theme = [];
@@ -43,8 +42,6 @@ class DetailNaverMapPageRestaurant implements DetailNaverMapPageModel {
   final Map<String, String> opening_hour;
   @override
   final Map<String, String> opening_breaktime;
-  @override
-  final Map<String, String> opening_lastorder;
   @override
   final List<String> category;
   @override
@@ -88,7 +85,6 @@ class DetailNaverMapPageRestaurant implements DetailNaverMapPageModel {
     required this.open,
     required this.opening_hour,
     required this.opening_breaktime,
-    required this.opening_lastorder,
     required this.category,
     required this.distance,
     required this.theme,
