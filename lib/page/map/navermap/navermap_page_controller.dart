@@ -234,6 +234,8 @@ class NaverMapPageController extends GetxService {
       Network network = Network(filter, _SearchPageController.searchedWord);
       rawAbstractRestaurantData = await network.getJsonData(); // 30개 받기
       print('================================================================');
+      for (int i=0 ; i<rawAbstractRestaurantData.length ; i++)
+        print(rawAbstractRestaurantData[i]);
       print('총 raw 데이터: ${rawAbstractRestaurantData.length}개');
       print('================================================================');
 
@@ -242,13 +244,13 @@ class NaverMapPageController extends GetxService {
               content: Text('만족하는 음식점이 없습니다. 필터와 검색 단어를 다시 확인해주세요.'),
               backgroundColor: Color(0xfff42957),
             ));
-
-        markerLoading.value = false;
       }
       else {
         await processAbstractRestaurantData(context);
       }
     }
+
+    markerLoading.value = false;
   }
 
   // 리스트 페이지 data loading

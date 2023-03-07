@@ -43,6 +43,9 @@ class RestaurantModel extends HiveObject {
   @HiveField(7)
   final int naver_cnt;
 
+  @HiveField(8)
+  final String main_category;
+
 
   RestaurantModel({
     required this.uid,
@@ -53,5 +56,6 @@ class RestaurantModel extends HiveObject {
     required this.store_image,
     required this.naver_star,
     required this.naver_cnt,
+    required this.main_category
   });
 }

@@ -222,7 +222,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           ),
                           SizedBox(width: 10),
                           Container(
-                            width: 90,
+                            width: 93,
                             height: 30,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -238,7 +238,7 @@ class _FavoritePageState extends State<FavoritePage> {
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   minimumSize: Size.zero,
-                                  padding: EdgeInsets.only(left: 12, right: 15),
+                                  padding: EdgeInsets.only(left: 14, right: 14),
                                   primary: Colors.white,
                                   shadowColor: Colors.transparent,
                                   shape: StadiumBorder(),
@@ -1492,11 +1492,19 @@ class _FavoritePageState extends State<FavoritePage> {
                                             ],
                                           ),
                                         ),
-                                        if (favoriteRestaurant.store_image.length != 0)
+                                        if (favoriteRestaurant.store_image.length != 0) ... [
                                           Container(
                                             width: 120,
                                             height: 80,
                                             decoration: BoxDecoration(
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.2),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 1,
+                                                  offset: Offset(0, 1),
+                                                ),
+                                              ],
                                               borderRadius: BorderRadius.circular(10),
                                               image: DecorationImage(
                                                   image: NetworkImage(favoriteRestaurant.store_image[0]),
@@ -1504,6 +1512,28 @@ class _FavoritePageState extends State<FavoritePage> {
                                               ),
                                             ),
                                           )
+                                        ]
+                                        else ... [
+                                          Container(
+                                            width: 120,
+                                            height: 80,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.2),
+                                                  spreadRadius: 1,
+                                                  blurRadius: 1,
+                                                  offset: Offset(0, 1),
+                                                ),
+                                              ],
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                              child: Image.asset(
+                                                (favoriteRestaurant.main_category.substring(0,favoriteRestaurant.main_category.indexOf('.')-2) + favoriteRestaurant.main_category.substring(favoriteRestaurant.main_category.indexOf('.')+2, favoriteRestaurant.main_category.length)).replaceAll('marker', 'background'),
+                                              )
+                                          )
+                                        ]
                                       ],
                                     ),
                                   )
@@ -1573,8 +1603,7 @@ class _FavoritePageState extends State<FavoritePage> {
                           height: 50,
                           child: ElevatedButton(
                             onPressed: () async {
-                              List<FavoriteModel> favoriteFolders = favoriteBox.values.toList().cast<FavoriteModel>();
-                              for (int i=favoriteRestaurantIsChecked.length-1; i>=0; i--) {
+                               for (int i=favoriteRestaurantIsChecked.length-1; i>=0; i--) {
                                 if (favoriteRestaurantIsChecked[i] == true) {
                                   final LocationTemplate defaultFeed = LocationTemplate(
                                     address: favoriteRestaurantList[i].jibun_address,
@@ -1728,7 +1757,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                   ),
                                                                                 ),
                                                                                 SizedBox(
-                                                                                  width: 75,
+                                                                                  width: 65,
                                                                                 ),
                                                                                 Container(
                                                                                   height: 50,
@@ -1764,8 +1793,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                           _TextEditingController.clear();
                                                                                         },
                                                                                         icon: Padding(
-                                                                                          padding: EdgeInsets.only(left: 15),
-                                                                                          child: Icon(Icons.clear, size: 18),
+                                                                                          padding: EdgeInsets.only(left: 25),
+                                                                                          child: Icon(Icons.clear, size: 20, color: Color(0xfff42957)),
                                                                                         )
                                                                                     )
                                                                                 ),
@@ -1802,10 +1831,26 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                   height: 50,
                                                                                   child: ElevatedButton(
                                                                                     onPressed: () {
-                                                                                      FavoriteModel? selectedFavoriteFolder = box.getAt(index);
-                                                                                      selectedFavoriteFolder!.favoriteFolderName = _TextEditingController.text;
-                                                                                      selectedFavoriteFolder.save();
-                                                                                      Navigator.pop(context);
+                                                                                      if (_TextEditingController.text.length == 0) {
+                                                                                        ScaffoldMessenger
+                                                                                            .of(
+                                                                                            context)
+                                                                                            .showSnackBar(
+                                                                                            SnackBar(
+                                                                                              content: Text(
+                                                                                                  '한 글자 이상 입력해주세요.'),
+                                                                                              backgroundColor: Color(
+                                                                                                  0xfff42957),
+                                                                                            ),
+                                                                                        );
+                                                                                      }
+                                                                                      else {
+                                                                                        FavoriteModel? selectedFavoriteFolder = box.getAt(index);
+                                                                                        selectedFavoriteFolder!.favoriteFolderName = _TextEditingController.text;
+                                                                                        selectedFavoriteFolder.save();
+                                                                                        Navigator.pop(context);
+                                                                                        _TextEditingController.clear();
+                                                                                      }
                                                                                     },
                                                                                     child: Text(
                                                                                         '확인'
@@ -1947,6 +1992,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                               Padding(
                                                 padding: EdgeInsets.only(left: 4, right: 4),
                                                 child: TextFormField(
+                                                  autofocus: true,
                                                   controller: _TextEditingController,
                                                   maxLength: 20,
                                                   decoration: InputDecoration(
@@ -1962,8 +2008,8 @@ class _FavoritePageState extends State<FavoritePage> {
                                                             _TextEditingController.clear();
                                                           },
                                                           icon: Padding(
-                                                            padding: EdgeInsets.only(left: 15),
-                                                            child: Icon(Icons.clear, size: 18, color: Color(0xfff42957)),
+                                                            padding: EdgeInsets.only(left: 25),
+                                                            child: Icon(Icons.clear, size: 20, color: Color(0xfff42957)),
                                                           )
                                                       )
                                                   ),
@@ -1975,13 +2021,28 @@ class _FavoritePageState extends State<FavoritePage> {
                                                 height: 50,
                                                 child: ElevatedButton(
                                                   onPressed: () {
-                                                    favoriteBox.add(
-                                                        FavoriteModel(
-                                                            favoriteFolderName: _TextEditingController.text,
-                                                            favoriteFolderRestaurantList: []
-                                                        )
-                                                    );
-                                                    Navigator.pop(context);
+                                                    if (_TextEditingController.text.length == 0) {
+                                                      ScaffoldMessenger
+                                                          .of(
+                                                          context)
+                                                          .showSnackBar(
+                                                          SnackBar(
+                                                            content: Text(
+                                                                '한 글자 이상 입력해주세요.'),
+                                                            backgroundColor: Color(
+                                                                0xfff42957),
+                                                          )
+                                                      );
+                                                    } else {
+                                                      favoriteBox.add(
+                                                          FavoriteModel(
+                                                              favoriteFolderName: _TextEditingController.text,
+                                                              favoriteFolderRestaurantList: []
+                                                          )
+                                                      );
+                                                      Navigator.pop(context);
+                                                      _TextEditingController.clear();
+                                                    }
                                                   },
                                                   child: Text(
                                                     '확인',

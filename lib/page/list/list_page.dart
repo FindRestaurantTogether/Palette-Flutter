@@ -128,7 +128,7 @@ class _ListPageState extends State<ListPage> {
                       children: [
                         SizedBox(width: 10),
                         Container(
-                          width: 90,
+                          width: 93,
                           height: 30,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(50)),
@@ -144,7 +144,7 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
                                   minimumSize: Size.zero,
-                                  padding: EdgeInsets.only(left: 12, right: 15),
+                                  padding: EdgeInsets.only(left: 14, right: 14),
                                   primary: Colors.white,
                                   shadowColor: Colors.transparent,
                                   shape: StadiumBorder()
@@ -254,7 +254,7 @@ class _ListPageState extends State<ListPage> {
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 minimumSize: Size.zero,
-                                padding: EdgeInsets.only(left: 18, right: 15),
+                                padding: EdgeInsets.only(left: 16, right: 14),
                                 primary: Colors.white,
                                 shape: StadiumBorder(),
                                 shadowColor: Colors.transparent,

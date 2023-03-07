@@ -298,6 +298,7 @@ class _SelectFolderPageState extends State<SelectFolderPage> {
                             store_image: selectedDetailRestaurant.store_image,
                             naver_star: selectedDetailRestaurant.naver_star,
                             naver_cnt: selectedDetailRestaurant.naver_cnt,
+                            main_category: selectedDetailRestaurant.main_category,
                         )
                       );
                       selectedFavoriteFolder!.save();

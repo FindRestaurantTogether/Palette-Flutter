@@ -455,7 +455,17 @@ class _ListviewPageState extends State<ListviewPage> {
                                         fontSize: 11,
                                         color: Color(0xff464646)
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(width: 0.5),
+                                  VerticalDivider(thickness: 1, endIndent: 8, indent: 8, color: Colors.black26),
+                                  SizedBox(width: 0.5),
+                                  Text(
+                                    '${restaurantList[index].distance}km',
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        color: Color(0xff464646)
+                                    ),
+                                  ),
                                 ],
                               ),
                             ), // 별점(높이 30)
@@ -480,18 +490,47 @@ class _ListviewPageState extends State<ListviewPage> {
                         ),
                       ),
                     ), // 음식점 정보(패딩 포함 높이 100 패딩 미포함 높이 70)
-                    if (restaurantList[index].store_image.length != 0)
+                    if (restaurantList[index].store_image.length != 0) ... [
                       Container(
                         width: 120,
                         height: 80,
                         decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: Offset(0, 1),
+                            ),
+                          ],
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
                               image: NetworkImage(restaurantList[index].store_image[0]),
                               fit: BoxFit.fill
                           ),
                         ),
-                      ), // 이미지
+                      ),
+                    ] else ... [
+                      Container(
+                        width: 120,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.2),
+                              spreadRadius: 1,
+                              blurRadius: 1,
+                              offset: Offset(0, 1),
+                            ),
+                          ],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Image.asset(
+                          (restaurantList[index].main_category.substring(0,restaurantList[index].main_category.indexOf('.')-2) + restaurantList[index].main_category.substring(restaurantList[index].main_category.indexOf('.')+2, restaurantList[index].main_category.length)).replaceAll('marker', 'background'),
+                        ),
+                      ),
+                    ] // 이미지
                   ],
                 )
             ),

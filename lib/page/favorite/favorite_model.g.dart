@@ -62,13 +62,14 @@ class RestaurantModelAdapter extends TypeAdapter<RestaurantModel> {
       store_image: (fields[5] as List).cast<String>(),
       naver_star: fields[6] as double,
       naver_cnt: fields[7] as int,
+      main_category: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, RestaurantModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.uid)
       ..writeByte(1)
@@ -84,7 +85,9 @@ class RestaurantModelAdapter extends TypeAdapter<RestaurantModel> {
       ..writeByte(6)
       ..write(obj.naver_star)
       ..writeByte(7)
-      ..write(obj.naver_cnt);
+      ..write(obj.naver_cnt)
+      ..writeByte(8)
+      ..write(obj.main_category);
   }
 
   @override

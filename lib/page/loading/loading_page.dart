@@ -14,7 +14,7 @@ class _LoadingPageState extends State<LoadingPage> {
   void initState() {
     super.initState();
     // 1초동안 로딩화면 보여주고 TabPage로 넘어가기
-    Timer(Duration(seconds: 3),
+    Timer(Duration(seconds: 0),
       () {
         Get.off(() => TabPage());
       }

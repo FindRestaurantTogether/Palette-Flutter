@@ -64,31 +64,57 @@ class _DetailPageState extends State<DetailPage> {
         body: SingleChildScrollView(
           child: Stack(
             children: [
-              if (_NaverMapPageController.selectedDetailRestaurant.value.store_image.length != 0)
+              if (_NaverMapPageController.selectedDetailRestaurant.value.store_image.length != 0) ... [
                 Positioned(
-                top: 0,
-                right: 0,
-                left: 0,
-                child: ShaderMask(
-                  shaderCallback: (rect) {
-                    return LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.black, Colors.transparent],
-                    ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
-                  },
-                  blendMode: BlendMode.dstIn,
-                  child: Container(
-                    height: height * 0.32,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: NetworkImage(_NaverMapPageController.selectedDetailRestaurant.value.store_image[0]),
-                          fit: BoxFit.fill
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  child: ShaderMask(
+                    shaderCallback: (rect) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black, Colors.transparent],
+                      ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: Container(
+                      height: height * 0.32,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: NetworkImage(_NaverMapPageController.selectedDetailRestaurant.value.store_image[0]),
+                            fit: BoxFit.fill
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ), // 배경화면
+              ] else ... [
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  left: 0,
+                  child: ShaderMask(
+                    shaderCallback: (rect) {
+                      return LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.black, Colors.transparent],
+                      ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+                    },
+                    blendMode: BlendMode.dstIn,
+                    child: Container(
+                      height: height * 0.25,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                            image: AssetImage((_NaverMapPageController.selectedDetailRestaurant.value.main_category.substring(0,_NaverMapPageController.selectedDetailRestaurant.value.main_category.indexOf('.')-2) + _NaverMapPageController.selectedDetailRestaurant.value.main_category.substring(_NaverMapPageController.selectedDetailRestaurant.value.main_category.indexOf('.')+2, _NaverMapPageController.selectedDetailRestaurant.value.main_category.length)).replaceAll('marker', 'background')),
+                            fit: BoxFit.fill
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ], // 배경화면
               Column(
                 children: [
                   SizedBox(height: height * 0.17), // 빈 공간
@@ -840,7 +866,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 15
                                         ),
                                         SizedBox(
-                                          width: 55,
+                                          width: 60,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             children: [
@@ -857,7 +883,7 @@ class _DetailPageState extends State<DetailPage> {
                                             ]
                                           ),
                                         ), // 리뷰 개수
-                                        SizedBox(width: 7)
+                                        SizedBox(width: 3)
                                       ],
                                     ) // 별점, 리뷰 개수
                                   ],
@@ -931,7 +957,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 15
                                         ),
                                         SizedBox(
-                                          width: 55,
+                                          width: 60,
                                           child: Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
@@ -948,7 +974,7 @@ class _DetailPageState extends State<DetailPage> {
                                               ]
                                           ),
                                         ), // 리뷰 개수
-                                        SizedBox(width: 7)
+                                        SizedBox(width: 3)
                                       ],
                                     ) // 별점, 리뷰 개수
                                   ],
@@ -1001,7 +1027,7 @@ class _DetailPageState extends State<DetailPage> {
                                     Row(
                                       children: [
                                         SizedBox(
-                                          width: 55,
+                                          width: 50,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment.start,
                                             children: [
@@ -1022,7 +1048,7 @@ class _DetailPageState extends State<DetailPage> {
                                             width: 15
                                         ),
                                         SizedBox(
-                                          width: 50,
+                                          width: 60,
                                           child: Row(
                                               mainAxisAlignment: MainAxisAlignment.end,
                                               children: [
@@ -1039,7 +1065,7 @@ class _DetailPageState extends State<DetailPage> {
                                               ]
                                           ),
                                         ), // 리뷰 개수
-                                        SizedBox(width: 7)
+                                        SizedBox(width: 3)
                                       ],
                                     ) // 별점, 리뷰 개수
                                   ],
