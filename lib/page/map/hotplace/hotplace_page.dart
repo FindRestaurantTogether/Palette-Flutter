@@ -455,6 +455,8 @@ class _HotPlacePageState extends State<HotPlacePage> {
                             leftDownPosition = bound.southwest;
                           });
                           Get.back();
+
+                          _HotPlacePageController.hotPlaceIsChecked.value[selectedIndex] = false;
                         },
                         child: Text(
                           '이동',

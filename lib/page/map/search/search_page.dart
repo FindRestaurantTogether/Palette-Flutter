@@ -110,6 +110,8 @@ class _SearchPageState extends State<SearchPage> {
                                   _SearchPageController.searchedWord.value = _TextEditingController.text;
                                   await _NaverMapPageController.fetchAbstractRestaurantData(context);
 
+                                  _NaverMapPageController.processDetailRestaurantData();
+
                                   Get.off(ListPage());
                                 }
                               },

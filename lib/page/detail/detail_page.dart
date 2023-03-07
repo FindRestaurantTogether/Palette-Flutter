@@ -179,7 +179,7 @@ class _DetailPageState extends State<DetailPage> {
                                         child: Text(
                                           '   ${_NaverMapPageController.selectedDetailRestaurant.value.store_name}',
                                           style: TextStyle(
-                                              fontSize: 16,
+                                              fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
                                       ), // 음식점 이름

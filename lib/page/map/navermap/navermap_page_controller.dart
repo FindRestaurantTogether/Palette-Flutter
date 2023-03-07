@@ -28,6 +28,7 @@ class NaverMapPageController extends GetxService {
   var rawAbstractRestaurantData = {};
 
   RxBool getMoreAbstractRestaurantData = false.obs;
+  RxBool markerLoading = false.obs;
 
   var selectedDetailRestaurant = DetailNaverMapPageRestaurant(
       uid: '',
@@ -59,6 +60,8 @@ class NaverMapPageController extends GetxService {
 
   // process 10개씩
   Future<void> processAbstractRestaurantData(context) async {
+
+    markerLoading.value = true;
 
     final int currentAbstractRestaurantsLength = abstractRestaurants.length;
 
@@ -211,10 +214,16 @@ class NaverMapPageController extends GetxService {
     print('총 abstract 개수: ${abstractRestaurants.length}');
     print('총 marker 개수: ${markers.length}');
     print('================================================================');
+
+    getMoreAbstractRestaurantData.value = true;
+
+    markerLoading.value = false;
   }
 
   // fetch 30개 & process 10개
   Future<void> fetchAbstractRestaurantData(context) async {
+
+    markerLoading.value = true;
 
     abstractRestaurants.value = [];
     markers.value = [];
@@ -233,10 +242,11 @@ class NaverMapPageController extends GetxService {
               content: Text('만족하는 음식점이 없습니다. 필터와 검색 단어를 다시 확인해주세요.'),
               backgroundColor: Color(0xfff42957),
             ));
+
+        markerLoading.value = false;
       }
       else {
         await processAbstractRestaurantData(context);
-        getMoreAbstractRestaurantData.value = true;
       }
     }
   }

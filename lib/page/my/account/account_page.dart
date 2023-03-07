@@ -51,10 +51,36 @@ class _AccountPageState extends State<AccountPage> {
     setState(() {
       _MyPageController.loggedUserName.value = _TextEditingController.text;
     });
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('이름 변경을 완료하였습니다.'),
+          backgroundColor: Color(0xfff42957),
+        )
+    );
   } // 이름 변경
-  Future<void> resetCurrentUserPassword(String email) async{
-    await FirebaseAuth.instance.setLanguageCode("kr");
-    await FirebaseAuth.instance.sendPasswordResetEmail(email:email);
+  // Future<void> resetCurrentUserPassword(String email) async{
+  //   await FirebaseAuth.instance.setLanguageCode("kr");
+  //   await FirebaseAuth.instance.sendPasswordResetEmail(email:email);
+  // }
+  Future<void> resetCurrentUserPassword(String password) async{
+    final currentUser = FirebaseAuth.instance.currentUser;
+
+    currentUser!.updatePassword(password).then((_){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('비밀번호 변경을 완료하였습니다.'),
+            backgroundColor: Color(0xfff42957),
+          )
+      );
+    }).catchError((error){
+      print("Password can't be changed" + error.toString());
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('비밀번호 변경을 실패하였습니다.'),
+            backgroundColor: Color(0xfff42957),
+          )
+      );
+    });
   } // 비밀번호 변경
   Future<void> pickImageFromCameraAndUpdateCurrentUserImage() async{
     final picker = ImagePicker();
@@ -318,7 +344,7 @@ class _AccountPageState extends State<AccountPage> {
                             color: Colors.transparent,
                             child: Center(
                               child: Container(
-                                  width: 300,
+                                  width: 320,
                                   height: 235,
                                   padding: EdgeInsets.all(20),
                                   decoration: BoxDecoration(
@@ -327,7 +353,7 @@ class _AccountPageState extends State<AccountPage> {
                                   ),
                                   child: Column(
                                     children: [
-                                      Row(
+                                      Stack(
                                         children: [
                                           GestureDetector(
                                             onTap: (){
@@ -341,9 +367,6 @@ class _AccountPageState extends State<AccountPage> {
                                                     child: Icon(Icons.close, size: 26)
                                                 )
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 75,
                                           ),
                                           Container(
                                             height: 50,
@@ -463,7 +486,116 @@ class _AccountPageState extends State<AccountPage> {
                   Divider(height: 1),
                   GestureDetector(
                     onTap: () {
-                      print(1);
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return Material(
+                            color: Colors.transparent,
+                            child: Center(
+                              child: Container(
+                                  width: 320,
+                                  height: 235,
+                                  padding: EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30)
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          GestureDetector(
+                                            onTap: (){
+                                              Navigator.pop(context);
+                                              _TextEditingController.clear();
+                                            },
+                                            child: Container(
+                                                height: 50,
+                                                child: Align(
+                                                    alignment: Alignment.topLeft,
+                                                    child: Icon(Icons.close, size: 26)
+                                                )
+                                            ),
+                                          ),
+                                          Container(
+                                            height: 50,
+                                            child: Align(
+                                              alignment: Alignment.center,
+                                              child: Text(
+                                                '비밀번호 변경',
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 20
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 4, right: 4),
+                                        child: TextFormField(
+                                          controller: _TextEditingController,
+                                          maxLength: 20,
+                                          decoration: InputDecoration(
+                                              enabledBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Color(0xfff42957)),
+                                              ),
+                                              focusedBorder: UnderlineInputBorder(
+                                                borderSide: BorderSide(color: Color(0xfff42957)),
+                                              ),
+                                              hintText: '새 비밀번호를 입력해주세요.',
+                                              suffixIcon: IconButton(
+                                                  onPressed: () {
+                                                    _TextEditingController.clear();
+                                                  },
+                                                  icon: Padding(
+                                                    padding: EdgeInsets.only(left: 15),
+                                                    child: Icon(Icons.clear, size: 18, color: Color(0xfff42957)),
+                                                  )
+                                              )
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 15),
+                                      Container(
+                                        width: 300,
+                                        height: 50,
+                                        child: ElevatedButton(
+                                          onPressed: () {
+                                            if (_TextEditingController.text.length < 6) {
+                                              ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('최소 6자 이상 입력해주세요.'),
+                                                    backgroundColor: Color(0xfff42957),
+                                                  )
+                                              );
+                                            } else {
+                                              resetCurrentUserPassword(_TextEditingController.text);
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                          child: Text(
+                                            '확인',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Color(0xfff42957),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                     child: Container(
                       height: 60,
@@ -533,7 +665,7 @@ class _AccountPageState extends State<AccountPage> {
                             child: Center(
                               child: Container(
                                   width: 300,
-                                  height: 180,
+                                  height: 160,
                                   padding: EdgeInsets.all(20),
                                   decoration: BoxDecoration(
                                       color: Colors.white,
@@ -541,7 +673,7 @@ class _AccountPageState extends State<AccountPage> {
                                   ),
                                   child: Column(
                                     children: [
-                                      Row(
+                                      Stack(
                                         children: [
                                           GestureDetector(
                                             onTap: (){
@@ -555,9 +687,6 @@ class _AccountPageState extends State<AccountPage> {
                                                     child: Icon(Icons.close, size: 26)
                                                 )
                                             ),
-                                          ),
-                                          SizedBox(
-                                            width: 75,
                                           ),
                                           Container(
                                             height: 50,
