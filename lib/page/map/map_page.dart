@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:myapp/page/list/list_page.dart';
 import 'package:myapp/page/map/filter/filter_page.dart';
 import 'package:myapp/page/map/hotplace/hotplace_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page.dart';
 import 'package:myapp/page/map/navermap/navermap_page_controller.dart';
-import 'package:myapp/page/map/navermap/navermap_page_detail_model.dart';
-import 'package:myapp/page/map/navermap/utils.dart';
 import 'package:myapp/page/map/search/search_page.dart';
 import 'package:myapp/page/map/search/search_page_controller.dart';
-import 'package:naver_map_plugin/naver_map_plugin.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key? key}) : super(key: key);
@@ -76,8 +72,7 @@ class _MapPageState extends State<MapPage> {
                                     splashColor: Colors.transparent,
                                     highlightColor: Colors.transparent,
                                     onPressed: () {
-                                      if (_NaverMapPageController.detailRestaurants.length != _NaverMapPageController.abstractRestaurants.length)
-                                        _NaverMapPageController.processDetailRestaurantData();
+                                      _NaverMapPageController.processAbstractRestaurantData();
                                       Get.to(() => ListPage());
                                     },
                                     icon: Image.asset('assets/button_image/list_button.png'),
@@ -120,7 +115,8 @@ class _MapPageState extends State<MapPage> {
                                       highlightColor: Colors.transparent,
                                       onPressed: () async {
                                         _SearchPageController.searchedWord.value = '';
-                                        await _NaverMapPageController.fetchAbstractRestaurantData(context);
+                                        await _NaverMapPageController.fetchRawAbstractRestaurantData(context);
+                                        await _NaverMapPageController.processRawAbstractRestaurantDataByFilter(context);
                                       },
                                       icon: Image.asset('assets/button_image/close_button.png')
                                   ),
@@ -170,9 +166,9 @@ class _MapPageState extends State<MapPage> {
                 FilterPage() // 필터
               ],
             ),
-            if (_NaverMapPageController.markerLoading.value == true)
+            if (_NaverMapPageController.fetchingRawAbstractRestaurant.value == true || _NaverMapPageController.processingRawAbstractRestaurant.value == true)
               Container(
-                  color: Colors.black.withOpacity(0.5),
+                  color: Colors.black.withOpacity(0.6),
                   width: width,
                   height: height,
                   child: Center(child: CircularProgressIndicator(color: Color(0xfff42957)))

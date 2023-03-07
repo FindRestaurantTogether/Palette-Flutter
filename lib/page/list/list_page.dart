@@ -106,10 +106,8 @@ class _ListPageState extends State<ListPage> {
                       onPressed: () async {
                         _SearchPageController.searchedWord.value = '';
                         Get.back();
-                        await _NaverMapPageController.fetchAbstractRestaurantData(context);
-                        // Future.delayed(Duration(milliseconds: 500), () async {
-                        //   await _NaverMapPageController.fetchRestaurantData(context, '');
-                        // });
+                        await _NaverMapPageController.fetchRawAbstractRestaurantData(context);
+                        await _NaverMapPageController.processRawAbstractRestaurantDataByFilter(context);
                       },
                       icon: Image.asset('assets/button_image/close_button.png'),
                     ),
@@ -328,7 +326,7 @@ class _ListPageState extends State<ListPage> {
             color: Color(0xffeeeeee),
           ), // 회색 바
           Obx(() {
-            return _NaverMapPageController.detailRestaurantDataLoading.value
+            return _NaverMapPageController.processingAbstractRestaurant.value || _NaverMapPageController.processingRawAbstractRestaurant.value
                 ? Expanded(child: Center(child: CircularProgressIndicator(color: Color(0xfff42957))))
                 : ListviewPage();
           }) // 음식점 리스트

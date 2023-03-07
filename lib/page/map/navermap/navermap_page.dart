@@ -156,9 +156,12 @@ class _NaverMapPageState extends State<NaverMapPage> {
                       height: 36,
                       child: ElevatedButton(
                           onPressed: () async {
-                            _NaverMapPageController.getMoreAbstractRestaurantData.value
-                                ? await _NaverMapPageController.processAbstractRestaurantData(context)
-                                : await _NaverMapPageController.fetchAbstractRestaurantData(context);
+                            if (_NaverMapPageController.getMoreAbstractRestaurantData.value == true) {
+                              await _NaverMapPageController.processRawAbstractRestaurantDataByFilter(context);
+                            } else {
+                              await _NaverMapPageController.fetchRawAbstractRestaurantData(context);
+                              await _NaverMapPageController.processRawAbstractRestaurantDataByFilter(context);
+                            }
                           }, // 이 지도에서 재검색 버튼
                           style: ElevatedButton.styleFrom(
                               shape: StadiumBorder(),

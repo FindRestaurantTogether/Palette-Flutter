@@ -1838,7 +1838,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                                                             .showSnackBar(
                                                                                             SnackBar(
                                                                                               content: Text(
-                                                                                                  '한 글자 이상 입력해주세요.'),
+                                                                                                  '폴더명을 입력해주세요.'),
                                                                                               backgroundColor: Color(
                                                                                                   0xfff42957),
                                                                                             ),
@@ -2028,7 +2028,7 @@ class _FavoritePageState extends State<FavoritePage> {
                                                           .showSnackBar(
                                                           SnackBar(
                                                             content: Text(
-                                                                '한 글자 이상 입력해주세요.'),
+                                                                '폴더명을 입력해주세요.'),
                                                             backgroundColor: Color(
                                                                 0xfff42957),
                                                           )

@@ -54,223 +54,237 @@ class _SearchPageState extends State<SearchPage> {
           elevation: 0,
         ), // 앱바 없애기
         extendBodyBehindAppBar: true,
-        body: Center(
-          child: Column(
+        body: Obx(() {
+          return  Stack(
             children: [
-              SizedBox(height: height * 0.075), // 공간 조금 만드는 박스
-              Container(
-                  width: width,
-                  padding: EdgeInsets.only(left: 20,right: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Container(
-                            child: IconButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onPressed: () {
-                                Get.back();
-                              },
-                              icon: Image.asset('assets/button_image/back_button.png', width: 10, height: 16, fit: BoxFit.fill),
+              Center(
+                child: Column(
+                  children: [
+                    SizedBox(height: height * 0.075), // 공간 조금 만드는 박스
+                    Container(
+                        width: width,
+                        padding: EdgeInsets.only(left: 20,right: 20),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  child: IconButton(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onPressed: () {
+                                      Get.back();
+                                    },
+                                    icon: Image.asset('assets/button_image/back_button.png', width: 10, height: 16, fit: BoxFit.fill),
+                                  ),
+                                ), // 뒤로가기 버튼
+                                SizedBox(width: 6),
+                                Container(
+                                  width: width * 0.87 - 120,
+                                  child: TextFormField(
+                                    autofocus: true,
+                                    textInputAction: TextInputAction.go,
+                                    onFieldSubmitted: (value) async {
+                                      if (value.isEmpty) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('검색어를 입력해주세요.'),
+                                              backgroundColor: Color(0xfff42957),
+                                            )
+                                        );
+                                      } else {
+                                        if (searchByMyLocation == true) {
+                                          final naverMapController = await naverMapCompleter.future;
+                                          final currentPosition = await Geolocator.getCurrentPosition();
+                                          CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
+                                          await naverMapController.moveCamera(cameraUpdate);
+                                        }
+
+                                        Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
+                                        recentSearchBox.add(RecentSearchModel(recentSearchWord: _TextEditingController.text));
+                                        if (recentSearchBox.length > 10) {
+                                          recentSearchBox.deleteAt(0);
+                                        }
+
+                                        _SearchPageController.searchedWord.value = _TextEditingController.text;
+                                        await _NaverMapPageController.fetchRawAbstractRestaurantData(context);
+                                        _NaverMapPageController.processRawAbstractRestaurantDataBySearch();
+
+                                        Get.off(ListPage());
+                                      }
+                                    },
+                                    controller: _TextEditingController,
+                                    textAlign: TextAlign.start,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: '장소, 주소, 음식 검색',
+                                      hintStyle: TextStyle(
+                                        fontSize: 18,
+                                        color: Color(0xffb9b9b9),
+                                      ),
+                                    ),
+                                  ),
+                                ), // 검색창
+                              ],
                             ),
-                          ), // 뒤로가기 버튼
-                          SizedBox(width: 6),
-                          Container(
-                            width: width * 0.87 - 120,
-                            child: TextFormField(
-                              autofocus: true,
-                              textInputAction: TextInputAction.go,
-                              onFieldSubmitted: (value) async {
-                                if (value.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('검색어를 입력해주세요.'),
-                                        backgroundColor: Color(0xfff42957),
-                                      )
-                                  );
-                                } else {
-                                  if (searchByMyLocation == true) {
-                                    final naverMapController = await naverMapCompleter.future;
-                                    final currentPosition = await Geolocator.getCurrentPosition();
-                                    CameraUpdate cameraUpdate = CameraUpdate.scrollTo(LatLng(currentPosition.latitude, currentPosition.longitude));
-                                    await naverMapController.moveCamera(cameraUpdate);
-                                  }
-
-                                  Box<RecentSearchModel> recentSearchBox =  Hive.box<RecentSearchModel>('recentsearch');
-                                  recentSearchBox.add(RecentSearchModel(recentSearchWord: _TextEditingController.text));
-                                  if (recentSearchBox.length > 10) {
-                                    recentSearchBox.deleteAt(0);
-                                  }
-
-                                  _SearchPageController.searchedWord.value = _TextEditingController.text;
-                                  await _NaverMapPageController.fetchAbstractRestaurantData(context);
-
-                                  _NaverMapPageController.processDetailRestaurantData();
-
-                                  Get.off(ListPage());
-                                }
-                              },
-                              controller: _TextEditingController,
-                              textAlign: TextAlign.start,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: '장소, 주소, 음식 검색',
-                                hintStyle: TextStyle(
-                                  fontSize: 18,
-                                  color: Color(0xffb9b9b9),
+                            Container(
+                              child: IconButton(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onPressed: () {
+                                  _TextEditingController.clear();
+                                },
+                                icon: Image.asset(
+                                    'assets/button_image/close_button.png',
+                                    width: 13,
+                                    height: 14,
+                                    fit: BoxFit.fill
                                 ),
                               ),
                             ),
-                          ), // 검색창
-                        ],
-                      ),
-                      Container(
-                        child: IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {
-                            _TextEditingController.clear();
+                          ],
+                        )
+                    ), // 검색창
+                    SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        ExpandTapWidget(
+                          onTap: () {
+                            setState(() {
+                              searchByMyLocation = true;
+                            });
                           },
-                          icon: Image.asset(
-                              'assets/button_image/close_button.png',
-                              width: 13,
-                              height: 14,
-                              fit: BoxFit.fill
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-              ), // 검색창
-              SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ExpandTapWidget(
-                    onTap: () {
-                      setState(() {
-                        searchByMyLocation = true;
-                      });
-                    },
-                    tapPadding: EdgeInsets.all(50),
-                    child: Container(
-                      width: width * 0.5,
-                      padding: EdgeInsets.all(10),
-                      decoration: searchByMyLocation? BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Color(0xfff42957)))) : null,
-                      child: Center(
-                        child: Text(
-                          '내 위치 중심',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: searchByMyLocation ? FontWeight.bold : null,
-                            color: searchByMyLocation ? Color(0xfff42957) : Color(0xffa0a0a0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  ExpandTapWidget(
-                    onTap: () {
-                      setState(() {
-                        searchByMyLocation = false;
-                      });
-                    },
-                    tapPadding: EdgeInsets.all(50),
-                    child: Container(
-                      width: width * 0.5,
-                      padding: EdgeInsets.all(10),
-                      decoration: !searchByMyLocation? BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Color(0xfff42957)))) : null,
-                      child: Center(
-                        child: Text(
-                          "지도 중심",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: !searchByMyLocation ? FontWeight.bold : null,
-                            color: !searchByMyLocation ? Color(0xfff42957) : Color(0xffa0a0a0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ), // 내 위치 중심 / 지도 중심
-              SizedBox(height: 3),
-              ValueListenableBuilder(
-                  valueListenable: Hive.box<RecentSearchModel>('recentsearch').listenable(),
-                  builder: (BuildContext context, Box<RecentSearchModel> box, _) {
-                    List<RecentSearchModel> recentSearchs = List.from(box.values.toList().cast<RecentSearchModel>().reversed);
-                    return Expanded(
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        itemCount: recentSearchs.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          RecentSearchModel recentSearch = recentSearchs[index];
-                          return Container(
-                            height: 50,
-                            width: width,
-                            child: ElevatedButton(
-                              onPressed: () async {
-                                _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
-                                await _NaverMapPageController.fetchAbstractRestaurantData(context);
-
-                                box.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
-                                if (recentSearchs.length > 10) {
-                                  recentSearchs[9].delete();
-                                }
-
-                                Get.off(ListPage());
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  padding: EdgeInsets.only(left: 30,right: 20),
-                                  elevation: 0,
-                                  primary: Colors.white
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Container(
-                                        height: 30,
-                                        width: 30,
-                                        child: Icon(Icons.search,color: Color(0xffa0a0a0), size: 20),
-                                        decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
-                                      ),
-                                      SizedBox(width: 16),
-                                      Text(
-                                        recentSearch.recentSearchWord,
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xffa0a0a0)
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  IconButton(
-                                      onPressed: (){
-                                        recentSearch.delete();
-                                      },
-                                      icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20)
-                                  )
-                                ],
+                          tapPadding: EdgeInsets.all(50),
+                          child: Container(
+                            width: width * 0.5,
+                            padding: EdgeInsets.all(10),
+                            decoration: searchByMyLocation? BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Color(0xfff42957)))) : null,
+                            child: Center(
+                              child: Text(
+                                '내 위치 중심',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: searchByMyLocation ? FontWeight.bold : null,
+                                  color: searchByMyLocation ? Color(0xfff42957) : Color(0xffa0a0a0),
+                                ),
                               ),
                             ),
+                          ),
+                        ),
+                        ExpandTapWidget(
+                          onTap: () {
+                            setState(() {
+                              searchByMyLocation = false;
+                            });
+                          },
+                          tapPadding: EdgeInsets.all(50),
+                          child: Container(
+                            width: width * 0.5,
+                            padding: EdgeInsets.all(10),
+                            decoration: !searchByMyLocation? BoxDecoration(border: Border(bottom: BorderSide(width: 4, color: Color(0xfff42957)))) : null,
+                            child: Center(
+                              child: Text(
+                                "지도 중심",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: !searchByMyLocation ? FontWeight.bold : null,
+                                  color: !searchByMyLocation ? Color(0xfff42957) : Color(0xffa0a0a0),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ), // 내 위치 중심 / 지도 중심
+                    SizedBox(height: 3),
+                    ValueListenableBuilder(
+                        valueListenable: Hive.box<RecentSearchModel>('recentsearch').listenable(),
+                        builder: (BuildContext context, Box<RecentSearchModel> box, _) {
+                          List<RecentSearchModel> recentSearchs = List.from(box.values.toList().cast<RecentSearchModel>().reversed);
+                          return Expanded(
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              itemCount: recentSearchs.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                RecentSearchModel recentSearch = recentSearchs[index];
+                                return Container(
+                                  height: 50,
+                                  width: width,
+                                  padding: EdgeInsets.only(left: 1.5),
+                                  child: ElevatedButton(
+                                    onPressed: () async {
+                                      box.add(RecentSearchModel(recentSearchWord: recentSearch.recentSearchWord));
+                                      if (recentSearchs.length > 10) {
+                                        recentSearchs[9].delete();
+                                      }
+
+                                      _SearchPageController.searchedWord.value = recentSearch.recentSearchWord;
+                                      await _NaverMapPageController.fetchRawAbstractRestaurantData(context);
+                                      _NaverMapPageController.processRawAbstractRestaurantDataBySearch();
+
+                                      Get.off(ListPage());
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        padding: EdgeInsets.only(left: 30,right: 20),
+                                        elevation: 0,
+                                        primary: Colors.white
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Container(
+                                              height: 30,
+                                              width: 30,
+                                              child: Icon(Icons.search,color: Color(0xffa0a0a0), size: 20),
+                                              decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.black12),
+                                            ),
+                                            SizedBox(width: 16),
+                                            Text(
+                                              recentSearch.recentSearchWord,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color(0xffa0a0a0)
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        IconButton(
+                                            onPressed: (){
+                                              recentSearch.delete();
+                                            },
+                                            icon: Icon(Icons.clear,color: Color(0xffa0a0a0),size: 20)
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                              separatorBuilder: (BuildContext context, int index) => Divider(height: 1),
+                            ),
                           );
-                        },
-                        separatorBuilder: (BuildContext context, int index) => Divider(height: 1),
-                      ),
-                    );
-                  }
-              )
+                        }
+                    )
+                  ],
+                ),
+              ),
+              if (_NaverMapPageController.fetchingRawAbstractRestaurant.value == true || _NaverMapPageController.processingRawAbstractRestaurant.value == true)
+                Container(
+                    color: Colors.black.withOpacity(0.6),
+                    width: width,
+                    height: height,
+                    child: Center(child: CircularProgressIndicator(color: Color(0xfff42957)))
+                )
             ],
-          ),
-        )
+          );
+        })
       ),
     );
   }
