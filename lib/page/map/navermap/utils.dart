@@ -39,8 +39,8 @@ class Network {
 
     rightUpLat = min(rightUpLat, max_lat);
     rightUpLon = min(rightUpLon,max_lon);
-    leftDownLat = max(leftDownLat,min_lat);
-    leftDownLon = max(leftDownLon,min_lon);
+    leftDownLat = min(leftDownLat,min_lat);
+    leftDownLon = min(leftDownLon,min_lon);
 
 
     // 필터 클릭, 이지도 재검색 클릭
@@ -71,8 +71,7 @@ class Network {
         }
       }
 
-      url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}' + cat_url;
-      print(url2);
+      url2 = 'http://34.64.102.13/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}' + cat_url;
       http.Response response = await http.get(Uri.parse(url2));
       if (response.statusCode == 200) {
         var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -106,9 +105,11 @@ class Network {
       // }
     }
 
+
+
     // text
     if(text != '') {
-      url2 = 'http://34.64.166.110/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
+      url2 = 'http://34.64.102.13/api/search?top_right_lat=${rightUpLat}&top_right_lon=${rightUpLon}&bottom_left_lat=${leftDownLat}&bottom_left_lon=${leftDownLon}';
       url2 = url2 + '&text=${text}';
       http.Response response = await http.get(Uri.parse(url2));
       if (response.statusCode == 200) {
@@ -142,7 +143,7 @@ class open_Network {
   open_Network(this.uid);
 
   Future<dynamic> getJsonData() async {
-    String url = 'http://34.64.166.110/api/is-opening?store_id=${uid}';
+    String url = 'http://34.64.102.13/api/is-opening?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       return response.body;
@@ -157,7 +158,7 @@ class uid_Network {
 
   Future<dynamic> getJsonData() async {
     Map<String, dynamic>? store_dict;
-    String url = 'http://34.64.166.110/api/info-from-id?store_id=${uid}';
+    String url = 'http://34.64.102.13/api/info-from-id?store_id=${uid}';
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       var parsingData = jsonDecode(utf8.decode(response.bodyBytes));
@@ -175,7 +176,12 @@ Map change_time(hour){
   Map<String,String> get_time = {};
   List week = ['월','화','수','목','금','토','일'];
   for(int i=0;i<hour.length;i++){
-    get_time[week[i]] = hour[i][week[i]];
+    if(hour[i][week[i]] == 'None'){
+      get_time[week[i]] = '정보없음';
+    }
+    else{
+      get_time[week[i]] = hour[i][week[i]];
+    }
   }
   return get_time;
 }
